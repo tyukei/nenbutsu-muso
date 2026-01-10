@@ -368,7 +368,7 @@
         
         <!-- ランキング画面 -->
         <div id="rankingScreen" class="screen hidden">
-            <h1>🏆 ランキング 🏆</h1>
+            <h1>ランキング</h1>
             <h2>歴代の名僧たち</h2>
             
             <div id="rankingList"></div>
@@ -729,10 +729,10 @@
             saveRanking(score, maxCombo);
             
             if (win) {
-                document.getElementById('resultTitle').textContent = '🎉 解脱達成！ 🎉';
+                document.getElementById('resultTitle').textContent = '解脱達成！';
                 document.getElementById('resultText').textContent = '108の煩悩を全て打ち払いました';
             } else {
-                document.getElementById('resultTitle').textContent = '💀 煩悩に飲まれた 💀';
+                document.getElementById('resultTitle').textContent = '煩悩に飲まれた';
                 document.getElementById('resultText').textContent = '煩悩に心を侵されてしまいました';
             }
             
