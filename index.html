@@ -896,6 +896,17 @@
         }
         
         // 初期化
+        // デバイス判定
+        const isMobileDevice = (window.innerWidth <= 768) && ('ontouchstart' in window);
+
+        // 初期化時に仮想コントローラーの表示/非表示を設定
+        function initControls() {
+            if (!isMobileDevice) {
+                virtualControls.style.display = 'none';
+            }
+        }
+
+        initControls();
         showTitle();
     </script>
 </body>
