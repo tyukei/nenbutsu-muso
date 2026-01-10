@@ -47,3 +47,5 @@
 - **推奨**: 華やかな鐘の音、ファンファーレ風
 - **長さ**: 3〜8秒
 
+
+https://soundeffect-lab.info/sound/anime/
