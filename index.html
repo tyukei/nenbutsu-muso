@@ -2,13 +2,19 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>念仏無双〜修行僧の逆襲〜</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
         
         body {
@@ -20,11 +26,16 @@
             font-family: 'MS Gothic', 'Courier New', monospace;
             color: #fff;
             overflow: hidden;
+            touch-action: none;
         }
         
         #gameContainer {
             position: relative;
             text-align: center;
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 640px;
         }
         
         canvas {
@@ -33,6 +44,20 @@
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
             display: block;
             margin: 0 auto;
+            width: 100%;
+            height: auto;
+            max-width: 480px;
+        }
+        
+        @media (max-width: 500px) {
+            #gameContainer {
+                max-width: 100vw;
+                max-height: 100vh;
+            }
+            
+            canvas {
+                border-width: 2px;
+            }
         }
         
         #info {
@@ -54,6 +79,14 @@
             align-items: center;
             background: rgba(0, 0, 0, 0.95);
             z-index: 10;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        @media (max-width: 500px) {
+            .screen {
+                padding: 10px;
+            }
         }
         
         .hidden {
@@ -68,6 +101,12 @@
             animation: glow 2s ease-in-out infinite;
         }
         
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 36px;
+            }
+        }
+        
         @keyframes glow {
             0%, 100% { text-shadow: 0 0 20px rgba(212, 175, 55, 1); }
             50% { text-shadow: 0 0 40px rgba(212, 175, 55, 1), 0 0 60px rgba(212, 175, 55, 0.8); }
@@ -78,6 +117,13 @@
             font-size: 24px;
             margin-bottom: 30px;
             text-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
+        }
+        
+        @media (max-width: 500px) {
+            h2 {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
         }
         
         button {
@@ -92,11 +138,26 @@
             margin: 10px;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            min-height: 50px;
+            min-width: 200px;
         }
         
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 7px 20px rgba(212, 175, 55, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(212, 175, 55, 0.4);
+        }
+        
+        @media (max-width: 500px) {
+            button {
+                font-size: 18px;
+                padding: 12px 30px;
+                min-width: 180px;
+            }
         }
         
         p {
@@ -184,6 +245,96 @@
             margin: 20px 0;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
         }
+        
+        /* 仮想コントローラー */
+        #virtualControls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: 5;
+            pointer-events: none;
+        }
+        
+        .control-btn {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.6), rgba(212, 175, 55, 0.3));
+            border: 3px solid rgba(212, 175, 55, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            pointer-events: auto;
+            transition: all 0.1s;
+            user-select: none;
+        }
+        
+        .control-btn:active {
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.9), rgba(212, 175, 55, 0.5));
+            transform: scale(0.95);
+        }
+        
+        #leftBtn {
+            bottom: 40px;
+            left: 30px;
+        }
+        
+        #rightBtn {
+            bottom: 40px;
+            left: 130px;
+        }
+        
+        #shootBtn {
+            bottom: 40px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            font-size: 24px;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.7), rgba(255, 107, 0, 0.4));
+            border-color: rgba(255, 107, 0, 0.9);
+        }
+        
+        #shootBtn:active {
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.95), rgba(255, 107, 0, 0.6));
+        }
+        
+        @media (min-width: 769px) {
+            #virtualControls {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .control-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+            }
+            
+            #leftBtn {
+                left: 20px;
+                bottom: 30px;
+            }
+            
+            #rightBtn {
+                left: 110px;
+                bottom: 30px;
+            }
+            
+            #shootBtn {
+                right: 20px;
+                bottom: 30px;
+                width: 85px;
+                height: 85px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -232,6 +383,13 @@
             <div>功徳: <span id="health">3</span></div>
             <div>念仏連鎖: <span id="combo">0</span></div>
         </div>
+        
+        <!-- 仮想コントローラー（スマホ用） -->
+        <div id="virtualControls" class="hidden">
+            <div id="leftBtn" class="control-btn">◀</div>
+            <div id="rightBtn" class="control-btn">▶</div>
+            <div id="shootBtn" class="control-btn">念仏</div>
+        </div>
     </div>
 
     <script>
@@ -243,6 +401,7 @@
         const gameOverScreen = document.getElementById('gameOverScreen');
         const rankingScreen = document.getElementById('rankingScreen');
         const infoPanel = document.getElementById('info');
+        const virtualControls = document.getElementById('virtualControls');
         
         // ボタン
         const startBtn = document.getElementById('startBtn');
@@ -250,6 +409,51 @@
         const rankingBtn = document.getElementById('rankingBtn');
         const backToTitleBtn = document.getElementById('backToTitleBtn');
         const toTitleBtn = document.getElementById('toTitleBtn');
+        
+        // 仮想コントローラーボタン
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const shootBtn = document.getElementById('shootBtn');
+        
+        // タッチ操作の状態
+        let touchLeft = false;
+        let touchRight = false;
+        
+        // BGMと効果音
+        const sounds = {
+            bgm: new Audio('sounds/bgm.mp3'),
+            shoot: new Audio('sounds/shoot.mp3'),
+            hit: new Audio('sounds/hit.mp3'),
+            damage: new Audio('sounds/damage.mp3'),
+            gameover: new Audio('sounds/gameover.mp3'),
+            clear: new Audio('sounds/clear.mp3')
+        };
+        
+        // BGMの設定
+        sounds.bgm.loop = true;
+        sounds.bgm.volume = 0.5;
+        
+        // 効果音の音量設定
+        sounds.shoot.volume = 0.3;
+        sounds.hit.volume = 0.4;
+        sounds.damage.volume = 0.5;
+        sounds.gameover.volume = 0.6;
+        sounds.clear.volume = 0.6;
+        
+        // 音声再生のヘルパー関数
+        function playSound(soundName) {
+            if (sounds[soundName]) {
+                sounds[soundName].currentTime = 0;
+                sounds[soundName].play().catch(e => console.log('Audio play failed:', e));
+            }
+        }
+        
+        function stopSound(soundName) {
+            if (sounds[soundName]) {
+                sounds[soundName].pause();
+                sounds[soundName].currentTime = 0;
+            }
+        }
         
         // ゲーム状態
         let gameState = 'title'; // 'title', 'playing', 'gameover', 'ranking'
@@ -353,12 +557,68 @@
         backToTitleBtn.addEventListener('click', showTitle);
         toTitleBtn.addEventListener('click', showTitle);
         
+        // 仮想コントローラーのイベント
+        // 左ボタン
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchLeft = true;
+        });
+        leftBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchLeft = false;
+        });
+        leftBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            touchLeft = true;
+        });
+        leftBtn.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            touchLeft = false;
+        });
+        
+        // 右ボタン
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchRight = true;
+        });
+        rightBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchRight = false;
+        });
+        rightBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            touchRight = true;
+        });
+        rightBtn.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            touchRight = false;
+        });
+        
+        // 念仏ボタン
+        shootBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameState === 'playing' && canShoot) {
+                shootBullet();
+                canShoot = false;
+                shootCooldown = 10;
+            }
+        });
+        shootBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            if (gameState === 'playing' && canShoot) {
+                shootBullet();
+                canShoot = false;
+                shootCooldown = 10;
+            }
+        });
+        
         function showTitle() {
             gameState = 'title';
             titleScreen.classList.remove('hidden');
             gameOverScreen.classList.add('hidden');
             rankingScreen.classList.add('hidden');
             infoPanel.classList.add('hidden');
+            virtualControls.classList.add('hidden');
         }
         
         function showRanking() {
@@ -379,11 +639,19 @@
             enemies.length = 0;
             particles.length = 0;
             player.x = canvas.width / 2;
+            touchLeft = false;
+            touchRight = false;
             
             titleScreen.classList.add('hidden');
             gameOverScreen.classList.add('hidden');
             rankingScreen.classList.add('hidden');
             infoPanel.classList.remove('hidden');
+            virtualControls.classList.remove('hidden');
+            
+            // BGM開始
+            stopSound('gameover');
+            stopSound('clear');
+            playSound('bgm');
             
             updateUI();
             gameLoop();
@@ -398,6 +666,7 @@
                 speed: 10,
                 color: '#d4af37'
             });
+            playSound('shoot');
         }
         
         function spawnEnemy() {
@@ -446,6 +715,15 @@
             gameState = 'gameover';
             gameOverScreen.classList.remove('hidden');
             infoPanel.classList.add('hidden');
+            virtualControls.classList.add('hidden');
+            
+            // BGM停止と結果音
+            stopSound('bgm');
+            if (win) {
+                playSound('clear');
+            } else {
+                playSound('gameover');
+            }
             
             // ランキング保存
             saveRanking(score, maxCombo);
@@ -475,11 +753,11 @@
                 }
             }
             
-            // プレイヤー移動
-            if (keys['ArrowLeft'] && player.x > player.width / 2) {
+            // プレイヤー移動（キーボード + 仮想コントローラー）
+            if ((keys['ArrowLeft'] || touchLeft) && player.x > player.width / 2) {
                 player.x -= player.speed;
             }
-            if (keys['ArrowRight'] && player.x < canvas.width - player.width / 2) {
+            if ((keys['ArrowRight'] || touchRight) && player.x < canvas.width - player.width / 2) {
                 player.x += player.speed;
             }
             
@@ -505,6 +783,7 @@
                     enemies.splice(i, 1);
                     health--;
                     combo = 0;
+                    playSound('damage');
                     updateUI();
                     if (health <= 0) {
                         gameOver(false);
@@ -523,6 +802,7 @@
                         score++;
                         combo++;
                         if (combo > maxCombo) maxCombo = combo;
+                        playSound('hit');
                         updateUI();
                         
                         if (score >= 108) {
