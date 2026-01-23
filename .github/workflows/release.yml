@@ -27,13 +27,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          CURRENT_VERSION=$(grep '^version = ' pyproject.toml | cut -d '"' -f 2)
+          # index.htmlのmetaタグからバージョンを取得
+          CURRENT_VERSION=$(grep -oP '<meta name="version" content="\K[^"]+' index.html)
           echo "Current version: $CURRENT_VERSION"
 
           NEW_VERSION=$(python3 -c "v='$CURRENT_VERSION'.split('.'); v[-1]=str(int(v[-1])+1); print('.'.join(v))")
           echo "New version: $NEW_VERSION"
 
-          sed -i 's/^version = "'$CURRENT_VERSION'"/version = "'$NEW_VERSION'"/' pyproject.toml
+          # index.htmlのバージョンを更新
+          sed -i 's/<meta name="version" content="'$CURRENT_VERSION'"/<meta name="version" content="'$NEW_VERSION'"/' index.html
           echo "VERSION=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push changes
@@ -44,7 +46,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          git add pyproject.toml
+          git add index.html
           if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
@@ -52,12 +54,6 @@ jobs:
 
           git commit -m "chore: bump version to ${{ steps.bump_version.outputs.VERSION }} [skip ci]"
           git push
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v2
-
-      - name: Install dependencies
-        run: uv sync
 
       - name: Generate AI Summary
         id: ai_summary
@@ -100,7 +96,7 @@ jobs:
             SUMMARY="- 内部改善（詳細なし）"
           else
             export CONTENT_LIST
-            SUMMARY="$(uv run python3 .github/scripts/generate_release_summary.py)"
+            SUMMARY="$(python3 .github/scripts/generate_release_summary.py)"
           fi
 
           # ✅ 改行を潰さずに steps output として渡す
