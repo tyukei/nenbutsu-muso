@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -16,7 +17,7 @@
             -webkit-user-select: none;
             user-select: none;
         }
-        
+
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             display: flex;
@@ -28,7 +29,7 @@
             overflow: hidden;
             touch-action: none;
         }
-        
+
         #gameContainer {
             position: relative;
             text-align: center;
@@ -37,7 +38,7 @@
             height: 100vh;
             max-height: 640px;
         }
-        
+
         canvas {
             border: 3px solid #d4af37;
             background: linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
@@ -48,25 +49,25 @@
             height: auto;
             max-width: 480px;
         }
-        
+
         @media (max-width: 500px) {
             #gameContainer {
                 max-width: 100vw;
                 max-height: 100vh;
             }
-            
+
             canvas {
                 border-width: 2px;
             }
         }
-        
+
         #info {
             margin-top: 20px;
             font-size: 18px;
             color: #d4af37;
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
         }
-        
+
         .screen {
             position: absolute;
             top: 0;
@@ -82,17 +83,17 @@
             overflow-y: auto;
             padding: 20px;
         }
-        
+
         @media (max-width: 500px) {
             .screen {
                 padding: 10px;
             }
         }
-        
+
         .hidden {
             display: none !important;
         }
-        
+
         h1 {
             color: #d4af37;
             font-size: 48px;
@@ -100,32 +101,39 @@
             text-shadow: 0 0 20px rgba(212, 175, 55, 1);
             animation: glow 2s ease-in-out infinite;
         }
-        
+
         @media (max-width: 500px) {
             h1 {
                 font-size: 36px;
             }
         }
-        
+
         @keyframes glow {
-            0%, 100% { text-shadow: 0 0 20px rgba(212, 175, 55, 1); }
-            50% { text-shadow: 0 0 40px rgba(212, 175, 55, 1), 0 0 60px rgba(212, 175, 55, 0.8); }
+
+            0%,
+            100% {
+                text-shadow: 0 0 20px rgba(212, 175, 55, 1);
+            }
+
+            50% {
+                text-shadow: 0 0 40px rgba(212, 175, 55, 1), 0 0 60px rgba(212, 175, 55, 0.8);
+            }
         }
-        
+
         h2 {
             color: #ff9800;
             font-size: 24px;
             margin-bottom: 30px;
             text-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
         }
-        
+
         @media (max-width: 500px) {
             h2 {
                 font-size: 20px;
                 margin-bottom: 20px;
             }
         }
-        
+
         button {
             background: linear-gradient(135deg, #d4af37 0%, #aa8c2e 100%);
             border: none;
@@ -141,17 +149,17 @@
             min-height: 50px;
             min-width: 200px;
         }
-        
+
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 7px 20px rgba(212, 175, 55, 0.6);
         }
-        
+
         button:active {
             transform: translateY(0);
             box-shadow: 0 3px 10px rgba(212, 175, 55, 0.4);
         }
-        
+
         @media (max-width: 500px) {
             button {
                 font-size: 18px;
@@ -159,13 +167,13 @@
                 min-width: 180px;
             }
         }
-        
+
         p {
             margin: 10px 0;
             line-height: 1.6;
             font-size: 16px;
         }
-        
+
         .instruction {
             background: rgba(212, 175, 55, 0.1);
             border: 2px solid #d4af37;
@@ -174,11 +182,11 @@
             margin: 20px 0;
             max-width: 400px;
         }
-        
+
         .instruction p {
             color: #ffd700;
         }
-        
+
         #rankingList {
             background: rgba(0, 0, 0, 0.5);
             border: 2px solid #d4af37;
@@ -188,7 +196,7 @@
             max-width: 500px;
             width: 100%;
         }
-        
+
         .rank-item {
             display: flex;
             justify-content: space-between;
@@ -198,54 +206,61 @@
             border-radius: 5px;
             border-left: 4px solid #d4af37;
         }
-        
+
         .rank-item.top3 {
             background: linear-gradient(90deg, rgba(255, 215, 0, 0.3), rgba(212, 175, 55, 0.1));
             border-left: 4px solid #ffd700;
         }
-        
+
         .rank-number {
             color: #d4af37;
             font-weight: bold;
             font-size: 20px;
             min-width: 40px;
         }
-        
+
         .rank-score {
             color: #fff;
             font-size: 18px;
         }
-        
+
         .rank-date {
             color: #888;
             font-size: 14px;
         }
-        
+
         .title-logo {
             font-size: 64px;
             margin-bottom: 20px;
             animation: float 3s ease-in-out infinite;
         }
-        
+
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
-        
+
         .subtitle {
             font-size: 20px;
             color: #ff6f00;
             margin-top: -15px;
             margin-bottom: 30px;
         }
-        
+
         #currentScore {
             font-size: 32px;
             color: #ffd700;
             margin: 20px 0;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
         }
-        
+
         /* 仮想コントローラー */
         #virtualControls {
             position: fixed;
@@ -256,7 +271,7 @@
             z-index: 5;
             pointer-events: none;
         }
-        
+
         .control-btn {
             position: absolute;
             width: 80px;
@@ -274,22 +289,22 @@
             transition: all 0.1s;
             user-select: none;
         }
-        
+
         .control-btn:active {
             background: radial-gradient(circle, rgba(212, 175, 55, 0.9), rgba(212, 175, 55, 0.5));
             transform: scale(0.95);
         }
-        
+
         #leftBtn {
             bottom: 40px;
             left: 30px;
         }
-        
+
         #rightBtn {
             bottom: 40px;
             left: 130px;
         }
-        
+
         #shootBtn {
             bottom: 40px;
             right: 30px;
@@ -299,34 +314,34 @@
             background: radial-gradient(circle, rgba(255, 107, 0, 0.7), rgba(255, 107, 0, 0.4));
             border-color: rgba(255, 107, 0, 0.9);
         }
-        
+
         #shootBtn:active {
             background: radial-gradient(circle, rgba(255, 107, 0, 0.95), rgba(255, 107, 0, 0.6));
         }
-        
+
         @media (min-width: 769px) {
             #virtualControls {
                 display: none;
             }
         }
-        
+
         @media (max-width: 500px) {
             .control-btn {
                 width: 70px;
                 height: 70px;
                 font-size: 28px;
             }
-            
+
             #leftBtn {
                 left: 20px;
                 bottom: 30px;
             }
-            
+
             #rightBtn {
                 left: 110px;
                 bottom: 30px;
             }
-            
+
             #shootBtn {
                 right: 20px;
                 bottom: 30px;
@@ -337,6 +352,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="gameContainer">
         <!-- タイトル画面 -->
@@ -344,7 +360,7 @@
             <div class="title-logo"></div>
             <h1>念仏無双</h1>
             <div class="subtitle">〜修行僧の逆襲〜</div>
-            
+
             <div class="instruction">
                 <p><strong>操作方法</strong></p>
                 <p>← → キー：移動</p>
@@ -352,11 +368,11 @@
                 <p><br><strong>目標</strong></p>
                 <p>108の煩悩を全て打ち払い<br>解脱を目指せ！</p>
             </div>
-            
+
             <button id="startBtn">修行を始める</button>
             <button id="rankingBtn">ランキングを見る</button>
         </div>
-        
+
         <!-- ゲームオーバー画面 -->
         <div id="gameOverScreen" class="screen hidden">
             <h1 id="resultTitle"></h1>
@@ -365,25 +381,25 @@
             <button id="restartBtn">再び修行する</button>
             <button id="toTitleBtn">タイトルに戻る</button>
         </div>
-        
+
         <!-- ランキング画面 -->
         <div id="rankingScreen" class="screen hidden">
             <h1>ランキング</h1>
             <h2>歴代の名僧たち</h2>
-            
+
             <div id="rankingList"></div>
-            
+
             <button id="backToTitleBtn">タイトルに戻る</button>
         </div>
-        
+
         <canvas id="gameCanvas" width="480" height="640"></canvas>
-        
+
         <div id="info" class="hidden">
             <div>煩悩撃破: <span id="score">0</span> / 108</div>
             <div>功徳: <span id="health">3</span></div>
             <div>念仏連鎖: <span id="combo">0</span></div>
         </div>
-        
+
         <!-- 仮想コントローラー（スマホ用） -->
         <div id="virtualControls" class="hidden">
             <div id="leftBtn" class="control-btn">◀</div>
@@ -395,51 +411,51 @@
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        
+
         // 画面要素
         const titleScreen = document.getElementById('titleScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
         const rankingScreen = document.getElementById('rankingScreen');
         const infoPanel = document.getElementById('info');
         const virtualControls = document.getElementById('virtualControls');
-        
+
         // ボタン
         const startBtn = document.getElementById('startBtn');
         const restartBtn = document.getElementById('restartBtn');
         const rankingBtn = document.getElementById('rankingBtn');
         const backToTitleBtn = document.getElementById('backToTitleBtn');
         const toTitleBtn = document.getElementById('toTitleBtn');
-        
+
         // 仮想コントローラーボタン
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
         const shootBtn = document.getElementById('shootBtn');
-        
+
         // タッチ操作の状態
         let touchLeft = false;
         let touchRight = false;
-        
+
         // BGMと効果音
         const sounds = {
-            bgm: new Audio('sounds/bgm.mp3'),
+            bgm: new Audio('sounds/bgm.wav'),
             shoot: new Audio('sounds/shoot.mp3'),
             hit: new Audio('sounds/hit.mp3'),
             damage: new Audio('sounds/damage.mp3'),
             gameover: new Audio('sounds/gameover.mp3'),
             clear: new Audio('sounds/clear.mp3')
         };
-        
+
         // BGMの設定
         sounds.bgm.loop = true;
         sounds.bgm.volume = 0.5;
-        
+
         // 効果音の音量設定
         sounds.shoot.volume = 0.3;
         sounds.hit.volume = 0.4;
         sounds.damage.volume = 0.5;
         sounds.gameover.volume = 0.6;
         sounds.clear.volume = 0.6;
-        
+
         // 音声再生のヘルパー関数
         function playSound(soundName) {
             if (sounds[soundName]) {
@@ -447,14 +463,14 @@
                 sounds[soundName].play().catch(e => console.log('Audio play failed:', e));
             }
         }
-        
+
         function stopSound(soundName) {
             if (sounds[soundName]) {
                 sounds[soundName].pause();
                 sounds[soundName].currentTime = 0;
             }
         }
-        
+
         // ゲーム状態
         let gameState = 'title'; // 'title', 'playing', 'gameover', 'ranking'
         let score = 0;
@@ -462,7 +478,7 @@
         let combo = 0;
         let maxCombo = 0;
         let frame = 0;
-        
+
         // 煩悩のリスト
         const bonnouList = [
             '貪欲', '瞋恚', '愚痴', '慢心', '疑惑', '邪見',
@@ -471,7 +487,7 @@
             '渇愛', '我執', '邪念', '雑念', '妄執', '煩い',
             '不安', '恐怖', '後悔', '焦燥', '絶望', '孤独'
         ];
-        
+
         // プレイヤー
         const player = {
             x: canvas.width / 2,
@@ -480,23 +496,23 @@
             height: 40,
             speed: 6
         };
-        
+
         // キー入力
         const keys = {};
         let canShoot = true;
         let shootCooldown = 0;
-        
+
         // ゲームオブジェクト
         const bullets = [];
         const enemies = [];
         const particles = [];
-        
+
         // ランキングデータ
         function loadRankings() {
             const saved = localStorage.getItem('nenbunRankings');
             return saved ? JSON.parse(saved) : [];
         }
-        
+
         function saveRanking(score, combo) {
             const rankings = loadRankings();
             const now = new Date();
@@ -509,16 +525,16 @@
             rankings.splice(10); // 上位10件のみ保存
             localStorage.setItem('nenbunRankings', JSON.stringify(rankings));
         }
-        
+
         function displayRankings() {
             const rankings = loadRankings();
             const rankingList = document.getElementById('rankingList');
-            
+
             if (rankings.length === 0) {
                 rankingList.innerHTML = '<p style="color: #888; padding: 20px;">まだ記録がありません</p>';
                 return;
             }
-            
+
             let html = '';
             rankings.forEach((rank, index) => {
                 const isTop3 = index < 3;
@@ -533,7 +549,7 @@
             });
             rankingList.innerHTML = html;
         }
-        
+
         // イベントリスナー
         document.addEventListener('keydown', (e) => {
             keys[e.key] = true;
@@ -546,17 +562,17 @@
                 }
             }
         });
-        
+
         document.addEventListener('keyup', (e) => {
             keys[e.key] = false;
         });
-        
+
         startBtn.addEventListener('click', startGame);
         restartBtn.addEventListener('click', startGame);
         rankingBtn.addEventListener('click', showRanking);
         backToTitleBtn.addEventListener('click', showTitle);
         toTitleBtn.addEventListener('click', showTitle);
-        
+
         // 仮想コントローラーのイベント
         // 左ボタン
         leftBtn.addEventListener('touchstart', (e) => {
@@ -575,7 +591,7 @@
             e.preventDefault();
             touchLeft = false;
         });
-        
+
         // 右ボタン
         rightBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
@@ -593,7 +609,7 @@
             e.preventDefault();
             touchRight = false;
         });
-        
+
         // 念仏ボタン
         shootBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
@@ -611,7 +627,7 @@
                 shootCooldown = 10;
             }
         });
-        
+
         function showTitle() {
             gameState = 'title';
             titleScreen.classList.remove('hidden');
@@ -620,14 +636,14 @@
             infoPanel.classList.add('hidden');
             virtualControls.classList.add('hidden');
         }
-        
+
         function showRanking() {
             gameState = 'ranking';
             titleScreen.classList.add('hidden');
             rankingScreen.classList.remove('hidden');
             displayRankings();
         }
-        
+
         function startGame() {
             gameState = 'playing';
             score = 0;
@@ -641,22 +657,22 @@
             player.x = canvas.width / 2;
             touchLeft = false;
             touchRight = false;
-            
+
             titleScreen.classList.add('hidden');
             gameOverScreen.classList.add('hidden');
             rankingScreen.classList.add('hidden');
             infoPanel.classList.remove('hidden');
             virtualControls.classList.remove('hidden');
-            
+
             // BGM開始
             stopSound('gameover');
             stopSound('clear');
             playSound('bgm');
-            
+
             updateUI();
             gameLoop();
         }
-        
+
         function shootBullet() {
             bullets.push({
                 x: player.x,
@@ -668,7 +684,7 @@
             });
             playSound('shoot');
         }
-        
+
         function spawnEnemy() {
             const bonnou = bonnouList[Math.floor(Math.random() * bonnouList.length)];
             const speed = 1 + Math.random() * 2 + (score / 30);
@@ -683,7 +699,7 @@
                 hp: 1
             });
         }
-        
+
         function createParticles(x, y, color) {
             for (let i = 0; i < 20; i++) {
                 particles.push({
@@ -697,26 +713,26 @@
                 });
             }
         }
-        
+
         function checkCollision(rect1, rect2) {
             return rect1.x < rect2.x + rect2.width &&
-                   rect1.x + rect1.width > rect2.x &&
-                   rect1.y < rect2.y + rect2.height &&
-                   rect1.y + rect1.height > rect2.y;
+                rect1.x + rect1.width > rect2.x &&
+                rect1.y < rect2.y + rect2.height &&
+                rect1.y + rect1.height > rect2.y;
         }
-        
+
         function updateUI() {
             document.getElementById('score').textContent = score;
             document.getElementById('health').textContent = health;
             document.getElementById('combo').textContent = combo;
         }
-        
+
         function gameOver(win) {
             gameState = 'gameover';
             gameOverScreen.classList.remove('hidden');
             infoPanel.classList.add('hidden');
             virtualControls.classList.add('hidden');
-            
+
             // BGM停止と結果音
             stopSound('bgm');
             if (win) {
@@ -724,10 +740,10 @@
             } else {
                 playSound('gameover');
             }
-            
+
             // ランキング保存
             saveRanking(score, maxCombo);
-            
+
             if (win) {
                 document.getElementById('resultTitle').textContent = '解脱達成！';
                 document.getElementById('resultText').textContent = '108の煩悩を全て打ち払いました';
@@ -735,16 +751,16 @@
                 document.getElementById('resultTitle').textContent = '煩悩に飲まれた';
                 document.getElementById('resultText').textContent = '煩悩に心を侵されてしまいました';
             }
-            
-            document.getElementById('currentScore').innerHTML = 
+
+            document.getElementById('currentScore').innerHTML =
                 `撃破数: ${score} / 108<br>最大連鎖: ${maxCombo}`;
         }
-        
+
         function update() {
             if (gameState !== 'playing') return;
-            
+
             frame++;
-            
+
             // クールダウン管理
             if (shootCooldown > 0) {
                 shootCooldown--;
@@ -752,7 +768,7 @@
                     canShoot = true;
                 }
             }
-            
+
             // プレイヤー移動（キーボード + 仮想コントローラー）
             if ((keys['ArrowLeft'] || touchLeft) && player.x > player.width / 2) {
                 player.x -= player.speed;
@@ -760,7 +776,7 @@
             if ((keys['ArrowRight'] || touchRight) && player.x < canvas.width - player.width / 2) {
                 player.x += player.speed;
             }
-            
+
             // 弾の更新
             for (let i = bullets.length - 1; i >= 0; i--) {
                 bullets[i].y -= bullets[i].speed;
@@ -768,16 +784,16 @@
                     bullets.splice(i, 1);
                 }
             }
-            
+
             // 敵の生成
             if (frame % Math.max(40 - Math.floor(score / 10), 20) === 0 && score < 108) {
                 spawnEnemy();
             }
-            
+
             // 敵の更新
             for (let i = enemies.length - 1; i >= 0; i--) {
                 enemies[i].y += enemies[i].speed;
-                
+
                 // 画面外に出たら削除してダメージ
                 if (enemies[i].y > canvas.height) {
                     enemies.splice(i, 1);
@@ -790,13 +806,13 @@
                     }
                     continue;
                 }
-                
+
                 // 弾との衝突判定
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     if (checkCollision(bullets[j], enemies[i])) {
-                        createParticles(enemies[i].x + enemies[i].width / 2, 
-                                      enemies[i].y + enemies[i].height / 2, 
-                                      enemies[i].color);
+                        createParticles(enemies[i].x + enemies[i].width / 2,
+                            enemies[i].y + enemies[i].height / 2,
+                            enemies[i].color);
                         bullets.splice(j, 1);
                         enemies.splice(i, 1);
                         score++;
@@ -804,7 +820,7 @@
                         if (combo > maxCombo) maxCombo = combo;
                         playSound('hit');
                         updateUI();
-                        
+
                         if (score >= 108) {
                             gameOver(true);
                         }
@@ -812,25 +828,25 @@
                     }
                 }
             }
-            
+
             // パーティクルの更新
             for (let i = particles.length - 1; i >= 0; i--) {
                 particles[i].x += particles[i].vx;
                 particles[i].y += particles[i].vy;
                 particles[i].vy += 0.2;
                 particles[i].life--;
-                
+
                 if (particles[i].life <= 0) {
                     particles.splice(i, 1);
                 }
             }
         }
-        
+
         function draw() {
             // 背景をクリア
             ctx.fillStyle = 'rgba(15, 12, 41, 0.2)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+
             // 背景の星
             if (frame % 5 === 0) {
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
@@ -840,81 +856,81 @@
                     ctx.fillRect(x, y, 2, 2);
                 }
             }
-            
+
             // プレイヤー（修行僧）の描画
             ctx.save();
             ctx.translate(player.x, player.y);
-            
+
             // 体（袈裟）
             ctx.fillStyle = '#ff6f00';
             ctx.fillRect(-player.width / 2, -10, player.width, 30);
-            
+
             // 頭
             ctx.fillStyle = '#ffb74d';
             ctx.beginPath();
             ctx.arc(0, -20, 15, 0, Math.PI * 2);
             ctx.fill();
-            
+
             // 合掌
             ctx.fillStyle = '#ffe0b2';
             ctx.fillRect(-5, 0, 10, 15);
-            
+
             // 光背
             ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
             ctx.lineWidth = 3;
             ctx.beginPath();
             ctx.arc(0, -10, 30, 0, Math.PI * 2);
             ctx.stroke();
-            
+
             ctx.restore();
-            
+
             // 弾（念仏）の描画
             bullets.forEach(bullet => {
                 ctx.save();
                 ctx.fillStyle = bullet.color;
                 ctx.shadowBlur = 15;
                 ctx.shadowColor = bullet.color;
-                
+
                 // 光る弾
                 ctx.beginPath();
                 ctx.ellipse(bullet.x, bullet.y, bullet.width / 2, bullet.height / 2, 0, 0, Math.PI * 2);
                 ctx.fill();
-                
+
                 // 卍マーク
                 ctx.shadowBlur = 0;
                 ctx.fillStyle = '#fff';
                 ctx.font = 'bold 14px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.fillText('卍', bullet.x, bullet.y + 5);
-                
+
                 ctx.restore();
             });
-            
+
             // 敵（煩悩）の描画
             enemies.forEach(enemy => {
                 ctx.save();
                 ctx.fillStyle = enemy.color;
                 ctx.shadowBlur = 20;
                 ctx.shadowColor = enemy.color;
-                
+
                 // 煩悩の形
                 ctx.beginPath();
-                ctx.ellipse(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 
-                           enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
+                ctx.ellipse(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2,
+                    enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
                 ctx.fill();
-                
+
                 ctx.shadowBlur = 0;
-                
+
                 // テキスト
                 ctx.fillStyle = '#fff';
                 ctx.font = 'bold 16px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(enemy.text, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
-                
+
                 ctx.restore();
             });
-            
+
             // パーティクルの描画
             particles.forEach(particle => {
                 ctx.fillStyle = particle.color;
@@ -924,7 +940,7 @@
                 ctx.fill();
                 ctx.globalAlpha = 1;
             });
-            
+
             // コンボ表示
             if (combo > 2) {
                 ctx.save();
@@ -937,18 +953,19 @@
                 ctx.restore();
             }
         }
-        
+
         function gameLoop() {
             update();
             draw();
-            
+
             if (gameState === 'playing') {
                 requestAnimationFrame(gameLoop);
             }
         }
-        
+
         // 初期化
         showTitle();
     </script>
 </body>
+
 </html>
