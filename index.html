@@ -287,12 +287,12 @@
         }
 
         #levelEasy {
-            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
         }
 
         #levelEasy:hover {
-            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
+            box-shadow: 0 7px 20px rgba(33, 150, 243, 0.6);
         }
 
         #levelNormal {
@@ -436,8 +436,7 @@
                 <p>← → キー：移動</p>
                 <p>スペースキー：念仏発射</p>
                 <p><br><strong>注意</strong></p>
-                <p style="color:#00ff88;">緑の「念仏」は撃つな！</p>
-                <p style="color:#00ff88;">「徳」を取ると功徳回復</p>
+                <p style="color:#00ff88;">緑の「読経」に触れると功徳回復</p>
             </div>
 
             <button id="startBtn">修行を始める</button>
@@ -635,7 +634,6 @@
         const bullets = [];
         const enemies = [];
         const particles = [];
-        const healItems = []; // 回復アイテム
 
         // ランキングデータ
         function loadRankings() {
@@ -811,7 +809,6 @@
             bullets.length = 0;
             enemies.length = 0;
             particles.length = 0;
-            healItems.length = 0;
             player.x = canvas.width / 2;
             touchLeft = false;
             touchRight = false;
@@ -845,12 +842,23 @@
         }
 
         function spawnEnemy() {
-            // 10%の確率で「念仏」（撃ってはいけない）が出現
+            // 10%の確率で「読経」（撃ってはいけない）が出現
             const isNenbutsu = Math.random() < 0.1;
-            const bonnou = isNenbutsu ? '念仏' : bonnouList[Math.floor(Math.random() * bonnouList.length)];
+            const bonnou = isNenbutsu ? '読経' : bonnouList[Math.floor(Math.random() * bonnouList.length)];
             const settings = levelSettings[currentLevel];
             // スピード = 基本速度 + ランダム + 進行に応じて加速
             const speed = baseSpeed + Math.random() * 1.5 + (score * settings.speedIncrease);
+
+            // 緑系の色（80-160度）を避けた色を生成
+            let hue;
+            if (isNenbutsu) {
+                hue = null; // 読経は固定色
+            } else {
+                // 0-70度（赤～オレンジ～黄色）または 170-360度（青～紫～赤）からランダム選択
+                const range = Math.random() < 0.3 ? 70 : 190; // 0-70の範囲が30%、170-360の範囲が70%
+                hue = range === 70 ? Math.random() * 70 : 170 + Math.random() * 190;
+            }
+
             enemies.push({
                 x: Math.random() * (canvas.width - 60) + 30,
                 y: -50,
@@ -858,7 +866,7 @@
                 height: 40,
                 speed: speed,
                 text: bonnou,
-                color: isNenbutsu ? '#00ff88' : `hsl(${Math.random() * 360}, 70%, 50%)`,
+                color: isNenbutsu ? '#00ff88' : `hsl(${hue}, 70%, 50%)`,
                 hp: 1,
                 isNenbutsu: isNenbutsu
             });
@@ -878,16 +886,7 @@
             }
         }
 
-        // 回復アイテム生成
-        function spawnHealItem() {
-            healItems.push({
-                x: Math.random() * (canvas.width - 40) + 20,
-                y: -30,
-                width: 30,
-                height: 30,
-                speed: 2
-            });
-        }
+
 
         function checkCollision(rect1, rect2) {
             return rect1.x < rect2.x + rect2.width &&
@@ -970,40 +969,7 @@
                 spawnEnemy();
             }
 
-            // 回復アイテムの生成（約5%の確率で出現）
-            if (frame % 60 === 0 && Math.random() < 0.05 && health < 3) {
-                spawnHealItem();
-            }
 
-            // 回復アイテムの更新
-            for (let i = healItems.length - 1; i >= 0; i--) {
-                healItems[i].y += healItems[i].speed;
-
-                // 画面外に出たら削除
-                if (healItems[i].y > canvas.height) {
-                    healItems.splice(i, 1);
-                    continue;
-                }
-
-                // プレイヤーとの衝突判定（プレイヤーが取る）
-                const playerRect = {
-                    x: player.x - player.width / 2,
-                    y: player.y - 30,
-                    width: player.width,
-                    height: 50
-                };
-                if (checkCollision(healItems[i], playerRect)) {
-                    createParticles(healItems[i].x + healItems[i].width / 2,
-                        healItems[i].y + healItems[i].height / 2,
-                        '#00ff88');
-                    healItems.splice(i, 1);
-                    if (health < 3) {
-                        health++;
-                        updateUI();
-                    }
-                    playSound('hit');
-                }
-            }
 
             // 敵の更新
             for (let i = enemies.length - 1; i >= 0; i--) {
@@ -1012,7 +978,7 @@
                 // 画面外に出たら削除
                 if (enemies[i].y > canvas.height) {
                     if (enemies[i].isNenbutsu) {
-                        // 念仏は画面外に出てもOK（むしろ良い）
+                        // 読経は画面外に出てもOK（むしろ良い）
                         enemies.splice(i, 1);
                     } else {
                         // 煩悩は画面外に出たらダメージ
@@ -1029,6 +995,26 @@
                     continue;
                 }
 
+                // プレイヤーとの衝突判定（読経に触れたらHP回復）
+                const playerRect = {
+                    x: player.x - player.width / 2,
+                    y: player.y - 30,
+                    width: player.width,
+                    height: 50
+                };
+                if (enemies[i].isNenbutsu && checkCollision(enemies[i], playerRect)) {
+                    createParticles(enemies[i].x + enemies[i].width / 2,
+                        enemies[i].y + enemies[i].height / 2,
+                        enemies[i].color);
+                    enemies.splice(i, 1);
+                    if (health < 3) {
+                        health++;
+                        updateUI();
+                    }
+                    playSound('hit');
+                    continue;
+                }
+
                 // 弾との衝突判定
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     if (checkCollision(bullets[j], enemies[i])) {
@@ -1038,16 +1024,8 @@
                         bullets.splice(j, 1);
 
                         if (enemies[i].isNenbutsu) {
-                            // 念仏を撃ってしまった！ペナルティ
+                            // 読経を撃った（HPは減らない）
                             enemies.splice(i, 1);
-                            health--;
-                            combo = 0;
-                            playSound('damage');
-                            updateUI();
-                            if (health <= 0) {
-                                lastBonnou = '念仏（誤射）';
-                                gameOver(false);
-                            }
                         } else {
                             // 煩悩を撃破
                             enemies.splice(i, 1);
@@ -1168,30 +1146,7 @@
                 ctx.restore();
             });
 
-            // 回復アイテムの描画
-            healItems.forEach(item => {
-                ctx.save();
-                ctx.fillStyle = '#00ff88';
-                ctx.shadowBlur = 20;
-                ctx.shadowColor = '#00ff88';
 
-                // 蓮の花の形
-                ctx.beginPath();
-                ctx.arc(item.x + item.width / 2, item.y + item.height / 2,
-                    item.width / 2, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.shadowBlur = 0;
-
-                // 功徳マーク
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 16px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('徳', item.x + item.width / 2, item.y + item.height / 2);
-
-                ctx.restore();
-            });
 
             // パーティクルの描画
             particles.forEach(particle => {
