@@ -265,17 +265,20 @@
         }
 
         .level-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            max-width: 500px;
         }
 
         .level-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px 40px;
+            padding: 20px 15px;
+            min-height: 100px;
+            justify-content: center;
         }
 
         .level-name {
@@ -295,7 +298,7 @@
         }
 
         .level-btn:disabled {
-            opacity: 0.4;
+            opacity: 0.5;
             cursor: not-allowed;
             filter: grayscale(70%);
         }
@@ -303,6 +306,10 @@
         .level-btn:disabled:hover {
             transform: none;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #levelDemon {
+            grid-column: 1 / -1;
         }
 
         #levelEasy {
@@ -336,10 +343,15 @@
             background: linear-gradient(135deg, #9c27b0 0%, #4a148c 100%);
             box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
             animation: demonPulse 2s ease-in-out infinite;
+            grid-column: 1 / -1;
         }
 
         #levelDemon:hover {
             box-shadow: 0 7px 20px rgba(156, 39, 176, 0.6);
+        }
+
+        #levelDemon.hidden {
+            display: none !important;
         }
 
         @keyframes demonPulse {
@@ -441,7 +453,7 @@
             font-size: 16px;
             padding: 10px 30px;
             min-width: 180px;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .unlock-btn:hover {
@@ -593,28 +605,27 @@
                 <button id="levelNormal" class="level-btn">
                     <span class="level-name">仏性Lev2</span>
                     <span class="level-desc">煩悩72体 / 普通</span>
-                    <span class="level-lock">🔒 仏性Lev1をクリアで解放</span>
+                    <span class="level-lock">仏性Lev1をクリアで解放</span>
                 </button>
                 <button id="levelHard" class="level-btn">
                     <span class="level-name">仏性Lev3</span>
                     <span class="level-desc">煩悩108体 / 高速</span>
-                    <span class="level-lock">🔒 仏性Lev2をクリアで解放</span>
+                    <span class="level-lock">仏性Lev2をクリアで解放</span>
                 </button>
-                <button id="levelDemon" class="level-btn">
-                    <span class="level-name">👹 鬼レベル 👹</span>
+                <button id="levelDemon" class="level-btn hidden">
+                    <span class="level-name">鬼レベル</span>
                     <span class="level-desc">無限煩悩 / 加速地獄</span>
-                    <span class="level-lock">🔒 仏性Lev3をクリアで解放</span>
                 </button>
             </div>
 
-            <button id="unlockBtn" class="unlock-btn">🔓 パスワードで解放</button>
+            <button id="unlockBtn" class="unlock-btn">パスワードで解放</button>
             <button id="backFromLevelBtn">戻る</button>
         </div>
 
         <!-- パスワード入力モーダル -->
         <div id="passwordModal" class="screen hidden">
             <div class="password-container">
-                <h2>🔐 レベル解放</h2>
+                <h2>レベル解放</h2>
                 <p>パスワードを入力してレベルを解放</p>
                 <input type="password" id="passwordInput" placeholder="パスワードを入力" maxlength="20">
                 <div class="password-buttons">
@@ -766,7 +777,7 @@
                 isInfinite: false
             },
             demon: {
-                name: '👹鬼レベル👹',
+                name: '鬼レベル',
                 targetScore: 999999, // 実質無限
                 baseSpeed: 2.0,
                 spawnRate: 25,
@@ -1050,13 +1061,13 @@
                 hardLock.style.display = hardUnlocked ? 'none' : 'block';
             }
 
-            // 鬼レベルの解放状態
+            // 鬼レベルの表示/非表示
             const demonUnlocked = isLevelUnlocked('demon');
             const levelDemonBtn = document.getElementById('levelDemon');
-            levelDemonBtn.disabled = !demonUnlocked;
-            const demonLock = levelDemonBtn.querySelector('.level-lock');
-            if (demonLock) {
-                demonLock.style.display = demonUnlocked ? 'none' : 'block';
+            if (demonUnlocked) {
+                levelDemonBtn.classList.remove('hidden');
+            } else {
+                levelDemonBtn.classList.add('hidden');
             }
         }
 
