@@ -265,17 +265,20 @@
         }
 
         .level-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            max-width: 500px;
         }
 
         .level-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px 40px;
+            padding: 20px 15px;
+            min-height: 100px;
+            justify-content: center;
         }
 
         .level-name {
@@ -295,7 +298,7 @@
         }
 
         .level-btn:disabled {
-            opacity: 0.4;
+            opacity: 0.5;
             cursor: not-allowed;
             filter: grayscale(70%);
         }
@@ -303,6 +306,11 @@
         .level-btn:disabled:hover {
             transform: none;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #levelDemon {
+            grid-column: 2;
+            grid-row: 2;
         }
 
         #levelEasy {
@@ -330,6 +338,135 @@
 
         #levelHard:hover {
             box-shadow: 0 7px 20px rgba(244, 67, 54, 0.6);
+        }
+
+        #levelDemon {
+            background: linear-gradient(135deg, #9c27b0 0%, #4a148c 100%);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+            animation: demonPulse 2s ease-in-out infinite;
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        #levelDemon:hover {
+            box-shadow: 0 7px 20px rgba(156, 39, 176, 0.6);
+        }
+
+        #levelDemon.hidden {
+            display: none !important;
+        }
+
+        @keyframes demonPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 5px 25px rgba(156, 39, 176, 0.8), 0 0 30px rgba(156, 39, 176, 0.5);
+            }
+        }
+
+        /* パスワード入力モーダル */
+        #passwordModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .password-container {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 3px solid #d4af37;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.6);
+        }
+
+        .password-container h2 {
+            color: #d4af37;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .password-container p {
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .password-hint {
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        #passwordInput {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #d4af37;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            text-align: center;
+            font-family: 'MS Gothic', 'Courier New', monospace;
+            margin-bottom: 20px;
+        }
+
+        #passwordInput:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .password-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .password-buttons button {
+            min-width: 120px;
+        }
+
+        #passwordMessage {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        #passwordMessage.success {
+            color: #00ff88;
+        }
+
+        #passwordMessage.error {
+            color: #ff6f00;
+        }
+
+        .unlock-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+            font-size: 16px;
+            padding: 10px 30px;
+            min-width: 180px;
+            margin-top: 20px;
+        }
+
+        .unlock-btn:hover {
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
         }
 
         /* 仮想コントローラー */
@@ -477,16 +614,38 @@
                 <button id="levelNormal" class="level-btn">
                     <span class="level-name">仏性Lev2</span>
                     <span class="level-desc">煩悩72体 / 普通</span>
-                    <span class="level-lock">🔒 仏性Lev1をクリアで解放</span>
+                    <span class="level-lock">仏性Lev1をクリアで解放</span>
                 </button>
                 <button id="levelHard" class="level-btn">
                     <span class="level-name">仏性Lev3</span>
                     <span class="level-desc">煩悩108体 / 高速</span>
-                    <span class="level-lock">🔒 仏性Lev2をクリアで解放</span>
+                    <span class="level-lock">仏性Lev2をクリアで解放</span>
+                </button>
+                <button id="levelDemon" class="level-btn hidden">
+                    <span class="level-name">鬼レベル</span>
+                    <span class="level-desc">無限煩悩 / 加速地獄</span>
                 </button>
             </div>
 
+            <button id="unlockBtn" class="unlock-btn">パスワードで解放</button>
             <button id="backFromLevelBtn">戻る</button>
+        </div>
+
+        <!-- パスワード入力モーダル -->
+        <div id="passwordModal" class="screen hidden">
+            <div class="password-container">
+                <h2>レベル解放</h2>
+                <p>
+                    パスワードを入力してレベルを解放<br>
+                    <span class="password-hint">※各レベルに対応するパスワードがあります</span>
+                </p>
+                <input type="password" id="passwordInput" placeholder="パスワードを入力" maxlength="20">
+                <div class="password-buttons">
+                    <button id="passwordSubmitBtn">確認</button>
+                    <button id="passwordCancelBtn">キャンセル</button>
+                </div>
+                <div id="passwordMessage"></div>
+            </div>
         </div>
 
         <!-- ゲームオーバー画面 -->
@@ -610,21 +769,32 @@
                 targetScore: 36,
                 baseSpeed: 0.8,
                 spawnRate: 50,
-                speedIncrease: 0.02
+                speedIncrease: 0.02,
+                isInfinite: false
             },
             normal: {
                 name: '仏性Lev2',
                 targetScore: 72,
                 baseSpeed: 1.2,
                 spawnRate: 40,
-                speedIncrease: 0.03
+                speedIncrease: 0.03,
+                isInfinite: false
             },
             hard: {
                 name: '仏性Lev3',
                 targetScore: 108,
                 baseSpeed: 1.8,
                 spawnRate: 30,
-                speedIncrease: 0.04
+                speedIncrease: 0.04,
+                isInfinite: false
+            },
+            demon: {
+                name: '鬼レベル',
+                targetScore: 999999, // 実質無限
+                baseSpeed: 2.0,
+                spawnRate: 25,
+                speedIncrease: 0.06, // より速く加速
+                isInfinite: true
             }
         };
 
@@ -697,6 +867,7 @@
             if (level === 'easy') return true; // 仏性Lev1は常に解放
             if (level === 'normal') return cleared.includes('easy'); // 仏性Lev2はLev1クリアで解放
             if (level === 'hard') return cleared.includes('normal'); // 仏性Lev3はLev2クリアで解放
+            if (level === 'demon') return cleared.includes('hard'); // 鬼レベルはLev3クリアで解放
             return false;
         }
 
@@ -752,7 +923,94 @@
         document.getElementById('levelEasy').addEventListener('click', () => startGame('easy'));
         document.getElementById('levelNormal').addEventListener('click', () => startGame('normal'));
         document.getElementById('levelHard').addEventListener('click', () => startGame('hard'));
+        document.getElementById('levelDemon').addEventListener('click', () => startGame('demon'));
         document.getElementById('backFromLevelBtn').addEventListener('click', showTitle);
+
+        // パスワード解放ボタン
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordMessage = document.getElementById('passwordMessage');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const passwordSubmitBtn = document.getElementById('passwordSubmitBtn');
+        const passwordCancelBtn = document.getElementById('passwordCancelBtn');
+
+        unlockBtn.addEventListener('click', () => {
+            passwordModal.classList.remove('hidden');
+            passwordInput.value = '';
+            passwordMessage.textContent = '';
+            passwordMessage.className = '';
+            setTimeout(() => passwordInput.focus(), 100);
+        });
+
+        passwordCancelBtn.addEventListener('click', () => {
+            passwordModal.classList.add('hidden');
+        });
+
+        passwordSubmitBtn.addEventListener('click', checkPassword);
+
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        function checkPassword() {
+            const password = passwordInput.value.trim();
+            const cleared = loadClearedLevels();
+            let unlocked = false;
+            let message = '';
+
+            // パスワードごとに異なるレベルを解放
+            if (password === 'nenbutsu-mashimashi1') {
+                // 仏性Lev2を解放（easyをクリア済みにする）
+                if (!cleared.includes('easy')) {
+                    cleared.push('easy');
+                }
+                localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+                message = '✓ 仏性Lev2を解放しました！';
+                unlocked = true;
+            } else if (password === 'nenbutsu-mashimashi2') {
+                // 仏性Lev3を解放（easy, normalをクリア済みにする）
+                if (!cleared.includes('easy')) {
+                    cleared.push('easy');
+                }
+                if (!cleared.includes('normal')) {
+                    cleared.push('normal');
+                }
+                localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+                message = '✓ 仏性Lev3を解放しました！';
+                unlocked = true;
+            } else if (password === 'nenbutsu-mashimashi3') {
+                // 鬼レベルを解放（easy, normal, hardをクリア済みにする）
+                if (!cleared.includes('easy')) {
+                    cleared.push('easy');
+                }
+                if (!cleared.includes('normal')) {
+                    cleared.push('normal');
+                }
+                if (!cleared.includes('hard')) {
+                    cleared.push('hard');
+                }
+                localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+                message = '✓ 鬼レベルを解放しました！';
+                unlocked = true;
+            }
+
+            if (unlocked) {
+                passwordMessage.textContent = message;
+                passwordMessage.className = 'success';
+
+                setTimeout(() => {
+                    passwordModal.classList.add('hidden');
+                    showLevelSelect(); // レベル選択画面を更新
+                }, 1500);
+            } else {
+                passwordMessage.textContent = '✗ パスワードが違います';
+                passwordMessage.className = 'error';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
 
         // 仮想コントローラーのイベント
         // 左ボタン
@@ -848,6 +1106,15 @@
             const hardLock = levelHardBtn.querySelector('.level-lock');
             if (hardLock) {
                 hardLock.style.display = hardUnlocked ? 'none' : 'block';
+            }
+
+            // 鬼レベルの表示/非表示
+            const demonUnlocked = isLevelUnlocked('demon');
+            const levelDemonBtn = document.getElementById('levelDemon');
+            if (demonUnlocked) {
+                levelDemonBtn.classList.remove('hidden');
+            } else {
+                levelDemonBtn.classList.add('hidden');
             }
         }
 
@@ -963,11 +1230,12 @@
         }
 
         function updateUI() {
+            const settings = levelSettings[currentLevel];
             document.getElementById('score').textContent = score;
-            document.getElementById('targetScore').textContent = targetScore;
+            document.getElementById('targetScore').textContent = settings.isInfinite ? '∞' : targetScore;
             document.getElementById('health').textContent = health;
             document.getElementById('combo').textContent = combo;
-            document.getElementById('levelDisplay').textContent = levelSettings[currentLevel].name;
+            document.getElementById('levelDisplay').textContent = settings.name;
         }
 
         function gameOver(win) {
@@ -990,16 +1258,23 @@
             saveRanking(score, maxCombo);
 
             const levelName = levelSettings[currentLevel].name;
+            const settings = levelSettings[currentLevel];
+            const targetDisplay = settings.isInfinite ? '∞' : targetScore;
+
             if (win) {
                 document.getElementById('resultTitle').textContent = '解脱達成!';
                 document.getElementById('resultText').textContent = `${targetScore}の煩悩を全て打ち払いました`;
                 document.getElementById('currentScore').innerHTML =
-                    `【${levelName}】<br>撃破数: ${score} / ${targetScore}<br>最大連鎖: ${maxCombo}`;
+                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}`;
             } else {
                 document.getElementById('resultTitle').textContent = '煩悩に飲まれた';
-                document.getElementById('resultText').textContent = `「${lastBonnou}」に心を侵されてしまいました`;
+                if (settings.isInfinite) {
+                    document.getElementById('resultText').textContent = `鬼の煩悩に飲み込まれました...`;
+                } else {
+                    document.getElementById('resultText').textContent = `「${lastBonnou}」に心を侵されてしまいました`;
+                }
                 document.getElementById('currentScore').innerHTML =
-                    `【${levelName}】<br>撃破数: ${score} / ${targetScore}<br>最大連鎖: ${maxCombo}<br><br>敗因: <span style="color:#ff6f00;font-size:36px;">${lastBonnou}</span>`;
+                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}<br><br>敗因: <span style="color:#ff6f00;font-size:36px;">${lastBonnou}</span>`;
             }
         }
 
@@ -1033,8 +1308,10 @@
             }
 
             // 敵の生成（難易度に応じた間隔）
-            const currentSpawnRate = Math.max(spawnRate - Math.floor(score / 10), 15);
-            if (frame % currentSpawnRate === 0 && score < targetScore) {
+            const settings = levelSettings[currentLevel];
+            const currentSpawnRate = Math.max(spawnRate - Math.floor(score / 10), settings.isInfinite ? 10 : 15);
+            // 鬼レベルは無限に出現、通常レベルはターゲットスコアまで
+            if (frame % currentSpawnRate === 0 && (settings.isInfinite || score < targetScore)) {
                 spawnEnemy();
             }
 
