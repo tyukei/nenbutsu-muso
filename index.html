@@ -63,10 +63,11 @@
         }
 
         #info {
-            margin-top: 20px;
+            margin-top: 5px;
             font-size: 18px;
             color: #d4af37;
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+            margin-bottom: 10px;
         }
 
         .screen {
@@ -577,6 +578,15 @@
             }
         }
 
+        /* Share Buttons Container */
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
         /* X (Twitter) Share Button */
         .share-btn {
             background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
@@ -585,7 +595,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-top: 10px;
+            min-width: 180px;
         }
 
         .share-btn:hover {
@@ -596,6 +606,21 @@
             content: '𝕏';
             font-size: 20px;
             font-weight: bold;
+        }
+
+        /* Facebook Share Button */
+        .share-btn-fb {
+            background: linear-gradient(135deg, #1877F2 0%, #0d5dbf 100%);
+            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 180px;
+        }
+
+        .share-btn-fb:hover {
+            box-shadow: 0 7px 20px rgba(24, 119, 242, 0.6);
         }
 
         /* 煩悩メッセージ表示 */
@@ -726,7 +751,10 @@
             <h1 id="resultTitle"></h1>
             <h2 id="resultText"></h2>
             <div id="currentScore"></div>
-            <button id="shareBtn" class="share-btn">結果をXに共有</button>
+            <div class="share-buttons">
+                <button id="shareBtn" class="share-btn">Xに共有</button>
+                <button id="shareFbBtn" class="share-btn-fb">Facebookに共有</button>
+            </div>
             <button id="restartBtn">再び修行する</button>
             <button id="toTitleBtn">タイトルに戻る</button>
         </div>
@@ -744,10 +772,9 @@
         <canvas id="gameCanvas" width="480" height="640"></canvas>
 
         <div id="info" class="hidden">
-            <div><span id="levelDisplay"></span></div>
-            <div>煩悩撃破: <span id="score">0</span> / <span id="targetScore">108</span></div>
-            <div>功徳: <span id="health">3</span></div>
-            <div>念仏連鎖: <span id="combo">0</span></div>
+            <div><span id="levelDisplay"></span> | 煩悩撃破: <span id="score">0</span> / <span id="targetScore">108</span>
+            </div>
+            <div>功徳: <span id="health">3</span> | 念仏連鎖: <span id="combo">0</span></div>
         </div>
 
         <!-- 仮想コントローラー（スマホ用） -->
@@ -1086,6 +1113,39 @@
 
             // 新しいウィンドウで開く
             window.open(twitterUrl, '_blank', 'width=550,height=420');
+        }
+
+        // Facebook シェアボタン
+        const shareFbBtn = document.getElementById('shareFbBtn');
+        shareFbBtn.addEventListener('click', shareToFacebook);
+
+        function shareToFacebook() {
+            const levelName = levelSettings[currentLevel].name;
+            const settings = levelSettings[currentLevel];
+            const targetDisplay = settings.isInfinite ? '∞' : targetScore;
+            const isWin = score >= targetScore && !settings.isInfinite;
+
+            // シェアテキストを作成（Xと同じ内容）
+            let shareText = `念仏無双〜修行僧の逆襲〜\n`;
+            shareText += `【${levelName}】\n`;
+
+            if (isWin) {
+                shareText += `✨解脱達成！✨\n`;
+            } else {
+                shareText += `煩悩に飲まれた...\n`;
+            }
+
+            shareText += `撃破数: ${score}/${targetDisplay}\n`;
+            shareText += `最大連鎖: ${maxCombo}\n`;
+            shareText += `\n#念仏無双 #般若心経EDM`;
+
+            const gameUrl = 'https://tyukei.github.io/nenbutsu-muso/';
+
+            // Facebookのシェアダイアログを開く（quoteパラメータで引用テキストを追加）
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gameUrl)}&quote=${encodeURIComponent(shareText)}`;
+
+            // 新しいウィンドウで開く
+            window.open(facebookUrl, '_blank', 'width=550,height=420');
         }
 
         // レベル選択ボタン
