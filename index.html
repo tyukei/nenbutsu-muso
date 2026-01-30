@@ -402,6 +402,24 @@
                 font-size: 20px;
             }
         }
+
+        /* Version Display */
+        #version-display {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: rgba(212, 175, 55, 0.6);
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 500px) {
+            #version-display {
+                font-size: 10px;
+                bottom: 5px;
+                right: 5px;
+            }
+        }
     </style>
 </head>
 
@@ -424,6 +442,8 @@
 
             <button id="startBtn">修行を始める</button>
             <button id="rankingBtn">ランキングを見る</button>
+
+            <div id="version-display"></div>
         </div>
 
         <!-- レベル選択画面 -->
@@ -1204,6 +1224,10 @@
                 requestAnimationFrame(gameLoop);
             }
         }
+
+        // バージョン表示
+        const version = document.querySelector('meta[name="version"]').content;
+        document.getElementById('version-display').textContent = `v${version}`;
 
         // 初期化
         showTitle();
