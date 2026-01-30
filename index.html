@@ -332,6 +332,28 @@
             box-shadow: 0 7px 20px rgba(244, 67, 54, 0.6);
         }
 
+        #levelDemon {
+            background: linear-gradient(135deg, #9c27b0 0%, #4a148c 100%);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+            animation: demonPulse 2s ease-in-out infinite;
+        }
+
+        #levelDemon:hover {
+            box-shadow: 0 7px 20px rgba(156, 39, 176, 0.6);
+        }
+
+        @keyframes demonPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 5px 25px rgba(156, 39, 176, 0.8), 0 0 30px rgba(156, 39, 176, 0.5);
+            }
+        }
+
         /* 仮想コントローラー */
         #virtualControls {
             position: fixed;
@@ -484,6 +506,11 @@
                     <span class="level-desc">煩悩108体 / 高速</span>
                     <span class="level-lock">🔒 仏性Lev2をクリアで解放</span>
                 </button>
+                <button id="levelDemon" class="level-btn">
+                    <span class="level-name">👹 鬼レベル 👹</span>
+                    <span class="level-desc">無限煩悩 / 加速地獄</span>
+                    <span class="level-lock">🔒 仏性Lev3をクリアで解放</span>
+                </button>
             </div>
 
             <button id="backFromLevelBtn">戻る</button>
@@ -610,21 +637,32 @@
                 targetScore: 36,
                 baseSpeed: 0.8,
                 spawnRate: 50,
-                speedIncrease: 0.02
+                speedIncrease: 0.02,
+                isInfinite: false
             },
             normal: {
                 name: '仏性Lev2',
                 targetScore: 72,
                 baseSpeed: 1.2,
                 spawnRate: 40,
-                speedIncrease: 0.03
+                speedIncrease: 0.03,
+                isInfinite: false
             },
             hard: {
                 name: '仏性Lev3',
                 targetScore: 108,
                 baseSpeed: 1.8,
                 spawnRate: 30,
-                speedIncrease: 0.04
+                speedIncrease: 0.04,
+                isInfinite: false
+            },
+            demon: {
+                name: '👹鬼レベル👹',
+                targetScore: 999999, // 実質無限
+                baseSpeed: 2.0,
+                spawnRate: 25,
+                speedIncrease: 0.06, // より速く加速
+                isInfinite: true
             }
         };
 
@@ -697,6 +735,7 @@
             if (level === 'easy') return true; // 仏性Lev1は常に解放
             if (level === 'normal') return cleared.includes('easy'); // 仏性Lev2はLev1クリアで解放
             if (level === 'hard') return cleared.includes('normal'); // 仏性Lev3はLev2クリアで解放
+            if (level === 'demon') return cleared.includes('hard'); // 鬼レベルはLev3クリアで解放
             return false;
         }
 
@@ -752,6 +791,7 @@
         document.getElementById('levelEasy').addEventListener('click', () => startGame('easy'));
         document.getElementById('levelNormal').addEventListener('click', () => startGame('normal'));
         document.getElementById('levelHard').addEventListener('click', () => startGame('hard'));
+        document.getElementById('levelDemon').addEventListener('click', () => startGame('demon'));
         document.getElementById('backFromLevelBtn').addEventListener('click', showTitle);
 
         // 仮想コントローラーのイベント
@@ -848,6 +888,15 @@
             const hardLock = levelHardBtn.querySelector('.level-lock');
             if (hardLock) {
                 hardLock.style.display = hardUnlocked ? 'none' : 'block';
+            }
+
+            // 鬼レベルの解放状態
+            const demonUnlocked = isLevelUnlocked('demon');
+            const levelDemonBtn = document.getElementById('levelDemon');
+            levelDemonBtn.disabled = !demonUnlocked;
+            const demonLock = levelDemonBtn.querySelector('.level-lock');
+            if (demonLock) {
+                demonLock.style.display = demonUnlocked ? 'none' : 'block';
             }
         }
 
@@ -963,11 +1012,12 @@
         }
 
         function updateUI() {
+            const settings = levelSettings[currentLevel];
             document.getElementById('score').textContent = score;
-            document.getElementById('targetScore').textContent = targetScore;
+            document.getElementById('targetScore').textContent = settings.isInfinite ? '∞' : targetScore;
             document.getElementById('health').textContent = health;
             document.getElementById('combo').textContent = combo;
-            document.getElementById('levelDisplay').textContent = levelSettings[currentLevel].name;
+            document.getElementById('levelDisplay').textContent = settings.name;
         }
 
         function gameOver(win) {
@@ -990,16 +1040,23 @@
             saveRanking(score, maxCombo);
 
             const levelName = levelSettings[currentLevel].name;
+            const settings = levelSettings[currentLevel];
+            const targetDisplay = settings.isInfinite ? '∞' : targetScore;
+
             if (win) {
                 document.getElementById('resultTitle').textContent = '解脱達成!';
                 document.getElementById('resultText').textContent = `${targetScore}の煩悩を全て打ち払いました`;
                 document.getElementById('currentScore').innerHTML =
-                    `【${levelName}】<br>撃破数: ${score} / ${targetScore}<br>最大連鎖: ${maxCombo}`;
+                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}`;
             } else {
                 document.getElementById('resultTitle').textContent = '煩悩に飲まれた';
-                document.getElementById('resultText').textContent = `「${lastBonnou}」に心を侵されてしまいました`;
+                if (settings.isInfinite) {
+                    document.getElementById('resultText').textContent = `鬼の煩悩に飲み込まれました...`;
+                } else {
+                    document.getElementById('resultText').textContent = `「${lastBonnou}」に心を侵されてしまいました`;
+                }
                 document.getElementById('currentScore').innerHTML =
-                    `【${levelName}】<br>撃破数: ${score} / ${targetScore}<br>最大連鎖: ${maxCombo}<br><br>敗因: <span style="color:#ff6f00;font-size:36px;">${lastBonnou}</span>`;
+                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}<br><br>敗因: <span style="color:#ff6f00;font-size:36px;">${lastBonnou}</span>`;
             }
         }
 
@@ -1033,8 +1090,10 @@
             }
 
             // 敵の生成（難易度に応じた間隔）
-            const currentSpawnRate = Math.max(spawnRate - Math.floor(score / 10), 15);
-            if (frame % currentSpawnRate === 0 && score < targetScore) {
+            const settings = levelSettings[currentLevel];
+            const currentSpawnRate = Math.max(spawnRate - Math.floor(score / 10), settings.isInfinite ? 10 : 15);
+            // 鬼レベルは無限に出現、通常レベルはターゲットスコアまで
+            if (frame % currentSpawnRate === 0 && (settings.isInfinite || score < targetScore)) {
                 spawnEnemy();
             }
 
