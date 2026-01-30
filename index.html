@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="version" content="1.0.4">
+    <meta name="version" content="1.1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -77,17 +77,17 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             background: rgba(0, 0, 0, 0.95);
             z-index: 10;
             overflow-y: auto;
-            padding: 20px;
+            padding: 30px 20px;
         }
 
         @media (max-width: 500px) {
             .screen {
-                padding: 10px;
+                padding: 20px 10px;
             }
         }
 
@@ -98,14 +98,15 @@
         h1 {
             color: #d4af37;
             font-size: 48px;
-            margin-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 5px;
             text-shadow: 0 0 20px rgba(212, 175, 55, 1);
             animation: glow 2s ease-in-out infinite;
         }
 
         @media (max-width: 500px) {
             h1 {
-                font-size: 36px;
+                font-size: 32px;
             }
         }
 
@@ -124,14 +125,15 @@
         h2 {
             color: #ff9800;
             font-size: 24px;
-            margin-bottom: 30px;
+            margin-top: 0;
+            margin-bottom: 20px;
             text-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
         }
 
         @media (max-width: 500px) {
             h2 {
-                font-size: 20px;
-                margin-bottom: 20px;
+                font-size: 18px;
+                margin-bottom: 15px;
             }
         }
 
@@ -139,15 +141,15 @@
             background: linear-gradient(135deg, #d4af37 0%, #aa8c2e 100%);
             border: none;
             color: #1a1a2e;
-            padding: 15px 40px;
-            font-size: 20px;
+            padding: 12px 40px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 5px;
-            margin: 10px;
+            margin: 8px;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-            min-height: 50px;
+            min-height: 45px;
             min-width: 200px;
         }
 
@@ -265,25 +267,42 @@
         .level-buttons {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin: 20px 0;
+            gap: 10px;
+            margin: 15px 0;
         }
 
         .level-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 40px;
+            padding: 15px 40px;
         }
 
         .level-name {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 22px;
+            margin-bottom: 3px;
         }
 
         .level-desc {
-            font-size: 14px;
+            font-size: 13px;
             opacity: 0.8;
+        }
+
+        .level-lock {
+            font-size: 12px;
+            opacity: 0.6;
+            margin-top: 5px;
+        }
+
+        .level-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(70%);
+        }
+
+        .level-btn:disabled:hover {
+            transform: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         #levelEasy {
@@ -452,16 +471,18 @@
 
             <div class="level-buttons">
                 <button id="levelEasy" class="level-btn">
-                    <span class="level-name">初級</span>
+                    <span class="level-name">仏性Lev1</span>
                     <span class="level-desc">煩悩36体 / ゆっくり</span>
                 </button>
                 <button id="levelNormal" class="level-btn">
-                    <span class="level-name">中級</span>
+                    <span class="level-name">仏性Lev2</span>
                     <span class="level-desc">煩悩72体 / 普通</span>
+                    <span class="level-lock">🔒 仏性Lev1をクリアで解放</span>
                 </button>
                 <button id="levelHard" class="level-btn">
-                    <span class="level-name">上級</span>
+                    <span class="level-name">仏性Lev3</span>
                     <span class="level-desc">煩悩108体 / 高速</span>
+                    <span class="level-lock">🔒 仏性Lev2をクリアで解放</span>
                 </button>
             </div>
 
@@ -585,21 +606,21 @@
 
         const levelSettings = {
             easy: {
-                name: '初級',
+                name: '仏性Lev1',
                 targetScore: 36,
                 baseSpeed: 0.8,
                 spawnRate: 50,
                 speedIncrease: 0.02
             },
             normal: {
-                name: '中級',
+                name: '仏性Lev2',
                 targetScore: 72,
                 baseSpeed: 1.2,
                 spawnRate: 40,
                 speedIncrease: 0.03
             },
             hard: {
-                name: '上級',
+                name: '仏性Lev3',
                 targetScore: 108,
                 baseSpeed: 1.8,
                 spawnRate: 30,
@@ -655,6 +676,28 @@
             rankings.sort((a, b) => b.score - a.score);
             rankings.splice(10); // 上位10件のみ保存
             localStorage.setItem('nenbunRankings', JSON.stringify(rankings));
+        }
+
+        // レベル進行システム
+        function loadClearedLevels() {
+            const saved = localStorage.getItem('nenbunClearedLevels');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveClearedLevel(level) {
+            const cleared = loadClearedLevels();
+            if (!cleared.includes(level)) {
+                cleared.push(level);
+                localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+            }
+        }
+
+        function isLevelUnlocked(level) {
+            const cleared = loadClearedLevels();
+            if (level === 'easy') return true; // 仏性Lev1は常に解放
+            if (level === 'normal') return cleared.includes('easy'); // 仏性Lev2はLev1クリアで解放
+            if (level === 'hard') return cleared.includes('normal'); // 仏性Lev3はLev2クリアで解放
+            return false;
         }
 
         function displayRankings() {
@@ -782,6 +825,30 @@
             levelScreen.classList.remove('hidden');
             gameOverScreen.classList.add('hidden');
             rankingScreen.classList.add('hidden');
+
+            // レベルのロック状態を更新
+            const levelEasyBtn = document.getElementById('levelEasy');
+            const levelNormalBtn = document.getElementById('levelNormal');
+            const levelHardBtn = document.getElementById('levelHard');
+
+            // 仏性Lev1は常に解放
+            levelEasyBtn.disabled = false;
+
+            // 仏性Lev2の解放状態
+            const normalUnlocked = isLevelUnlocked('normal');
+            levelNormalBtn.disabled = !normalUnlocked;
+            const normalLock = levelNormalBtn.querySelector('.level-lock');
+            if (normalLock) {
+                normalLock.style.display = normalUnlocked ? 'none' : 'block';
+            }
+
+            // 仏性Lev3の解放状態
+            const hardUnlocked = isLevelUnlocked('hard');
+            levelHardBtn.disabled = !hardUnlocked;
+            const hardLock = levelHardBtn.querySelector('.level-lock');
+            if (hardLock) {
+                hardLock.style.display = hardUnlocked ? 'none' : 'block';
+            }
         }
 
         function showRanking() {
@@ -913,6 +980,8 @@
             stopSound('bgm');
             if (win) {
                 playSound('clear');
+                // レベルクリア時に進行状況を保存
+                saveClearedLevel(currentLevel);
             } else {
                 playSound('gameover');
             }
@@ -922,7 +991,7 @@
 
             const levelName = levelSettings[currentLevel].name;
             if (win) {
-                document.getElementById('resultTitle').textContent = '解脱達成！';
+                document.getElementById('resultTitle').textContent = '解脱達成!';
                 document.getElementById('resultText').textContent = `${targetScore}の煩悩を全て打ち払いました`;
                 document.getElementById('currentScore').innerHTML =
                     `【${levelName}】<br>撃破数: ${score} / ${targetScore}<br>最大連鎖: ${maxCombo}`;
