@@ -956,14 +956,49 @@
 
         function checkPassword() {
             const password = passwordInput.value.trim();
-            // パスワード: "nenbutsu-mashimashi1" または "nenbutsu-mashimashi2" または "nenbutsu-mashimashi3"
-            if (password === 'nenbutsu-mashimashi1' || password === 'nenbutsu-mashimashi2' || password === 'nenbutsu-mashimashi3') {
-                passwordMessage.textContent = '✓ 全レベル解放成功！';
-                passwordMessage.className = 'success';
+            const cleared = loadClearedLevels();
+            let unlocked = false;
+            let message = '';
 
-                // 全レベルを解放
-                const allLevels = ['easy', 'normal', 'hard'];
-                localStorage.setItem('nenbunClearedLevels', JSON.stringify(allLevels));
+            // パスワードごとに異なるレベルを解放
+            if (password === 'nenbutsu-mashimashi1') {
+                // 仏性Lev2を解放（easyをクリア済みにする）
+                if (!cleared.includes('easy')) {
+                    cleared.push('easy');
+                }
+                localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+                message = '✓ 仏性Lev2を解放しました！';
+                unlocked = true;
+            } else if (password === 'nenbutsu-mashimashi2') {
+                // 仏性Lev3を解放（easy, normalをクリア済みにする）
+                if (!cleared.includes('easy')) {
+                    cleared.push('easy');
+                }
+                if (!cleared.includes('normal')) {
+                    cleared.push('normal');
+                }
+                localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+                message = '✓ 仏性Lev3を解放しました！';
+                unlocked = true;
+            } else if (password === 'nenbutsu-mashimashi3') {
+                // 鬼レベルを解放（easy, normal, hardをクリア済みにする）
+                if (!cleared.includes('easy')) {
+                    cleared.push('easy');
+                }
+                if (!cleared.includes('normal')) {
+                    cleared.push('normal');
+                }
+                if (!cleared.includes('hard')) {
+                    cleared.push('hard');
+                }
+                localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+                message = '✓ 鬼レベルを解放しました！';
+                unlocked = true;
+            }
+
+            if (unlocked) {
+                passwordMessage.textContent = message;
+                passwordMessage.className = 'success';
 
                 setTimeout(() => {
                     passwordModal.classList.add('hidden');
