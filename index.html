@@ -576,6 +576,27 @@
                 right: 5px;
             }
         }
+
+        /* X (Twitter) Share Button */
+        .share-btn {
+            background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
+            box-shadow: 0 5px 15px rgba(29, 161, 242, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .share-btn:hover {
+            box-shadow: 0 7px 20px rgba(29, 161, 242, 0.6);
+        }
+
+        .share-btn::before {
+            content: '𝕏';
+            font-size: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -653,6 +674,7 @@
             <h1 id="resultTitle"></h1>
             <h2 id="resultText"></h2>
             <div id="currentScore"></div>
+            <button id="shareBtn" class="share-btn">結果をXに共有</button>
             <button id="restartBtn">再び修行する</button>
             <button id="toTitleBtn">タイトルに戻る</button>
         </div>
@@ -918,6 +940,40 @@
         rankingBtn.addEventListener('click', showRanking);
         backToTitleBtn.addEventListener('click', showTitle);
         toTitleBtn.addEventListener('click', showTitle);
+
+        // X (Twitter) シェアボタン
+        const shareBtn = document.getElementById('shareBtn');
+        shareBtn.addEventListener('click', shareToTwitter);
+
+        function shareToTwitter() {
+            const levelName = levelSettings[currentLevel].name;
+            const settings = levelSettings[currentLevel];
+            const targetDisplay = settings.isInfinite ? '∞' : targetScore;
+            const isWin = score >= targetScore && !settings.isInfinite;
+
+            // シェアテキストを作成
+            let shareText = `念仏無双〜修行僧の逆襲〜\n`;
+            shareText += `【${levelName}】\n`;
+
+            if (isWin) {
+                shareText += `✨解脱達成！✨\n`;
+            } else {
+                shareText += `煩悩に飲まれた...\n`;
+            }
+
+            shareText += `撃破数: ${score}/${targetDisplay}\n`;
+            shareText += `最大連鎖: ${maxCombo}\n`;
+            shareText += `\nhttps://tyukei.github.io/nenbutsu-muso/\n`;
+
+            // ハッシュタグを追加
+            shareText += `\n#念仏無双 #ゲーム`;
+
+            // X (Twitter) のシェアURLを作成
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+
+            // 新しいウィンドウで開く
+            window.open(twitterUrl, '_blank', 'width=550,height=420');
+        }
 
         // レベル選択ボタン
         document.getElementById('levelEasy').addEventListener('click', () => startGame('easy'));
@@ -1197,7 +1253,7 @@
                 x: Math.random() * (canvas.width - 60) + 30,
                 y: -50,
                 width: 60,
-                height: 40,
+                height: 50,
                 speed: speed,
                 text: bonnou,
                 color: isNenbutsu ? '#00ff88' : `hsl(${hue}, 70%, 50%)`,
