@@ -309,7 +309,8 @@
         }
 
         #levelDemon {
-            grid-column: 1 / -1;
+            grid-column: 2;
+            grid-row: 2;
         }
 
         #levelEasy {
@@ -343,7 +344,8 @@
             background: linear-gradient(135deg, #9c27b0 0%, #4a148c 100%);
             box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
             animation: demonPulse 2s ease-in-out infinite;
-            grid-column: 1 / -1;
+            grid-column: 2;
+            grid-row: 2;
         }
 
         #levelDemon:hover {
@@ -398,9 +400,16 @@
 
         .password-container p {
             color: #ffd700;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
             font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .password-hint {
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
         }
 
         #passwordInput {
@@ -626,7 +635,10 @@
         <div id="passwordModal" class="screen hidden">
             <div class="password-container">
                 <h2>レベル解放</h2>
-                <p>パスワードを入力してレベルを解放</p>
+                <p>
+                    パスワードを入力してレベルを解放<br>
+                    <span class="password-hint">※各レベルに対応するパスワードがあります</span>
+                </p>
                 <input type="password" id="passwordInput" placeholder="パスワードを入力" maxlength="20">
                 <div class="password-buttons">
                     <button id="passwordSubmitBtn">確認</button>
