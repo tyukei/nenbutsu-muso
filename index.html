@@ -354,6 +354,100 @@
             }
         }
 
+        /* パスワード入力モーダル */
+        #passwordModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .password-container {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 3px solid #d4af37;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.6);
+        }
+
+        .password-container h2 {
+            color: #d4af37;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .password-container p {
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        #passwordInput {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #d4af37;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            text-align: center;
+            font-family: 'MS Gothic', 'Courier New', monospace;
+            margin-bottom: 20px;
+        }
+
+        #passwordInput:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .password-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .password-buttons button {
+            min-width: 120px;
+        }
+
+        #passwordMessage {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        #passwordMessage.success {
+            color: #00ff88;
+        }
+
+        #passwordMessage.error {
+            color: #ff6f00;
+        }
+
+        .unlock-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+            font-size: 16px;
+            padding: 10px 30px;
+            min-width: 180px;
+            margin-top: 10px;
+        }
+
+        .unlock-btn:hover {
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
+        }
+
         /* 仮想コントローラー */
         #virtualControls {
             position: fixed;
@@ -513,7 +607,22 @@
                 </button>
             </div>
 
+            <button id="unlockBtn" class="unlock-btn">🔓 パスワードで解放</button>
             <button id="backFromLevelBtn">戻る</button>
+        </div>
+
+        <!-- パスワード入力モーダル -->
+        <div id="passwordModal" class="screen hidden">
+            <div class="password-container">
+                <h2>🔐 レベル解放</h2>
+                <p>パスワードを入力してレベルを解放</p>
+                <input type="password" id="passwordInput" placeholder="パスワードを入力" maxlength="20">
+                <div class="password-buttons">
+                    <button id="passwordSubmitBtn">確認</button>
+                    <button id="passwordCancelBtn">キャンセル</button>
+                </div>
+                <div id="passwordMessage"></div>
+            </div>
         </div>
 
         <!-- ゲームオーバー画面 -->
@@ -793,6 +902,57 @@
         document.getElementById('levelHard').addEventListener('click', () => startGame('hard'));
         document.getElementById('levelDemon').addEventListener('click', () => startGame('demon'));
         document.getElementById('backFromLevelBtn').addEventListener('click', showTitle);
+
+        // パスワード解放ボタン
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordMessage = document.getElementById('passwordMessage');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const passwordSubmitBtn = document.getElementById('passwordSubmitBtn');
+        const passwordCancelBtn = document.getElementById('passwordCancelBtn');
+
+        unlockBtn.addEventListener('click', () => {
+            passwordModal.classList.remove('hidden');
+            passwordInput.value = '';
+            passwordMessage.textContent = '';
+            passwordMessage.className = '';
+            setTimeout(() => passwordInput.focus(), 100);
+        });
+
+        passwordCancelBtn.addEventListener('click', () => {
+            passwordModal.classList.add('hidden');
+        });
+
+        passwordSubmitBtn.addEventListener('click', checkPassword);
+
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        function checkPassword() {
+            const password = passwordInput.value.trim();
+            // パスワード: "念仏無双" または "nenbunmusou"
+            if (password === '念仏無双' || password === 'nenbunmusou' || password === '108') {
+                passwordMessage.textContent = '✓ 全レベル解放成功！';
+                passwordMessage.className = 'success';
+
+                // 全レベルを解放
+                const allLevels = ['easy', 'normal', 'hard'];
+                localStorage.setItem('nenbunClearedLevels', JSON.stringify(allLevels));
+
+                setTimeout(() => {
+                    passwordModal.classList.add('hidden');
+                    showLevelSelect(); // レベル選択画面を更新
+                }, 1500);
+            } else {
+                passwordMessage.textContent = '✗ パスワードが違います';
+                passwordMessage.className = 'error';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
 
         // 仮想コントローラーのイベント
         // 左ボタン
