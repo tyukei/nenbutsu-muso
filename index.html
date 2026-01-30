@@ -1120,10 +1120,29 @@
         shareFbBtn.addEventListener('click', shareToFacebook);
 
         function shareToFacebook() {
+            const levelName = levelSettings[currentLevel].name;
+            const settings = levelSettings[currentLevel];
+            const targetDisplay = settings.isInfinite ? '∞' : targetScore;
+            const isWin = score >= targetScore && !settings.isInfinite;
+
+            // シェアテキストを作成（Xと同じ内容）
+            let shareText = `念仏無双〜修行僧の逆襲〜\n`;
+            shareText += `【${levelName}】\n`;
+
+            if (isWin) {
+                shareText += `✨解脱達成！✨\n`;
+            } else {
+                shareText += `煩悩に飲まれた...\n`;
+            }
+
+            shareText += `撃破数: ${score}/${targetDisplay}\n`;
+            shareText += `最大連鎖: ${maxCombo}\n`;
+            shareText += `\n#念仏無双 #般若心経EDM`;
+
             const gameUrl = 'https://tyukei.github.io/nenbutsu-muso/';
 
-            // Facebookのシェアダイアログを開く
-            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gameUrl)}`;
+            // Facebookのシェアダイアログを開く（quoteパラメータで引用テキストを追加）
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gameUrl)}&quote=${encodeURIComponent(shareText)}`;
 
             // 新しいウィンドウで開く
             window.open(facebookUrl, '_blank', 'width=550,height=420');
