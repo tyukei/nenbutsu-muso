@@ -597,6 +597,58 @@
             font-size: 20px;
             font-weight: bold;
         }
+
+        /* 煩悩メッセージ表示 */
+        #bonnouMessage {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff6f00;
+            border-radius: 10px;
+            padding: 12px 25px;
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            max-width: 85%;
+            text-align: center;
+        }
+
+        #bonnouMessage.show {
+            opacity: 1;
+        }
+
+        .bonnou-title {
+            font-size: 24px;
+            color: #ff6f00;
+            text-shadow: 0 0 10px rgba(255, 111, 0, 0.8);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .bonnou-desc {
+            font-size: 14px;
+            color: #ffd700;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 500px) {
+            #bonnouMessage {
+                padding: 10px 15px;
+                top: 10px;
+                max-width: 90%;
+            }
+
+            .bonnou-title {
+                font-size: 18px;
+            }
+
+            .bonnou-desc {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
@@ -706,6 +758,9 @@
         </div>
     </div>
 
+    <!-- 煩悩メッセージ表示 -->
+    <div id="bonnouMessage"></div>
+
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -779,6 +834,30 @@
         let frame = 0;
         let lastBonnou = ''; // 最後にやられた煩悩
 
+        // 煩悩メッセージ表示
+        const bonnouMessageEl = document.getElementById('bonnouMessage');
+        let bonnouMessageTimeout = null;
+
+        function showBonnouMessage(bonnouText) {
+            // 既存のタイムアウトをクリア
+            if (bonnouMessageTimeout) {
+                clearTimeout(bonnouMessageTimeout);
+            }
+
+            // メッセージを設定して表示
+            const description = bonnouDescriptions[bonnouText] || '心を乱す煩悩';
+            bonnouMessageEl.innerHTML = `
+                <div class="bonnou-title">「${bonnouText}」</div>
+                <div class="bonnou-desc">${description}</div>
+            `;
+            bonnouMessageEl.classList.add('show');
+
+            // 3秒後に非表示
+            bonnouMessageTimeout = setTimeout(() => {
+                bonnouMessageEl.classList.remove('show');
+            }, 3000);
+        }
+
         // 難易度設定
         let currentLevel = 'normal';
         let targetScore = 108; // クリアに必要な撃破数
@@ -828,6 +907,40 @@
             '渇愛', '我執', '邪念', '雑念', '妄執', '煩い',
             '不安', '恐怖', '後悔', '焦燥', '絶望', '孤独'
         ];
+
+        // 煩悩の説明と対処法
+        const bonnouDescriptions = {
+            '貪欲': '限りない欲望 → 足るを知る心で対処',
+            '瞋恚': '激しい怒り → 慈悲の心で鎮める',
+            '愚痴': '真理への無知 → 智慧を磨いて克服',
+            '慢心': '傲慢な心 → 謙虚さを忘れずに',
+            '疑惑': '疑いの心 → 信じる心を持つ',
+            '邪見': '誤った見解 → 正しい理解を求める',
+            '怒り': '心を乱す感情 → 深呼吸で心を落ち着ける',
+            '執着': '手放せない心 → 無常を受け入れる',
+            '嫉妬': '他者を妬む心 → 自分の道を歩む',
+            '傲慢': '自己を過信 → 他者から学ぶ姿勢を',
+            '怠惰': '怠ける心 → 精進の心で克服',
+            '無知': '知らないこと → 学び続ける心を',
+            '欲望': '際限ない欲求 → 必要十分を知る',
+            '憎悪': '憎しみの心 → 許しの心で解放',
+            '迷い': '道に迷う心 → 目的を明確に',
+            '妄想': '現実離れした思考 → 今ここに集中',
+            '煩悶': '心の苦しみ → 受け入れることから',
+            '苦悩': '深い悩み → 一つずつ解決を',
+            '渇愛': '渇くような欲望 → 感謝の心で満たす',
+            '我執': '自我への執着 → 無我の境地へ',
+            '邪念': '邪な考え → 正しい思考を保つ',
+            '雑念': '散漫な思考 → 瞑想で心を整える',
+            '妄執': '誤った執着 → 真実を見極める',
+            '煩い': '心の煩わしさ → 静寂の中で休む',
+            '不安': '先への恐れ → 今を大切に生きる',
+            '恐怖': '恐れの感情 → 勇気を持って向き合う',
+            '後悔': '過去への囚われ → 今から始める',
+            '焦燥': '焦る心 → ゆっくり着実に',
+            '絶望': '希望を失う → 小さな光を見つける',
+            '孤独': '孤立感 → つながりを感じる'
+        };
 
         // プレイヤー
         const player = {
@@ -1210,6 +1323,12 @@
             infoPanel.classList.remove('hidden');
             virtualControls.classList.remove('hidden');
 
+            // 煩悩メッセージをクリア
+            bonnouMessageEl.classList.remove('show');
+            if (bonnouMessageTimeout) {
+                clearTimeout(bonnouMessageTimeout);
+            }
+
             // BGM開始
             stopSound('gameover');
             stopSound('clear');
@@ -1385,6 +1504,7 @@
                     } else {
                         // 煩悩は画面外に出たらダメージ
                         lastBonnou = enemies[i].text; // やられた煩悩を記録
+                        showBonnouMessage(enemies[i].text); // 煩悩メッセージを3秒表示
                         enemies.splice(i, 1);
                         health--;
                         combo = 0;
