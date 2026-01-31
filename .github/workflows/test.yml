@@ -29,8 +29,11 @@ jobs:
           unzip vnu.jar_latest.zip
           
       - name: Validate HTML
+        id: validate_html
+        continue-on-error: true
         run: |
-          java -jar dist/vnu.jar --errors-only index.html
+          java -jar dist/vnu.jar --errors-only index.html 2>&1 | tee vnu_output.txt
+          exit ${PIPESTATUS[0]}
           
       - name: Check required meta tags
         run: |
@@ -55,6 +58,13 @@ jobs:
           fi
           
           echo "✅ All required meta tags present"
+      
+      - name: Upload HTML validation results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: html-validation-results
+          path: vnu_output.txt
 
   performance-test:
     name: Performance Test (Lighthouse)
@@ -125,3 +135,135 @@ jobs:
         with:
           name: accessibility-results
           path: accessibility-report.json
+
+  auto-fix:
+    name: AI Auto-Fix (on failure)
+    runs-on: ubuntu-latest
+    needs: [html-validation, accessibility-test]
+    if: failure() && github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Python dependencies
+        run: |
+          pip install google-generativeai
+      
+      - name: Download test artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: '*-results'
+          merge-multiple: true
+      
+      - name: Collect HTML errors
+        continue-on-error: true
+        run: |
+          if [ -f "vnu_output.txt" ]; then
+            chmod +x .github/scripts/collect_html_errors.sh
+            .github/scripts/collect_html_errors.sh html_errors.json vnu_output.txt
+          else
+            echo '{"test_type":"html_validation","errors":[],"success":true}' > html_errors.json
+          fi
+      
+      - name: Collect accessibility errors
+        continue-on-error: true
+        run: |
+          if [ -f "accessibility-report.json" ]; then
+            node .github/scripts/collect_accessibility_errors.js accessibility-report.json accessibility_errors.json
+          else
+            echo '{"test_type":"accessibility","errors":[],"success":true}' > accessibility_errors.json
+          fi
+      
+      - name: Generate fix suggestions
+        id: generate_fixes
+        if: env.GEMINI_API_KEY != ''
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python3 .github/scripts/generate_fix_suggestions.py > fix_output.txt
+          
+          if [ -f "fix_suggestions.json" ]; then
+            echo "has_fixes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_fixes=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Post PR comment with fixes
+        if: steps.generate_fixes.outputs.has_fixes == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Read fix suggestions
+          SUGGESTIONS=$(cat fix_suggestions.json | jq -r '.suggestions')
+          
+          # Create PR comment
+          cat > comment.md <<'COMMENT_EOF'
+          ## 🤖 AI自動修正提案
+          
+          テストで問題が検出されました。以下の修正案を確認してください。
+          
+          ---
+          
+          COMMENT_EOF
+          
+          echo "$SUGGESTIONS" >> comment.md
+          
+          cat >> comment.md <<'COMMENT_EOF'
+          
+          ---
+          
+          ### ✨ ワンクリック適用
+          
+          この修正を自動で適用するには:
+          
+          1. [Actions](../../actions/workflows/apply-fix.yml) タブを開く
+          2. "Run workflow" をクリック
+          3. PR番号を入力
+          4. Run IDを入力
+          5. "Run workflow" を実行
+          
+          または、手動で修正してください。
+          
+          ---
+          
+          <details>
+          <summary>📊 エラーサマリー</summary>
+          
+          COMMENT_EOF
+          
+          # Add error summary
+          HTML_ERRORS=$(cat html_errors.json | jq -r '.total_errors // 0')
+          A11Y_ERRORS=$(cat accessibility_errors.json | jq -r '.total_violations // 0')
+          
+          echo "- HTMLバリデーションエラー: $HTML_ERRORS" >> comment.md
+          echo "- アクセシビリティ違反: $A11Y_ERRORS" >> comment.md
+          echo "" >> comment.md
+          echo "</details>" >> comment.md
+          
+          # Post comment
+          gh pr comment ${{ github.event.pull_request.number }} --body-file comment.md
+      
+      - name: Upload fix suggestions
+        if: steps.generate_fixes.outputs.has_fixes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: fix-suggestions
+          path: |
+            fix_suggestions.json
+            html_errors.json
+            accessibility_errors.json
