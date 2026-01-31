@@ -89,6 +89,7 @@
 
 ```bash
 # vnu.jarをダウンロード
+mkdir -p dist
 wget -O dist/vnu.jar https://github.com/validator/validator/releases/latest/download/vnu.jar
 
 # バリデーション実行
