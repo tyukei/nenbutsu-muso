@@ -69,11 +69,22 @@ jobs:
           fi
           
           git add index.html
-          git commit -m "fix: apply AI-generated fixes [auto-fix]"
+          git commit -m "fix: apply AI-generated fixes"
           git push
+      
+      - name: Wait for PR update
+        run: |
+          echo "Waiting for PR to update..."
+          sleep 5
       
       - name: Comment on PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr comment ${{ github.event.inputs.pr_number }} --body "✅ AI修正を適用しました。テストを再実行しています..."
+          cat > pr_comment.txt <<'EOF'
+          ✅ AI修正を適用しました。テストを再実行しています...
+          
+          修正内容を確認してください。テストが完了するまでお待ちください。
+          EOF
+          
+          gh pr comment ${{ github.event.inputs.pr_number }} --body-file pr_comment.txt
