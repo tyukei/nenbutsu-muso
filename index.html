@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="version" content="1.1.10">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 修正前: <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
+    <!-- 修正後: -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>念仏退散〜修行僧の葛藤〜</title>
@@ -758,120 +760,122 @@
 </head>
 
 <body>
-    <div id="gameContainer">
-        <!-- タイトル画面 -->
-        <div id="titleScreen" class="screen">
-            <div class="title-logo"></div>
-            <h1>念仏退散</h1>
-            <div class="subtitle">〜修行僧の葛藤〜</div>
+    <main>
+        <div id="gameContainer">
+            <!-- タイトル画面 -->
+            <div id="titleScreen" class="screen">
+                <div class="title-logo"></div>
+                <h1>念仏退散</h1>
+                <div class="subtitle">〜修行僧の葛藤〜</div>
 
-            <div class="instruction">
-                <p><strong>操作方法</strong></p>
-                <p>← → キー：移動</p>
-                <p>スペースキー：読経発射</p>
-                <p>Z キー：煩悩即菩薩（功徳3で発動）</p>
-                <p><br><strong>注意</strong></p>
-                <p style="color:#FFD700;">金色の「布施・持戒・忍辱・精進・禅定・智慧」に触れると功徳回復</p>
-            </div>
-
-            <div class="title-buttons">
-                <button id="startBtn">修行の開始</button>
-                <button id="rankingBtn">修行の軌跡</button>
-            </div>
-
-            <div id="version-display"></div>
-        </div>
-
-        <!-- レベル選択画面 -->
-        <div id="levelScreen" class="screen hidden">
-            <h1>修行の道</h1>
-            <h2>難易度を選べ</h2>
-
-            <div class="level-buttons">
-                <button id="levelEasy" class="level-btn">
-                    <span class="level-name">仏性Lev1</span>
-                    <span class="level-desc">煩悩36体 / ゆっくり</span>
-                </button>
-                <button id="levelNormal" class="level-btn">
-                    <span class="level-name">仏性Lev2</span>
-                    <span class="level-desc">煩悩72体 / 普通</span>
-                    <span class="level-lock">仏性Lev1をクリアで解放</span>
-                </button>
-                <button id="levelHard" class="level-btn">
-                    <span class="level-name">仏性Lev3</span>
-                    <span class="level-desc">煩悩108体 / 高速</span>
-                    <span class="level-lock">仏性Lev2をクリアで解放</span>
-                </button>
-                <button id="levelDemon" class="level-btn hidden">
-                    <span class="level-name">鬼レベル</span>
-                    <span class="level-desc">無限煩悩 / 加速地獄</span>
-                </button>
-            </div>
-
-            <button id="unlockBtn" class="unlock-btn">開発者モード</button>
-            <button id="backFromLevelBtn">戻る</button>
-        </div>
-
-        <!-- パスワード入力モーダル -->
-        <div id="passwordModal" class="screen hidden">
-            <div class="password-container">
-                <h2>レベル解放</h2>
-                <p>
-                    パスワードを入力してレベルを解放<br>
-                    <span class="password-hint">※各レベルに対応するパスワードがあります</span>
-                </p>
-                <input type="password" id="passwordInput" placeholder="パスワードを入力" maxlength="20">
-                <div class="password-buttons">
-                    <button id="passwordSubmitBtn">確認</button>
-                    <button id="passwordCancelBtn">キャンセル</button>
+                <div class="instruction">
+                    <p><strong>操作方法</strong></p>
+                    <p>← → キー：移動</p>
+                    <p>スペースキー：読経発射</p>
+                    <p>Z キー：煩悩即菩薩（功徳3で発動）</p>
+                    <p><br><strong>注意</strong></p>
+                    <p style="color:#FFD700;">金色の「布施・持戒・忍辱・精進・禅定・智慧」に触れると功徳回復</p>
                 </div>
-                <div id="passwordMessage"></div>
+
+                <div class="title-buttons">
+                    <button id="startBtn">修行の開始</button>
+                    <button id="rankingBtn">修行の軌跡</button>
+                </div>
+
+                <div id="version-display"></div>
+            </div>
+
+            <!-- レベル選択画面 -->
+            <div id="levelScreen" class="screen hidden">
+                <h1>修行の道</h1>
+                <h2>難易度を選べ</h2>
+
+                <div class="level-buttons">
+                    <button id="levelEasy" class="level-btn">
+                        <span class="level-name">仏性Lev1</span>
+                        <span class="level-desc">煩悩36体 / ゆっくり</span>
+                    </button>
+                    <button id="levelNormal" class="level-btn">
+                        <span class="level-name">仏性Lev2</span>
+                        <span class="level-desc">煩悩72体 / 普通</span>
+                        <span class="level-lock">仏性Lev1をクリアで解放</span>
+                    </button>
+                    <button id="levelHard" class="level-btn">
+                        <span class="level-name">仏性Lev3</span>
+                        <span class="level-desc">煩悩108体 / 高速</span>
+                        <span class="level-lock">仏性Lev2をクリアで解放</span>
+                    </button>
+                    <button id="levelDemon" class="level-btn hidden">
+                        <span class="level-name">鬼レベル</span>
+                        <span class="level-desc">無限煩悩 / 加速地獄</span>
+                    </button>
+                </div>
+
+                <button id="unlockBtn" class="unlock-btn">開発者モード</button>
+                <button id="backFromLevelBtn">戻る</button>
+            </div>
+
+            <!-- パスワード入力モーダル -->
+            <div id="passwordModal" class="screen hidden">
+                <div class="password-container">
+                    <h2>レベル解放</h2>
+                    <p>
+                        パスワードを入力してレベルを解放<br>
+                        <span class="password-hint">※各レベルに対応するパスワードがあります</span>
+                    </p>
+                    <input type="password" id="passwordInput" placeholder="パスワードを入力" maxlength="20">
+                    <div class="password-buttons">
+                        <button id="passwordSubmitBtn">確認</button>
+                        <button id="passwordCancelBtn">キャンセル</button>
+                    </div>
+                    <div id="passwordMessage"></div>
+                </div>
+            </div>
+
+            <!-- ゲームオーバー画面 -->
+            <div id="gameOverScreen" class="screen hidden">
+                <h1 id="resultTitle"></h1>
+                <h2 id="resultText"></h2>
+                <div id="currentScore"></div>
+                <div class="share-buttons">
+                    <button id="shareBtn" class="share-btn">Xに共有</button>
+                    <button id="shareFbBtn" class="share-btn-fb">Facebookに共有</button>
+                </div>
+                <button id="restartBtn">再び修行する</button>
+                <button id="toTitleBtn">タイトルに戻る</button>
+            </div>
+
+            <!-- ランキング画面 -->
+            <div id="rankingScreen" class="screen hidden">
+                <h1>ランキング</h1>
+                <h2>歴代の名僧たち</h2>
+
+                <div id="rankingList"></div>
+
+                <button id="backToTitleBtn">タイトルに戻る</button>
+            </div>
+
+            <canvas id="gameCanvas" width="480" height="640"></canvas>
+
+            <div id="info" class="hidden">
+                <div><span id="levelDisplay"></span> | 煩悩退散: <span id="score">0</span> / <span id="targetScore">108</span>
+                </div>
+                <div>精神力: <span id="spirit">3</span> | 功徳: <span id="kudoku" style="color:#fff">0</span>/3 | 連鎖数: <span
+                        id="combo">0</span></div>
+            </div>
+
+            <!-- 仮想コントローラー（スマホ用） -->
+            <div id="virtualControls" class="hidden">
+                <div id="leftBtn" class="control-btn">◀</div>
+                <div id="rightBtn" class="control-btn">▶</div>
+                <div id="shootBtn" class="control-btn">読経発射</div>
+                <div id="specialBtn" class="control-btn disabled">煩悩即菩薩</div>
             </div>
         </div>
 
-        <!-- ゲームオーバー画面 -->
-        <div id="gameOverScreen" class="screen hidden">
-            <h1 id="resultTitle"></h1>
-            <h2 id="resultText"></h2>
-            <div id="currentScore"></div>
-            <div class="share-buttons">
-                <button id="shareBtn" class="share-btn">Xに共有</button>
-                <button id="shareFbBtn" class="share-btn-fb">Facebookに共有</button>
-            </div>
-            <button id="restartBtn">再び修行する</button>
-            <button id="toTitleBtn">タイトルに戻る</button>
-        </div>
-
-        <!-- ランキング画面 -->
-        <div id="rankingScreen" class="screen hidden">
-            <h1>ランキング</h1>
-            <h2>歴代の名僧たち</h2>
-
-            <div id="rankingList"></div>
-
-            <button id="backToTitleBtn">タイトルに戻る</button>
-        </div>
-
-        <canvas id="gameCanvas" width="480" height="640"></canvas>
-
-        <div id="info" class="hidden">
-            <div><span id="levelDisplay"></span> | 煩悩退散: <span id="score">0</span> / <span id="targetScore">108</span>
-            </div>
-            <div>精神力: <span id="spirit">3</span> | 功徳: <span id="kudoku" style="color:#fff">0</span>/3 | 連鎖数: <span
-                    id="combo">0</span></div>
-        </div>
-
-        <!-- 仮想コントローラー（スマホ用） -->
-        <div id="virtualControls" class="hidden">
-            <div id="leftBtn" class="control-btn">◀</div>
-            <div id="rightBtn" class="control-btn">▶</div>
-            <div id="shootBtn" class="control-btn">読経発射</div>
-            <div id="specialBtn" class="control-btn disabled">煩悩即菩薩</div>
-        </div>
-    </div>
-
-    <!-- 煩悩メッセージ表示 -->
-    <div id="bonnouMessageContainer"></div>
+        <!-- 煩悩メッセージ表示 -->
+        <div id="bonnouMessageContainer"></div>
+    </main>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
