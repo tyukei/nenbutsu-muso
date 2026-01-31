@@ -1605,11 +1605,21 @@
         function activateSpecialAttack() {
             if (kudoku < maxKudoku || gameState !== 'playing') return;
 
-            // Clear all enemies with particles
+            // Count and clear all enemies with particles
+            let defeatedCount = 0;
             enemies.forEach(enemy => {
                 createParticles(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, enemy.color);
+                // Only count bonnou (non-nenbutsu enemies) toward score
+                if (!enemy.isNenbutsu) {
+                    defeatedCount++;
+                }
             });
             enemies.splice(0, enemies.length); // Properly clear the array
+
+            // Add defeated enemies to score and combo
+            score += defeatedCount;
+            combo += defeatedCount;
+            if (combo > maxCombo) maxCombo = combo;
 
             // Reset kudoku
             kudoku = 0;
@@ -1620,6 +1630,11 @@
 
             // Visual flash effect
             flashScreen();
+
+            // Check if game is won
+            if (score >= targetScore) {
+                gameOver(true);
+            }
         }
 
         function flashScreen() {
