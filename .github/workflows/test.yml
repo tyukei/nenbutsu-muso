@@ -25,8 +25,13 @@ jobs:
       
       - name: Install vnu (Nu Html Checker)
         run: |
-          wget https://github.com/validator/validator/releases/download/latest/vnu.jar_latest.zip
-          unzip vnu.jar_latest.zip
+          wget https://github.com/validator/validator/releases/download/26.1.11/vnu.jar_26.1.11.zip
+          unzip vnu.jar_26.1.11.zip
+          # Ensure dist/vnu.jar exists for the next step
+          if [ ! -f dist/vnu.jar ]; then
+            mkdir -p dist
+            find . -name "vnu.jar" -type f -exec cp {} dist/vnu.jar \;
+          fi
           
       - name: Validate HTML
         id: validate_html
