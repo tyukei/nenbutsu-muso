@@ -1157,7 +1157,7 @@
             if (isWin) {
                 shareText += `✨解脱達成！✨\n`;
             } else {
-                shareText += `煩悩に飲まれた...\n`;
+                shareText += `煩悩に呑まれた...\n`;
             }
 
             shareText += `撃破数: ${score}/${targetDisplay}\n`;
@@ -1191,7 +1191,7 @@
             if (isWin) {
                 shareText += `✨解脱達成！✨\n`;
             } else {
-                shareText += `煩悩に飲まれた...\n`;
+                shareText += `煩悩に呑まれた...\n`;
             }
 
             shareText += `撃破数: ${score}/${targetDisplay}\n`;
@@ -1580,7 +1580,7 @@
             enemies.forEach(enemy => {
                 createParticles(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, enemy.color);
             });
-            enemies = [];
+            enemies.splice(0, enemies.length); // Properly clear the array
 
             // Reset kudoku
             kudoku = 0;
@@ -1641,9 +1641,9 @@
                 document.getElementById('currentScore').innerHTML =
                     `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}`;
             } else {
-                document.getElementById('resultTitle').textContent = '煩悩に飲まれた';
+                document.getElementById('resultTitle').textContent = '煩悩に呑まれた';
                 if (settings.isInfinite) {
-                    document.getElementById('resultText').textContent = `鬼の煩悩に飲み込まれました...`;
+                    document.getElementById('resultText').textContent = `鬼の煩悩に呑まれてしまいました...`;
                 } else {
                     document.getElementById('resultText').textContent = `「${lastBonnou}」に心を侵されてしまいました`;
                 }
