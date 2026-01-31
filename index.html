@@ -820,7 +820,7 @@
         <div id="info" class="hidden">
             <div><span id="levelDisplay"></span> | 煩悩退散: <span id="score">0</span> / <span id="targetScore">108</span>
             </div>
-            <div>精神力: <span id="spirit">3</span> | 功徳: <span id="kudoku" style="color:#fff">0</span>/10 | 連鎖数: <span
+            <div>精神力: <span id="spirit">3</span> | 功徳: <span id="kudoku" style="color:#fff">0</span>/3 | 連鎖数: <span
                     id="combo">0</span></div>
         </div>
 
@@ -907,7 +907,7 @@
         let score = 0;
         let spirit = 3;      // 精神力（HPシステム）
         let kudoku = 0;      // 功徳（MPシステム）
-        const maxKudoku = 10; // 最大功徳
+        const maxKudoku = 3; // 最大功徳
         let combo = 0;
         let maxCombo = 0;
         let frame = 0;
@@ -1121,8 +1121,8 @@
                     canShoot = false;
                     shootCooldown = 10;
                 }
-                // Special attack with X key
-                if ((e.key === 'x' || e.key === 'X') && kudoku >= maxKudoku) {
+                // Special attack with Z key
+                if ((e.key === 'z' || e.key === 'Z') && kudoku >= maxKudoku) {
                     activateSpecialAttack();
                 }
             } else {
