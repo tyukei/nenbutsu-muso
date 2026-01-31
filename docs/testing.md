@@ -89,8 +89,7 @@
 
 ```bash
 # vnu.jarをダウンロード
-wget https://github.com/validator/validator/releases/download/latest/vnu.jar_latest.zip
-unzip vnu.jar_latest.zip
+wget -O dist/vnu.jar https://github.com/validator/validator/releases/latest/download/vnu.jar
 
 # バリデーション実行
 java -jar dist/vnu.jar --errors-only index.html
