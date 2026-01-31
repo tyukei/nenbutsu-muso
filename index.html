@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>念仏退散〜修行僧の逆襲〜</title>
+    <title>念仏退散〜修行僧の葛藤〜</title>
     <style>
         * {
             margin: 0;
@@ -683,14 +683,14 @@
         <div id="titleScreen" class="screen">
             <div class="title-logo"></div>
             <h1>念仏退散</h1>
-            <div class="subtitle">〜修行僧の逆襲〜</div>
+            <div class="subtitle">〜修行僧の葛藤〜</div>
 
             <div class="instruction">
                 <p><strong>操作方法</strong></p>
                 <p>← → キー：移動</p>
                 <p>スペースキー：念仏発射</p>
                 <p><br><strong>注意</strong></p>
-                <p style="color:#00ff88;">緑の「読経」に触れると功徳回復</p>
+                <p style="color:#FFD700;">金色の「布施・持戒・忍辱・精進・禅定・智慧」に触れると功徳回復</p>
             </div>
 
             <button id="startBtn">修行を始める</button>
@@ -781,7 +781,7 @@
         <div id="virtualControls" class="hidden">
             <div id="leftBtn" class="control-btn">◀</div>
             <div id="rightBtn" class="control-btn">▶</div>
-            <div id="shootBtn" class="control-btn">読経</div>
+            <div id="shootBtn" class="control-btn">読経発射</div>
         </div>
     </div>
 
@@ -1092,7 +1092,7 @@
             const isWin = score >= targetScore && !settings.isInfinite;
 
             // シェアテキストを作成
-            let shareText = `念仏退散〜修行僧の逆襲〜\n`;
+            let shareText = `念仏退散〜修行僧の葛藤〜\n`;
             shareText += `【${levelName}】\n`;
 
             if (isWin) {
@@ -1126,7 +1126,7 @@
             const isWin = score >= targetScore && !settings.isInfinite;
 
             // シェアテキストを作成（Xと同じ内容）
-            let shareText = `念仏退散〜修行僧の逆襲〜\n`;
+            let shareText = `念仏退散〜修行僧の葛藤〜\n`;
             shareText += `【${levelName}】\n`;
 
             if (isWin) {
@@ -1411,21 +1411,22 @@
         }
 
         function spawnEnemy() {
-            // 10%の確率で「読経」（撃ってはいけない）が出現
+            // 10%の確率で六波羅蜜（布施・持戒・忍辱・精進・禅定・智慧）が出現
             const isNenbutsu = Math.random() < 0.1;
-            const bonnou = isNenbutsu ? '読経' : bonnouList[Math.floor(Math.random() * bonnouList.length)];
+            const ropparamitsuList = ['布施', '持戒', '忍辱', '精進', '禅定', '智慧'];
+            const bonnou = isNenbutsu ? ropparamitsuList[Math.floor(Math.random() * ropparamitsuList.length)] : bonnouList[Math.floor(Math.random() * bonnouList.length)];
             const settings = levelSettings[currentLevel];
             // スピード = 基本速度 + ランダム + 進行に応じて加速
             const speed = baseSpeed + Math.random() * 1.5 + (score * settings.speedIncrease);
 
-            // 緑系の色（80-160度）を避けた色を生成
+            // 金色・黄色系（30-60度）を避けた色を生成
             let hue;
             if (isNenbutsu) {
-                hue = null; // 読経は固定色
+                hue = null; // 六波羅蜜（布施・持戒・忍辱・精進・禅定・智慧）は固定色（金色）
             } else {
-                // 0-70度（赤～オレンジ～黄色）または 170-360度（青～紫～赤）からランダム選択
-                const range = Math.random() < 0.3 ? 70 : 190; // 0-70の範囲が30%、170-360の範囲が70%
-                hue = range === 70 ? Math.random() * 70 : 170 + Math.random() * 190;
+                // 0-30度（赤～オレンジ）または 60-360度（緑～青～紫～赤）からランダム選択
+                const range = Math.random() < 0.2 ? 30 : 300; // 0-30の範囲が20%、60-360の範囲が80%
+                hue = range === 30 ? Math.random() * 30 : 60 + Math.random() * 300;
             }
 
             enemies.push({
@@ -1435,7 +1436,7 @@
                 height: 50,
                 speed: speed,
                 text: bonnou,
-                color: isNenbutsu ? '#00ff88' : `hsl(${hue}, 70%, 50%)`,
+                color: isNenbutsu ? '#FFD700' : `hsl(${hue}, 70%, 50%)`,
                 hp: 1,
                 isNenbutsu: isNenbutsu
             });
@@ -1559,7 +1560,7 @@
                 // 画面外に出たら削除
                 if (enemies[i].y > canvas.height) {
                     if (enemies[i].isNenbutsu) {
-                        // 読経は画面外に出てもOK（むしろ良い）
+                        // 六波羅蜜（布施・持戒・忍辱・精進・禅定・智慧）は画面外に出てもOK（むしろ良い）
                         enemies.splice(i, 1);
                     } else {
                         // 煩悩は画面外に出たらダメージ
@@ -1577,7 +1578,7 @@
                     continue;
                 }
 
-                // プレイヤーとの衝突判定（読経に触れたらHP回復）
+                // プレイヤーとの衝突判定（六波羅蜜に触れたらHP回復）
                 const playerRect = {
                     x: player.x - player.width / 2,
                     y: player.y - 30,
@@ -1606,7 +1607,7 @@
                         bullets.splice(j, 1);
 
                         if (enemies[i].isNenbutsu) {
-                            // 読経を撃った（HPは減らない）
+                            // 六波羅蜜を撃った（HPは減らない）
                             enemies.splice(i, 1);
                         } else {
                             // 煩悩を撃破
