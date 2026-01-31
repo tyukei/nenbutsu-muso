@@ -670,29 +670,43 @@
         }
 
         /* 煩悩メッセージ表示 */
-        #bonnouMessage {
+        #bonnouMessageContainer {
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: calc((100vh - 640px) / 2);
+            right: 20px;
+            width: 320px;
+            max-height: 640px;
+            overflow-y: auto;
+            z-index: 20;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bonnou-message-item {
             background: rgba(0, 0, 0, 0.9);
             border: 2px solid #ff6f00;
             border-radius: 10px;
-            padding: 12px 25px;
-            z-index: 20;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            max-width: 85%;
-            text-align: center;
+            padding: 12px 15px;
+            text-align: left;
+            animation: slideInRight 0.3s ease-out;
         }
 
-        #bonnouMessage.show {
-            opacity: 1;
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .bonnou-title {
-            font-size: 24px;
+            font-size: 20px;
             color: #ff6f00;
             text-shadow: 0 0 10px rgba(255, 111, 0, 0.8);
             font-weight: bold;
@@ -700,16 +714,24 @@
         }
 
         .bonnou-desc {
-            font-size: 14px;
+            font-size: 13px;
             color: #ffd700;
             line-height: 1.4;
         }
 
-        @media (max-width: 500px) {
-            #bonnouMessage {
-                padding: 10px 15px;
+        /* Mobile: keep original centered display at top */
+        @media (max-width: 768px) {
+            #bonnouMessageContainer {
                 top: 10px;
-                max-width: 90%;
+                left: 50%;
+                transform: translateX(-50%);
+                right: auto;
+                width: 90%;
+                max-width: 350px;
+            }
+
+            .bonnou-message-item {
+                text-align: center;
             }
 
             .bonnou-title {
@@ -834,7 +856,7 @@
     </div>
 
     <!-- 煩悩メッセージ表示 -->
-    <div id="bonnouMessage"></div>
+    <div id="bonnouMessageContainer"></div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -914,28 +936,22 @@
         let lastBonnou = ''; // 最後にやられた煩悩
 
         // 煩悩メッセージ表示
-        const bonnouMessageEl = document.getElementById('bonnouMessage');
-        let bonnouMessageTimeout = null;
+        const bonnouMessageContainer = document.getElementById('bonnouMessageContainer');
 
         function showBonnouMessage(bonnouText) {
-            // 既存のタイムアウトをクリア
-            if (bonnouMessageTimeout) {
-                clearTimeout(bonnouMessageTimeout);
-            }
-
-            // メッセージを設定して表示
+            // メッセージアイテムを作成
             const description = bonnouDescriptions[bonnouText] || '心を乱す煩悩';
-            bonnouMessageEl.innerHTML = `
+            const messageItem = document.createElement('div');
+            messageItem.className = 'bonnou-message-item';
+            messageItem.innerHTML = `
                 <div class="bonnou-title">「${bonnouText}」</div>
                 <div class="bonnou-desc">${description}</div>
             `;
-            bonnouMessageEl.classList.add('show');
 
-            // 3秒後に非表示
-            bonnouMessageTimeout = setTimeout(() => {
-                bonnouMessageEl.classList.remove('show');
-            }, 3000);
+            // コンテナに追加（最新のメッセージが上に来るように）
+            bonnouMessageContainer.insertBefore(messageItem, bonnouMessageContainer.firstChild);
         }
+
 
         // 難易度設定
         let currentLevel = 'normal';
@@ -1466,10 +1482,8 @@
             virtualControls.classList.remove('hidden');
 
             // 煩悩メッセージをクリア
-            bonnouMessageEl.classList.remove('show');
-            if (bonnouMessageTimeout) {
-                clearTimeout(bonnouMessageTimeout);
-            }
+            bonnouMessageContainer.innerHTML = '';
+
 
             // BGM開始
             stopSound('gameover');
