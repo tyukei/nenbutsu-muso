@@ -1,0 +1,127 @@
+name: Automated Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  html-validation:
+    name: HTML Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Java (for vnu)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: Install vnu (Nu Html Checker)
+        run: |
+          wget https://github.com/validator/validator/releases/download/latest/vnu.jar_latest.zip
+          unzip vnu.jar_latest.zip
+          
+      - name: Validate HTML
+        run: |
+          java -jar dist/vnu.jar --errors-only index.html
+          
+      - name: Check required meta tags
+        run: |
+          echo "Checking for required meta tags..."
+          
+          # Check charset
+          if ! grep -q '<meta charset="UTF-8">' index.html; then
+            echo "❌ Missing charset meta tag"
+            exit 1
+          fi
+          
+          # Check viewport
+          if ! grep -q '<meta name="viewport"' index.html; then
+            echo "❌ Missing viewport meta tag"
+            exit 1
+          fi
+          
+          # Check version
+          if ! grep -q '<meta name="version"' index.html; then
+            echo "❌ Missing version meta tag"
+            exit 1
+          fi
+          
+          echo "✅ All required meta tags present"
+
+  performance-test:
+    name: Performance Test (Lighthouse)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          npm install -g @lhci/cli http-server
+      
+      - name: Start local server
+        run: |
+          http-server -p 8080 &
+          sleep 3
+      
+      - name: Run Lighthouse CI
+        run: |
+          lhci autorun
+        continue-on-error: true
+      
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+
+  accessibility-test:
+    name: Accessibility Test (axe-core)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          npm install -D @playwright/test @axe-core/playwright axe-core http-server
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Start local server
+        run: |
+          npx http-server -p 8080 &
+          sleep 3
+      
+      - name: Run accessibility tests
+        run: |
+          node tests/accessibility.test.js
+      
+      - name: Upload accessibility results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-results
+          path: accessibility-report.json

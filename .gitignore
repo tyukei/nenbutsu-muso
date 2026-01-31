@@ -34,3 +34,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# testing artifacts
+.lighthouseci/
+accessibility-report.json
+vnu.jar_latest.zip
+dist/
+package-lock.json
