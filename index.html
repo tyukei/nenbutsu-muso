@@ -164,6 +164,18 @@
             box-shadow: 0 3px 10px rgba(212, 175, 55, 0.4);
         }
 
+        .title-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .title-buttons button {
+            margin: 0;
+        }
+
         @media (max-width: 500px) {
             button {
                 font-size: 18px;
@@ -173,17 +185,17 @@
         }
 
         p {
-            margin: 10px 0;
-            line-height: 1.6;
-            font-size: 16px;
+            margin: 8px 0;
+            line-height: 1.5;
+            font-size: 15px;
         }
 
         .instruction {
             background: rgba(212, 175, 55, 0.1);
             border: 2px solid #d4af37;
             border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 15px;
+            margin: 15px 0;
             max-width: 400px;
         }
 
@@ -670,29 +682,43 @@
         }
 
         /* 煩悩メッセージ表示 */
-        #bonnouMessage {
+        #bonnouMessageContainer {
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: calc((100vh - 640px) / 2);
+            right: 20px;
+            width: 320px;
+            max-height: 640px;
+            overflow-y: auto;
+            z-index: 20;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bonnou-message-item {
             background: rgba(0, 0, 0, 0.9);
             border: 2px solid #ff6f00;
             border-radius: 10px;
-            padding: 12px 25px;
-            z-index: 20;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            max-width: 85%;
-            text-align: center;
+            padding: 12px 15px;
+            text-align: left;
+            animation: slideInRight 0.3s ease-out;
         }
 
-        #bonnouMessage.show {
-            opacity: 1;
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .bonnou-title {
-            font-size: 24px;
+            font-size: 20px;
             color: #ff6f00;
             text-shadow: 0 0 10px rgba(255, 111, 0, 0.8);
             font-weight: bold;
@@ -700,16 +726,24 @@
         }
 
         .bonnou-desc {
-            font-size: 14px;
+            font-size: 13px;
             color: #ffd700;
             line-height: 1.4;
         }
 
-        @media (max-width: 500px) {
-            #bonnouMessage {
-                padding: 10px 15px;
+        /* Mobile: keep original centered display at top */
+        @media (max-width: 768px) {
+            #bonnouMessageContainer {
                 top: 10px;
-                max-width: 90%;
+                left: 50%;
+                transform: translateX(-50%);
+                right: auto;
+                width: 90%;
+                max-width: 350px;
+            }
+
+            .bonnou-message-item {
+                text-align: center;
             }
 
             .bonnou-title {
@@ -734,13 +768,16 @@
             <div class="instruction">
                 <p><strong>操作方法</strong></p>
                 <p>← → キー：移動</p>
-                <p>スペースキー：念仏発射</p>
+                <p>スペースキー：読経発射</p>
+                <p>Z キー：煩悩即菩薩（功徳3で発動）</p>
                 <p><br><strong>注意</strong></p>
                 <p style="color:#FFD700;">金色の「布施・持戒・忍辱・精進・禅定・智慧」に触れると功徳回復</p>
             </div>
 
-            <button id="startBtn">修行を始める</button>
-            <button id="rankingBtn">ランキングを見る</button>
+            <div class="title-buttons">
+                <button id="startBtn">修行の開始</button>
+                <button id="rankingBtn">修行の軌跡</button>
+            </div>
 
             <div id="version-display"></div>
         </div>
@@ -834,7 +871,7 @@
     </div>
 
     <!-- 煩悩メッセージ表示 -->
-    <div id="bonnouMessage"></div>
+    <div id="bonnouMessageContainer"></div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -914,28 +951,22 @@
         let lastBonnou = ''; // 最後にやられた煩悩
 
         // 煩悩メッセージ表示
-        const bonnouMessageEl = document.getElementById('bonnouMessage');
-        let bonnouMessageTimeout = null;
+        const bonnouMessageContainer = document.getElementById('bonnouMessageContainer');
 
         function showBonnouMessage(bonnouText) {
-            // 既存のタイムアウトをクリア
-            if (bonnouMessageTimeout) {
-                clearTimeout(bonnouMessageTimeout);
-            }
-
-            // メッセージを設定して表示
+            // メッセージアイテムを作成
             const description = bonnouDescriptions[bonnouText] || '心を乱す煩悩';
-            bonnouMessageEl.innerHTML = `
+            const messageItem = document.createElement('div');
+            messageItem.className = 'bonnou-message-item';
+            messageItem.innerHTML = `
                 <div class="bonnou-title">「${bonnouText}」</div>
                 <div class="bonnou-desc">${description}</div>
             `;
-            bonnouMessageEl.classList.add('show');
 
-            // 3秒後に非表示
-            bonnouMessageTimeout = setTimeout(() => {
-                bonnouMessageEl.classList.remove('show');
-            }, 3000);
+            // コンテナに追加（最新のメッセージが上に来るように）
+            bonnouMessageContainer.insertBefore(messageItem, bonnouMessageContainer.firstChild);
         }
+
 
         // 難易度設定
         let currentLevel = 'normal';
@@ -1466,10 +1497,8 @@
             virtualControls.classList.remove('hidden');
 
             // 煩悩メッセージをクリア
-            bonnouMessageEl.classList.remove('show');
-            if (bonnouMessageTimeout) {
-                clearTimeout(bonnouMessageTimeout);
-            }
+            bonnouMessageContainer.innerHTML = '';
+
 
             // BGM開始
             stopSound('gameover');
@@ -1648,7 +1677,7 @@
                     document.getElementById('resultText').textContent = `「${lastBonnou}」に心を侵されてしまいました`;
                 }
                 document.getElementById('currentScore').innerHTML =
-                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}<br><br>敗因: <span style="color:#ff6f00;font-size:36px;">${lastBonnou}</span>`;
+                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}`;
             }
         }
 
