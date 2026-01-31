@@ -112,7 +112,7 @@ def generate_fixes(api_key, errors, file_content):
     
     # Configure Gemini
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     
     # Generate prompt
     prompt = generate_fix_prompt(errors, file_content)

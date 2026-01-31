@@ -31,7 +31,7 @@ def apply_fixes_with_ai(api_key, suggestions, file_content):
     """Use Gemini to apply fixes to the actual file"""
     
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     
     prompt = f"""以下の修正提案を、実際のHTMLファイルに適用してください。
 
