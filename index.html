@@ -528,6 +528,44 @@
             background: radial-gradient(circle, rgba(255, 107, 0, 0.95), rgba(255, 107, 0, 0.6));
         }
 
+        /* Special Attack Button */
+        #specialBtn {
+            bottom: 150px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            font-size: 18px;
+            background: radial-gradient(circle, rgba(128, 128, 128, 0.5), rgba(128, 128, 128, 0.3));
+            border-color: rgba(128, 128, 128, 0.8);
+        }
+
+        #specialBtn.ready {
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.5));
+            border-color: rgba(255, 0, 0, 1);
+            animation: specialPulse 1s ease-in-out infinite;
+        }
+
+        #specialBtn.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        #specialBtn:active {
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.95), rgba(255, 0, 0, 0.7));
+        }
+
+        @keyframes specialPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(255, 0, 0, 1);
+            }
+        }
+
         @media (min-width: 769px) {
             #virtualControls {
                 display: none;
@@ -557,6 +595,14 @@
                 width: 85px;
                 height: 85px;
                 font-size: 20px;
+            }
+
+            #specialBtn {
+                right: 20px;
+                bottom: 130px;
+                width: 85px;
+                height: 85px;
+                font-size: 16px;
             }
         }
 
@@ -774,7 +820,8 @@
         <div id="info" class="hidden">
             <div><span id="levelDisplay"></span> | 煩悩退散: <span id="score">0</span> / <span id="targetScore">108</span>
             </div>
-            <div>功徳: <span id="health">3</span> | 連鎖数: <span id="combo">0</span></div>
+            <div>精神力: <span id="spirit">3</span> | 功徳: <span id="kudoku" style="color:#fff">0</span>/10 | 連鎖数: <span
+                    id="combo">0</span></div>
         </div>
 
         <!-- 仮想コントローラー（スマホ用） -->
@@ -782,6 +829,7 @@
             <div id="leftBtn" class="control-btn">◀</div>
             <div id="rightBtn" class="control-btn">▶</div>
             <div id="shootBtn" class="control-btn">読経発射</div>
+            <div id="specialBtn" class="control-btn disabled">煩悩即菩薩</div>
         </div>
     </div>
 
@@ -811,10 +859,12 @@
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
         const shootBtn = document.getElementById('shootBtn');
+        const specialBtn = document.getElementById('specialBtn');
 
         // タッチ操作の状態
         let touchLeft = false;
         let touchRight = false;
+        let touchSpecial = false;
 
         // BGMと効果音
         const sounds = {
@@ -855,7 +905,9 @@
         // ゲーム状態
         let gameState = 'title'; // 'title', 'level', 'playing', 'gameover', 'ranking'
         let score = 0;
-        let health = 3;
+        let spirit = 3;      // 精神力（HPシステム）
+        let kudoku = 0;      // 功徳（MPシステム）
+        const maxKudoku = 10; // 最大功徳
         let combo = 0;
         let maxCombo = 0;
         let frame = 0;
@@ -1060,14 +1112,21 @@
 
         // イベントリスナー
         document.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
-            if (e.key === ' ' && gameState === 'playing') {
-                e.preventDefault();
-                if (canShoot) {
+            if (gameState === 'playing') {
+                if (e.key === 'ArrowLeft') keys['ArrowLeft'] = true;
+                if (e.key === 'ArrowRight') keys['ArrowRight'] = true;
+                if (e.key === ' ' && canShoot) {
+                    e.preventDefault(); // Prevent default spacebar action (scrolling)
                     shootBullet();
                     canShoot = false;
                     shootCooldown = 10;
                 }
+                // Special attack with X key
+                if ((e.key === 'x' || e.key === 'X') && kudoku >= maxKudoku) {
+                    activateSpecialAttack();
+                }
+            } else {
+                keys[e.key] = true; // Keep general key tracking for non-playing states if needed
             }
         });
 
@@ -1296,6 +1355,27 @@
             }
         });
 
+        // Special attack button
+        specialBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (kudoku >= maxKudoku) {
+                touchSpecial = true;
+                activateSpecialAttack();
+            }
+        });
+
+        specialBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchSpecial = false;
+        });
+
+        specialBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            if (kudoku >= maxKudoku) {
+                activateSpecialAttack();
+            }
+        });
+
         function showTitle() {
             gameState = 'title';
             titleScreen.classList.remove('hidden');
@@ -1364,7 +1444,8 @@
 
             gameState = 'playing';
             score = 0;
-            health = 3;
+            spirit = 3;
+            kudoku = 0;
             combo = 0;
             maxCombo = 0;
             frame = 0;
@@ -1375,6 +1456,7 @@
             player.x = canvas.width / 2;
             touchLeft = false;
             touchRight = false;
+            touchSpecial = false;
 
             titleScreen.classList.add('hidden');
             levelScreen.classList.add('hidden');
@@ -1411,8 +1493,8 @@
         }
 
         function spawnEnemy() {
-            // 10%の確率で六波羅蜜（布施・持戒・忍辱・精進・禅定・智慧）が出現
-            const isNenbutsu = Math.random() < 0.1;
+            // 30%の確率で六波羅蜜（布施・持戒・忍辱・精進・禅定・智慧）が出現
+            const isNenbutsu = Math.random() < 0.3;
             const ropparamitsuList = ['布施', '持戒', '忍辱', '精進', '禅定', '智慧'];
             const bonnou = isNenbutsu ? ropparamitsuList[Math.floor(Math.random() * ropparamitsuList.length)] : bonnouList[Math.floor(Math.random() * bonnouList.length)];
             const settings = levelSettings[currentLevel];
@@ -1469,9 +1551,65 @@
             const settings = levelSettings[currentLevel];
             document.getElementById('score').textContent = score;
             document.getElementById('targetScore').textContent = settings.isInfinite ? '∞' : targetScore;
-            document.getElementById('health').textContent = health;
+            document.getElementById('spirit').textContent = spirit;
+
+            const kudokuDisplay = document.getElementById('kudoku');
+            kudokuDisplay.textContent = kudoku;
+            kudokuDisplay.style.color = kudoku >= maxKudoku ? '#ff0000' : '#fff';
+
             document.getElementById('combo').textContent = combo;
             document.getElementById('levelDisplay').textContent = settings.name;
+
+            updateSpecialButton();
+        }
+
+        function updateSpecialButton() {
+            if (kudoku >= maxKudoku) {
+                specialBtn.classList.add('ready');
+                specialBtn.classList.remove('disabled');
+            } else {
+                specialBtn.classList.remove('ready');
+                specialBtn.classList.add('disabled');
+            }
+        }
+
+        function activateSpecialAttack() {
+            if (kudoku < maxKudoku || gameState !== 'playing') return;
+
+            // Clear all enemies with particles
+            enemies.forEach(enemy => {
+                createParticles(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, enemy.color);
+            });
+            enemies = [];
+
+            // Reset kudoku
+            kudoku = 0;
+            updateUI();
+
+            // Play sound effect
+            playSound('hit');
+
+            // Visual flash effect
+            flashScreen();
+        }
+
+        function flashScreen() {
+            const flash = document.createElement('div');
+            flash.style.position = 'fixed';
+            flash.style.top = '0';
+            flash.style.left = '0';
+            flash.style.width = '100%';
+            flash.style.height = '100%';
+            flash.style.backgroundColor = 'rgba(255, 215, 0, 0.8)';
+            flash.style.zIndex = '50';
+            flash.style.pointerEvents = 'none';
+            document.body.appendChild(flash);
+
+            setTimeout(() => {
+                flash.style.transition = 'opacity 0.5s';
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 500);
+            }, 100);
         }
 
         function gameOver(win) {
@@ -1567,11 +1705,11 @@
                         lastBonnou = enemies[i].text; // やられた煩悩を記録
                         showBonnouMessage(enemies[i].text); // 煩悩メッセージを3秒表示
                         enemies.splice(i, 1);
-                        health--;
+                        spirit--;
                         combo = 0;
                         playSound('damage');
                         updateUI();
-                        if (health <= 0) {
+                        if (spirit <= 0) {
                             gameOver(false);
                         }
                     }
@@ -1590,10 +1728,8 @@
                         enemies[i].y + enemies[i].height / 2,
                         enemies[i].color);
                     enemies.splice(i, 1);
-                    if (health < 3) {
-                        health++;
-                        updateUI();
-                    }
+                    kudoku = Math.min(kudoku + 1, maxKudoku);
+                    updateUI();
                     playSound('hit');
                     continue;
                 }
