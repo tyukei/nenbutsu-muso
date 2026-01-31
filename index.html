@@ -164,6 +164,18 @@
             box-shadow: 0 3px 10px rgba(212, 175, 55, 0.4);
         }
 
+        .title-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .title-buttons button {
+            margin: 0;
+        }
+
         @media (max-width: 500px) {
             button {
                 font-size: 18px;
@@ -762,8 +774,10 @@
                 <p style="color:#FFD700;">金色の「布施・持戒・忍辱・精進・禅定・智慧」に触れると功徳回復</p>
             </div>
 
-            <button id="startBtn">修行を始める</button>
-            <button id="rankingBtn">修行の軌跡を辿る</button>
+            <div class="title-buttons">
+                <button id="startBtn">修行の開始</button>
+                <button id="rankingBtn">修行の軌跡</button>
+            </div>
 
             <div id="version-display"></div>
         </div>
