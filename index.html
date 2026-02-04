@@ -53,15 +53,13 @@
             max-width: 480px;
         }
 
-        @media (max-width: 500px) {
-            #gameContainer {
-                max-width: 100vw;
-                max-height: 100vh;
-            }
+        .mobile-mode #gameContainer {
+            max-width: 100vw;
+            max-height: 100vh;
+        }
 
-            canvas {
-                border-width: 2px;
-            }
+        .mobile-mode canvas {
+            border-width: 2px;
         }
 
         #info {
@@ -88,10 +86,8 @@
             padding: 30px 20px;
         }
 
-        @media (max-width: 500px) {
-            .screen {
-                padding: 20px 10px;
-            }
+        .mobile-mode .screen {
+            padding: 20px 10px;
         }
 
         .hidden {
@@ -107,10 +103,8 @@
             animation: glow 2s ease-in-out infinite;
         }
 
-        @media (max-width: 500px) {
-            h1 {
-                font-size: 28px;
-            }
+        .mobile-mode h1 {
+            font-size: 24px;
         }
 
         @keyframes glow {
@@ -133,11 +127,9 @@
             text-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
         }
 
-        @media (max-width: 500px) {
-            h2 {
-                font-size: 16px;
-                margin-bottom: 15px;
-            }
+        .mobile-mode h2 {
+            font-size: 14px;
+            margin-bottom: 15px;
         }
 
         button {
@@ -178,12 +170,10 @@
             margin: 0;
         }
 
-        @media (max-width: 500px) {
-            button {
-                font-size: 16px;
-                padding: 12px 30px;
-                min-width: 180px;
-            }
+        .mobile-mode button {
+            font-size: 14px;
+            padding: 10px 30px;
+            min-width: 160px;
         }
 
         p {
@@ -585,45 +575,42 @@
             }
         }
 
-        @media (min-width: 769px) {
-            #virtualControls {
-                display: none;
-            }
+        /* Hide virtual controls on PC unless mobile mode is active */
+        body:not(.mobile-mode) #virtualControls {
+            display: none !important;
         }
 
-        @media (max-width: 500px) {
-            .control-btn {
-                width: 70px;
-                height: 70px;
-                font-size: 24px;
-            }
+        .mobile-mode .control-btn {
+            width: 70px;
+            height: 70px;
+            font-size: 24px;
+        }
 
-            #leftBtn {
-                left: 20px;
-                bottom: 30px;
-            }
+        .mobile-mode #leftBtn {
+            left: 20px;
+            bottom: 30px;
+        }
 
-            #rightBtn {
-                left: 110px;
-                bottom: 30px;
-            }
+        .mobile-mode #rightBtn {
+            left: 110px;
+            bottom: 30px;
+        }
 
-            #shootBtn {
-                right: 20px;
-                bottom: 30px;
-                width: 85px;
-                height: 85px;
-                font-size: 16px;
-                white-space: nowrap;
-            }
+        .mobile-mode #shootBtn {
+            right: 20px;
+            bottom: 30px;
+            width: 85px;
+            height: 85px;
+            font-size: 16px;
+            white-space: nowrap;
+        }
 
-            #specialBtn {
-                right: 20px;
-                bottom: 130px;
-                width: 85px;
-                height: 85px;
-                font-size: 14px;
-            }
+        .mobile-mode #specialBtn {
+            right: 20px;
+            bottom: 130px;
+            width: 85px;
+            height: 85px;
+            font-size: 14px;
         }
 
         /* Version Display */
@@ -636,12 +623,20 @@
             font-family: 'Courier New', monospace;
         }
 
-        @media (max-width: 500px) {
-            #version-display {
-                font-size: 8px;
-                bottom: 5px;
-                right: 5px;
-            }
+        .mobile-mode #version-display {
+            font-size: 8px;
+            bottom: 5px;
+            right: 5px;
+        }
+
+        .mode-toggle {
+            margin-top: 15px;
+            font-size: 12px;
+            padding: 8px 16px;
+            min-width: auto;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid #d4af37;
+            box-shadow: none;
         }
 
         /* Share Buttons Container */
@@ -740,27 +735,25 @@
         }
 
         /* Mobile: keep original centered display at top */
-        @media (max-width: 768px) {
-            #bonnouMessageContainer {
-                top: 10px;
-                left: 50%;
-                transform: translateX(-50%);
-                right: auto;
-                width: 90%;
-                max-width: 350px;
-            }
+        .mobile-mode #bonnouMessageContainer {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            right: auto;
+            width: 90%;
+            max-width: 350px;
+        }
 
-            .bonnou-message-item {
-                text-align: center;
-            }
+        .mobile-mode .bonnou-message-item {
+            text-align: center;
+        }
 
-            .bonnou-title {
-                font-size: 18px;
-            }
+        .mobile-mode .bonnou-title {
+            font-size: 18px;
+        }
 
-            .bonnou-desc {
-                font-size: 12px;
-            }
+        .mobile-mode .bonnou-desc {
+            font-size: 12px;
         }
 
         @keyframes shake {
@@ -828,6 +821,7 @@
                 <div class="title-buttons">
                     <button id="startBtn">修行の開始</button>
                     <button id="rankingBtn">修行の軌跡</button>
+                    <button id="modeToggleBtn" class="mode-toggle">PC / Mobile 切替</button>
                 </div>
 
                 <div id="version-display"></div>
@@ -965,6 +959,7 @@
             bgm: new Audio('sounds/bgm.wav'),
             shoot: new Audio('sounds/shoot.mp3'),
             hit: new Audio('sounds/hit.mp3'),
+            hit_bounas: new Audio('sounds/hit_bounas.mp3'),
             damage: new Audio('sounds/damage.mp3'),
             gameover: new Audio('sounds/gameover.mp3'),
             clear: new Audio('sounds/clear.mp3')
@@ -1053,8 +1048,8 @@
             // コンテナに追加（最新のメッセージが上に来るように）
             bonnouMessageContainer.insertBefore(messageItem, bonnouMessageContainer.firstChild);
 
-            // スマホの場合（幅768px以下）、3秒経ったら消えるようにする
-            if (window.matchMedia('(max-width: 768px)').matches) {
+            // スマホの場合（mobile-mode）、3秒経ったら消えるようにする
+            if (document.body.classList.contains('mobile-mode')) {
                 setTimeout(() => {
                     messageItem.style.transition = 'opacity 0.5s';
                     messageItem.style.opacity = '0';
@@ -1078,7 +1073,7 @@
             easy: {
                 name: '仏性Lev1',
                 targetScore: 36,
-                baseSpeed: 1.6,
+                baseSpeed: 1.0,
                 spawnRate: 30, // Reduced from 50 (faster spawn)
                 speedIncrease: 0.04,
                 isInfinite: false
@@ -1086,7 +1081,7 @@
             normal: {
                 name: '仏性Lev2',
                 targetScore: 72,
-                baseSpeed: 2.4,
+                baseSpeed: 1.5,
                 spawnRate: 25, // Reduced from 40
                 speedIncrease: 0.06,
                 isInfinite: false
@@ -1094,7 +1089,7 @@
             hard: {
                 name: '仏性Lev3',
                 targetScore: 108,
-                baseSpeed: 3.6,
+                baseSpeed: 2.5,
                 spawnRate: 20, // Reduced from 30
                 speedIncrease: 0.08,
                 isInfinite: false
@@ -1102,7 +1097,7 @@
             demon: {
                 name: '鬼レベル',
                 targetScore: 999999, // 実質無限
-                baseSpeed: 4.0,
+                baseSpeed: 3.0,
                 spawnRate: 15, // Reduced from 25
                 speedIncrease: 0.12, // より速く加速
                 isInfinite: true
@@ -1287,6 +1282,26 @@
         // X (Twitter) シェアボタン
         const shareBtn = document.getElementById('shareBtn');
         shareBtn.addEventListener('click', shareToTwitter);
+
+        // Mobile Mode Logic
+        const modeToggleBtn = document.getElementById('modeToggleBtn');
+        modeToggleBtn.addEventListener('click', toggleMobileMode);
+
+        function checkMobileMode() {
+            // Initial check: if width <= 500px, enable mobile mode
+            if (window.innerWidth <= 500) {
+                document.body.classList.add('mobile-mode');
+            } else {
+                document.body.classList.remove('mobile-mode');
+            }
+        }
+
+        function toggleMobileMode() {
+            document.body.classList.toggle('mobile-mode');
+        }
+
+        // Run initial check
+        checkMobileMode();
 
         function shareToTwitter() {
             const levelName = levelSettings[currentLevel].name;
@@ -1644,7 +1659,7 @@
             const bonnou = isNenbutsu ? ropparamitsuList[Math.floor(Math.random() * ropparamitsuList.length)] : bonnouList[Math.floor(Math.random() * bonnouList.length)];
             const settings = levelSettings[currentLevel];
             // スピード = 基本速度 + ランダム + 進行に応じて加速
-            const speed = baseSpeed + Math.random() * 3.0 + (score * settings.speedIncrease); // Random variance doubled from 1.5
+            const speed = baseSpeed + Math.random() * 1.5 + (score * settings.speedIncrease); // Random variance reduced from 3.0
 
             // 金色・黄色系（30-60度）を避けた色を生成
             let hue;
@@ -1926,7 +1941,7 @@
                     enemies.splice(i, 1);
                     kudoku = Math.min(kudoku + 1, maxKudoku);
                     updateUI();
-                    playSound('hit');
+                    playSound('hit_bounas');
                     continue;
                 }
 
