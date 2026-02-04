@@ -733,6 +733,41 @@
             box-shadow: none;
         }
 
+        .mode-toggle {
+            margin-top: 15px;
+            font-size: 12px;
+            padding: 8px 16px;
+            min-width: auto;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid #d4af37;
+            box-shadow: none;
+        }
+
+        #openSettingsBtn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: #d4af37;
+            font-size: 32px;
+            padding: 0;
+            margin: 0;
+            width: auto;
+            min-width: auto;
+            min-height: auto;
+            box-shadow: none;
+            cursor: pointer;
+            z-index: 20;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            transition: transform 0.5s ease;
+        }
+
+        #openSettingsBtn:hover {
+            transform: rotate(90deg);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+        }
+
         /* Share Buttons Container */
         .share-buttons {
             display: flex;
@@ -899,6 +934,7 @@
         <div id="gameContainer">
             <!-- タイトル画面 -->
             <div id="titleScreen" class="screen">
+                <button id="openSettingsBtn" aria-label="設定">⚙️</button>
                 <div class="title-logo"></div>
                 <h1>煩悩退散</h1>
                 <div class="subtitle">〜修行僧の葛藤〜</div>
@@ -907,15 +943,18 @@
                     <p><strong>操作方法</strong></p>
                     <p>← → キー：移動</p>
                     <p>スペースキー：読経発射</p>
-                    <p>Z キー：煩悩即菩薩（功徳6で発動）</p>
-                    <p><br><strong>注意</strong></p>
-                    <p style="color:#FFD700;">金色の「布施・持戒・忍辱・精進・禅定・智慧」に触れると功徳回復</p>
+                    <br>
+                    <p><strong>特別ルール</strong></p>
+                    <p style="color:#FFD700; font-weight:bold;">
+                        六波羅蜜（金色の文字）を<br>
+                        6回 積む（体で受け止める）と、<br>
+                        自動で画面の煩悩を全て浄化！
+                    </p>
                 </div>
 
                 <div class="title-buttons">
                     <button id="startBtn">修行の開始</button>
                     <button id="rankingBtn">修行の軌跡</button>
-                    <button id="modeToggleBtn" class="mode-toggle">PC / Mobile 切替</button>
                 </div>
 
                 <div id="version-display"></div>
@@ -1405,9 +1444,6 @@
         shareBtn.addEventListener('click', shareToTwitter);
 
         // Mobile Mode Logic
-        const modeToggleBtn = document.getElementById('modeToggleBtn');
-        modeToggleBtn.addEventListener('click', toggleMobileMode);
-
         function checkMobileMode() {
             // Check for saved setting first
             const savedSettings = localStorage.getItem('nenbunSettings');
@@ -1426,17 +1462,6 @@
                 document.body.classList.add('mobile-mode');
             } else {
                 document.body.classList.remove('mobile-mode');
-            }
-        }
-
-        function toggleMobileMode() {
-            document.body.classList.toggle('mobile-mode');
-            // Update setting in localStorage if it exists
-            const savedSettings = localStorage.getItem('nenbunSettings');
-            if (savedSettings) {
-                const settings = JSON.parse(savedSettings);
-                settings.mode = document.body.classList.contains('mobile-mode') ? 'mobile' : 'pc';
-                localStorage.setItem('nenbunSettings', JSON.stringify(settings));
             }
         }
 
@@ -1507,10 +1532,22 @@
         }
 
         // レベル選択ボタン
-        document.getElementById('levelEasy').addEventListener('click', () => startGame('easy'));
-        document.getElementById('levelNormal').addEventListener('click', () => startGame('normal'));
-        document.getElementById('levelHard').addEventListener('click', () => startGame('hard'));
-        document.getElementById('levelDemon').addEventListener('click', () => startGame('demon'));
+        document.getElementById('levelEasy').addEventListener('click', () => {
+            playSound('hit');
+            startGame('easy');
+        });
+        document.getElementById('levelNormal').addEventListener('click', () => {
+            playSound('hit');
+            startGame('normal');
+        });
+        document.getElementById('levelHard').addEventListener('click', () => {
+            playSound('hit');
+            startGame('hard');
+        });
+        document.getElementById('levelDemon').addEventListener('click', () => {
+            playSound('hit');
+            startGame('demon');
+        });
         document.getElementById('backFromLevelBtn').addEventListener('click', showTitle);
 
         // パスワード解放ボタン
@@ -2082,6 +2119,11 @@
                     kudoku = Math.min(kudoku + 1, maxKudoku);
                     updateUI();
                     playSound('hit_bounas');
+
+                    // Auto-trigger special attack if full
+                    if (kudoku >= maxKudoku) {
+                        activateSpecialAttack();
+                    }
                     continue;
                 }
 
@@ -2270,6 +2312,7 @@
         // Initialize Settings
         const settingsModal = document.getElementById('settingsModal');
         const settingsSubmitBtn = document.getElementById('settingsSubmitBtn');
+        const openSettingsBtn = document.getElementById('openSettingsBtn');
         const toggleBtns = document.querySelectorAll('.toggle-btn');
 
         // Default temporary settings for the modal
@@ -2278,14 +2321,26 @@
             mode: 'pc'
         };
 
+        function loadTempSettingsFromStorage() {
+            const savedSettings = localStorage.getItem('nenbunSettings');
+            if (savedSettings) {
+                tempSettings = JSON.parse(savedSettings);
+            } else {
+                // Defaults
+                tempSettings = {
+                    sound: 'on',
+                    mode: 'pc'
+                };
+            }
+        }
+
         function initSettings() {
             const savedSettings = localStorage.getItem('nenbunSettings');
 
             if (!savedSettings) {
                 // No settings saved, show modal
+                loadTempSettingsFromStorage(); // Load defaults
                 settingsModal.classList.remove('hidden');
-
-                // Set initial active states for buttons based on defaults
                 updateToggleButtons();
             } else {
                 // Settings exist, apply them
@@ -2357,13 +2412,21 @@
             // Hide modal
             settingsModal.classList.add('hidden');
 
-            // Show title
-            showTitle();
+            // Show title (if not already there, but we are essentially toggling modal)
+            if (gameState === 'title') {
+                showTitle();
+            }
 
             // Attempt to unlock audio immediately if sound is ON (since user clicked a button)
             if (tempSettings.sound === 'on') {
                 unlockAudio();
             }
+        });
+
+        openSettingsBtn.addEventListener('click', () => {
+            loadTempSettingsFromStorage();
+            updateToggleButtons();
+            settingsModal.classList.remove('hidden');
         });
 
         // Initialize
