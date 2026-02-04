@@ -761,6 +761,48 @@
                 font-size: 12px;
             }
         }
+
+        @keyframes shake {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            10% {
+                transform: translate(-5px, 0);
+            }
+
+            20% {
+                transform: translate(5px, 0);
+            }
+
+            30% {
+                transform: translate(-5px, 0);
+            }
+
+            40% {
+                transform: translate(5px, 0);
+            }
+
+            50% {
+                transform: translate(-3px, 0);
+            }
+
+            60% {
+                transform: translate(3px, 0);
+            }
+
+            70% {
+                transform: translate(-3px, 0);
+            }
+
+            80% {
+                transform: translate(0, 0);
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+        }
     </style>
 </head>
 
@@ -1683,6 +1725,20 @@
             }, 100);
         }
 
+        function shakeScreen() {
+            const container = document.getElementById('gameContainer');
+            // アニメーションをリセットするためにクラスを一度削除
+            container.classList.remove('shake');
+            // リフローを強制
+            void container.offsetWidth;
+            container.classList.add('shake');
+
+            // アニメーション終了後にクラスを削除
+            setTimeout(() => {
+                container.classList.remove('shake');
+            }, 500);
+        }
+
         function gameOver(win) {
             gameState = 'gameover';
             gameOverScreen.classList.remove('hidden');
@@ -1697,6 +1753,7 @@
                 saveClearedLevel(currentLevel);
             } else {
                 playSound('gameover');
+                shakeScreen(); // ゲームオーバー時も揺らす
             }
 
             // ランキング保存
@@ -1789,6 +1846,7 @@
                         spirit--;
                         combo = 0;
                         playSound('damage');
+                        shakeScreen(); // ダメージ時に画面を揺らす
                         updateUI();
                         if (spirit <= 0) {
                             gameOver(false);
