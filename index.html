@@ -965,6 +965,7 @@
             bgm: new Audio('sounds/bgm.wav'),
             shoot: new Audio('sounds/shoot.mp3'),
             hit: new Audio('sounds/hit.mp3'),
+            hit_bounas: new Audio('sounds/hit_bounas.mp3'),
             damage: new Audio('sounds/damage.mp3'),
             gameover: new Audio('sounds/gameover.mp3'),
             clear: new Audio('sounds/clear.mp3')
@@ -1926,7 +1927,7 @@
                     enemies.splice(i, 1);
                     kudoku = Math.min(kudoku + 1, maxKudoku);
                     updateUI();
-                    playSound('hit');
+                    playSound('hit_bounas');
                     continue;
                 }
 
