@@ -1078,33 +1078,33 @@
             easy: {
                 name: '仏性Lev1',
                 targetScore: 36,
-                baseSpeed: 0.8,
-                spawnRate: 50,
-                speedIncrease: 0.02,
+                baseSpeed: 1.6,
+                spawnRate: 30, // Reduced from 50 (faster spawn)
+                speedIncrease: 0.04,
                 isInfinite: false
             },
             normal: {
                 name: '仏性Lev2',
                 targetScore: 72,
-                baseSpeed: 1.2,
-                spawnRate: 40,
-                speedIncrease: 0.03,
+                baseSpeed: 2.4,
+                spawnRate: 25, // Reduced from 40
+                speedIncrease: 0.06,
                 isInfinite: false
             },
             hard: {
                 name: '仏性Lev3',
                 targetScore: 108,
-                baseSpeed: 1.8,
-                spawnRate: 30,
-                speedIncrease: 0.04,
+                baseSpeed: 3.6,
+                spawnRate: 20, // Reduced from 30
+                speedIncrease: 0.08,
                 isInfinite: false
             },
             demon: {
                 name: '鬼レベル',
                 targetScore: 999999, // 実質無限
-                baseSpeed: 2.0,
-                spawnRate: 25,
-                speedIncrease: 0.06, // より速く加速
+                baseSpeed: 4.0,
+                spawnRate: 15, // Reduced from 25
+                speedIncrease: 0.12, // より速く加速
                 isInfinite: true
             }
         };
@@ -1158,7 +1158,7 @@
             y: canvas.height - 80,
             width: 40,
             height: 40,
-            speed: 6
+            speed: 12 // Doubled from 6
         };
 
         // キー入力
@@ -1619,7 +1619,10 @@
             playSound('bgm');
 
             updateUI();
-            gameLoop();
+
+            // Delta Time setup
+            lastTime = performance.now();
+            requestAnimationFrame(gameLoop);
         }
 
         function shootBullet() {
@@ -1628,7 +1631,7 @@
                 y: player.y - 10,
                 width: 8,
                 height: 20,
-                speed: 10,
+                speed: 20, // Doubled from 10
                 color: '#d4af37'
             });
             playSound('shoot');
@@ -1641,7 +1644,7 @@
             const bonnou = isNenbutsu ? ropparamitsuList[Math.floor(Math.random() * ropparamitsuList.length)] : bonnouList[Math.floor(Math.random() * bonnouList.length)];
             const settings = levelSettings[currentLevel];
             // スピード = 基本速度 + ランダム + 進行に応じて加速
-            const speed = baseSpeed + Math.random() * 1.5 + (score * settings.speedIncrease);
+            const speed = baseSpeed + Math.random() * 3.0 + (score * settings.speedIncrease); // Random variance doubled from 1.5
 
             // 金色・黄色系（30-60度）を避けた色を生成
             let hue;
@@ -1671,8 +1674,8 @@
                 particles.push({
                     x: x,
                     y: y,
-                    vx: (Math.random() - 0.5) * 8,
-                    vy: (Math.random() - 0.5) * 8,
+                    vx: (Math.random() - 0.5) * 16, // Doubled speed
+                    vy: (Math.random() - 0.5) * 16, // Doubled speed
                     life: 40,
                     color: color,
                     size: Math.random() * 4 + 2
@@ -1824,7 +1827,13 @@
             }
         }
 
-        function update() {
+        // Delta Time Management
+        let lastTime = 0;
+        let accumulator = 0;
+        const TARGET_FPS = 60;
+        const STEP = 1000 / TARGET_FPS;
+
+        function update(timeScale) {
             if (gameState !== 'playing') return;
 
             // オートハイド判定（スマホ表示の時のみ有効にするか、常時動かしても害はないが、クラス付与はDOM操作なので頻度を下げる）
@@ -1839,25 +1848,26 @@
 
             frame++;
 
-            // クールダウン管理
+            // クールダウン管理 (Frame-based to Time-based conversion: 1 unit ~ 1 frame)
             if (shootCooldown > 0) {
-                shootCooldown--;
-                if (shootCooldown === 0) {
+                shootCooldown -= 1 * timeScale;
+                if (shootCooldown <= 0) {
+                    shootCooldown = 0;
                     canShoot = true;
                 }
             }
 
             // プレイヤー移動（キーボード + 仮想コントローラー）
             if ((keys['ArrowLeft'] || touchLeft) && player.x > player.width / 2) {
-                player.x -= player.speed;
+                player.x -= player.speed * timeScale;
             }
             if ((keys['ArrowRight'] || touchRight) && player.x < canvas.width - player.width / 2) {
-                player.x += player.speed;
+                player.x += player.speed * timeScale;
             }
 
             // 弾の更新
             for (let i = bullets.length - 1; i >= 0; i--) {
-                bullets[i].y -= bullets[i].speed;
+                bullets[i].y -= bullets[i].speed * timeScale;
                 if (bullets[i].y < -20) {
                     bullets.splice(i, 1);
                 }
@@ -1865,9 +1875,12 @@
 
             // 敵の生成（難易度に応じた間隔）
             const settings = levelSettings[currentLevel];
+            // Adjust spawn calculations for delta time - using frame accumulation
+            // Originally based on frames, so we keep logic but spawn checks happen per frame update equivalent
             const currentSpawnRate = Math.max(spawnRate - Math.floor(score / 10), settings.isInfinite ? 10 : 15);
-            // 鬼レベルは無限に出現、通常レベルはターゲットスコアまで
-            if (frame % currentSpawnRate === 0 && (settings.isInfinite || score < targetScore)) {
+
+            // Using a separate counter for spawning which scales with time
+            if (frame % Math.floor(currentSpawnRate) === 0 && (settings.isInfinite || score < targetScore)) {
                 spawnEnemy();
             }
 
@@ -1875,7 +1888,7 @@
 
             // 敵の更新
             for (let i = enemies.length - 1; i >= 0; i--) {
-                enemies[i].y += enemies[i].speed;
+                enemies[i].y += enemies[i].speed * timeScale;
 
                 // 画面外に出たら削除
                 if (enemies[i].y > canvas.height) {
@@ -1948,10 +1961,10 @@
 
             // パーティクルの更新
             for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].x += particles[i].vx;
-                particles[i].y += particles[i].vy;
-                particles[i].vy += 0.2;
-                particles[i].life--;
+                particles[i].x += particles[i].vx * timeScale;
+                particles[i].y += particles[i].vy * timeScale;
+                particles[i].vy += 0.2 * timeScale;
+                particles[i].life -= 1 * timeScale;
 
                 if (particles[i].life <= 0) {
                     particles.splice(i, 1);
@@ -2073,13 +2086,26 @@
             }
         }
 
-        function gameLoop() {
-            update();
+        function gameLoop(timestamp) {
+            if (gameState !== 'playing') return;
+
+            // Calculate delta time
+            const deltaTime = timestamp - lastTime;
+            lastTime = timestamp;
+
+            // Calculate scale based on target 60 FPS
+            // If delta is 16.6ms (60fps), scale is 1
+            // If delta is 33.3ms (30fps), scale is 2
+            // If delta is 8.3ms (120fps), scale is 0.5
+            let timeScale = deltaTime / STEP;
+
+            // Cap to avoid huge jumps on lags
+            if (timeScale > 4) timeScale = 4;
+
+            update(timeScale);
             draw();
 
-            if (gameState === 'playing') {
-                requestAnimationFrame(gameLoop);
-            }
+            requestAnimationFrame(gameLoop);
         }
 
         // バージョン表示
