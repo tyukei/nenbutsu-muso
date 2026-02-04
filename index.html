@@ -474,6 +474,100 @@
             box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
         }
 
+        /* Settings Modal */
+        #settingsModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .settings-container {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 3px solid #d4af37;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
+            text-align: center;
+        }
+
+        .settings-container h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 15px;
+        }
+
+        .setting-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .setting-label {
+            color: #d4af37;
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .toggle-options {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 5px;
+            position: relative;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: #aaa;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s;
+            margin: 0;
+            box-shadow: none;
+            min-height: auto;
+            min-width: auto;
+        }
+
+        .toggle-btn.active {
+            background: #d4af37;
+            color: #1a1a2e;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+        }
+
+        .toggle-btn:hover:not(.active) {
+            color: #fff;
+            transform: none;
+        }
+
+        .settings-desc {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        #settingsSubmitBtn {
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2e 100%);
+            width: 100%;
+            margin-top: 20px;
+            font-size: 20px;
+            padding: 15px;
+        }
+
         /* 仮想コントローラー */
         #virtualControls {
             position: fixed;
@@ -887,6 +981,33 @@
                 <button id="toTitleBtn">タイトルに戻る</button>
             </div>
 
+            <!-- 初期設定モーダル -->
+            <div id="settingsModal" class="hidden">
+                <div class="settings-container">
+                    <h2>環境設定</h2>
+
+                    <div class="setting-group">
+                        <span class="setting-label">音声設定</span>
+                        <div class="toggle-options">
+                            <button class="toggle-btn active" data-group="sound" data-value="on">ON (BGMあり)</button>
+                            <button class="toggle-btn" data-group="sound" data-value="off">OFF (無音)</button>
+                        </div>
+                        <div class="settings-desc">※「ON」の場合、開始時に音声が再生されます</div>
+                    </div>
+
+                    <div class="setting-group">
+                        <span class="setting-label">操作モード</span>
+                        <div class="toggle-options">
+                            <button class="toggle-btn" data-group="mode" data-value="pc">PC (キーボード)</button>
+                            <button class="toggle-btn" data-group="mode" data-value="mobile">スマホ (タップ)</button>
+                        </div>
+                        <div class="settings-desc">※デフォルトはPCです</div>
+                    </div>
+
+                    <button id="settingsSubmitBtn">決定して開始</button>
+                </div>
+            </div>
+
             <!-- ランキング画面 -->
             <div id="rankingScreen" class="screen hidden">
                 <h1>ランキング</h1>
@@ -1288,7 +1409,19 @@
         modeToggleBtn.addEventListener('click', toggleMobileMode);
 
         function checkMobileMode() {
-            // Initial check: if width <= 500px, enable mobile mode
+            // Check for saved setting first
+            const savedSettings = localStorage.getItem('nenbunSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                if (settings.mode === 'mobile') {
+                    document.body.classList.add('mobile-mode');
+                } else {
+                    document.body.classList.remove('mobile-mode');
+                }
+                return;
+            }
+
+            // Fallback to width check if no setting saved
             if (window.innerWidth <= 500) {
                 document.body.classList.add('mobile-mode');
             } else {
@@ -1298,6 +1431,13 @@
 
         function toggleMobileMode() {
             document.body.classList.toggle('mobile-mode');
+            // Update setting in localStorage if it exists
+            const savedSettings = localStorage.getItem('nenbunSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                settings.mode = document.body.classList.contains('mobile-mode') ? 'mobile' : 'pc';
+                localStorage.setItem('nenbunSettings', JSON.stringify(settings));
+            }
         }
 
         // Run initial check
@@ -2127,8 +2267,108 @@
         const version = document.querySelector('meta[name="version"]').content;
         document.getElementById('version-display').textContent = `v${version}`;
 
-        // 初期化
-        showTitle();
+        // Initialize Settings
+        const settingsModal = document.getElementById('settingsModal');
+        const settingsSubmitBtn = document.getElementById('settingsSubmitBtn');
+        const toggleBtns = document.querySelectorAll('.toggle-btn');
+
+        // Default temporary settings for the modal
+        let tempSettings = {
+            sound: 'on',
+            mode: 'pc'
+        };
+
+        function initSettings() {
+            const savedSettings = localStorage.getItem('nenbunSettings');
+
+            if (!savedSettings) {
+                // No settings saved, show modal
+                settingsModal.classList.remove('hidden');
+
+                // Set initial active states for buttons based on defaults
+                updateToggleButtons();
+            } else {
+                // Settings exist, apply them
+                const settings = JSON.parse(savedSettings);
+                applySettings(settings);
+                showTitle();
+            }
+        }
+
+        function applySettings(settings) {
+            // Apply Mode
+            if (settings.mode === 'mobile') {
+                document.body.classList.add('mobile-mode');
+            } else {
+                document.body.classList.remove('mobile-mode');
+            }
+
+            // Apply Sound (Set volume globally)
+            if (settings.sound === 'off') {
+                Object.values(sounds).forEach(audio => {
+                    audio.volume = 0;
+                });
+                // Disable unlockAudio if sound is off
+                document.removeEventListener('touchstart', unlockAudio);
+                document.removeEventListener('click', unlockAudio);
+                document.removeEventListener('keydown', unlockAudio);
+            } else {
+                // Restore default volumes if needed (re-run init logic or just set specific volumes)
+                // For simplicity, we just leave them as initialized or unlocked
+                // If we implemented a mute toggle during gameplay, we'd need more robust volume management
+                sounds.bgm.volume = 0.5;
+                sounds.shoot.volume = 0.3;
+                sounds.hit.volume = 0.4;
+                sounds.damage.volume = 0.5;
+                sounds.gameover.volume = 0.6;
+                sounds.clear.volume = 0.6;
+            }
+        }
+
+        function updateToggleButtons() {
+            toggleBtns.forEach(btn => {
+                const group = btn.dataset.group;
+                const value = btn.dataset.value;
+                if (tempSettings[group] === value) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Event Listeners for Settings Modal
+        toggleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const group = btn.dataset.group;
+                const value = btn.dataset.value;
+                tempSettings[group] = value;
+                updateToggleButtons();
+            });
+        });
+
+        settingsSubmitBtn.addEventListener('click', () => {
+            // Save settings
+            localStorage.setItem('nenbunSettings', JSON.stringify(tempSettings));
+
+            // Apply settings
+            applySettings(tempSettings);
+
+            // Hide modal
+            settingsModal.classList.add('hidden');
+
+            // Show title
+            showTitle();
+
+            // Attempt to unlock audio immediately if sound is ON (since user clicked a button)
+            if (tempSettings.sound === 'on') {
+                unlockAudio();
+            }
+        });
+
+        // Initialize
+        // showTitle(); // Removed direct call, moved to initSettings
+        initSettings();
     </script>
 </body>
 
