@@ -995,6 +995,36 @@
             }
         }
 
+        // モバイル等の自動再生制限解除用
+        let audioUnlocked = false;
+        function unlockAudio() {
+            if (audioUnlocked) return;
+
+            // 全ての音声を無音で一瞬再生してアンロック
+            Object.values(sounds).forEach(audio => {
+                audio.muted = true;
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.muted = false;
+                }).catch(e => {
+                    console.log('Audio unlock failed:', e);
+                    audio.muted = false;
+                });
+            });
+
+            audioUnlocked = true;
+
+            // イベントリスナー削除
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('click', unlockAudio);
+            document.removeEventListener('keydown', unlockAudio);
+        }
+
+        document.addEventListener('touchstart', unlockAudio, { passive: true });
+        document.addEventListener('click', unlockAudio);
+        document.addEventListener('keydown', unlockAudio);
+
         // ゲーム状態
         let gameState = 'title'; // 'title', 'level', 'playing', 'gameover', 'ranking'
         let score = 0;
