@@ -1051,6 +1051,19 @@
 
             // コンテナに追加（最新のメッセージが上に来るように）
             bonnouMessageContainer.insertBefore(messageItem, bonnouMessageContainer.firstChild);
+
+            // スマホの場合（幅768px以下）、3秒経ったら消えるようにする
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                setTimeout(() => {
+                    messageItem.style.transition = 'opacity 0.5s';
+                    messageItem.style.opacity = '0';
+                    setTimeout(() => {
+                        if (messageItem.parentNode) {
+                            messageItem.remove();
+                        }
+                    }, 500);
+                }, 3000);
+            }
         }
 
 
