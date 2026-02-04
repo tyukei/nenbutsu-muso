@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>念仏退散〜修行僧の葛藤〜</title>
+    <title>煩悩退散〜修行僧の葛藤〜</title>
     <style>
         * {
             margin: 0;
@@ -493,6 +493,11 @@
             height: 200px;
             z-index: 5;
             pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        #virtualControls.inactive {
+            opacity: 0.2;
         }
 
         .control-btn {
@@ -765,14 +770,14 @@
             <!-- タイトル画面 -->
             <div id="titleScreen" class="screen">
                 <div class="title-logo"></div>
-                <h1>念仏退散</h1>
+                <h1>煩悩退散</h1>
                 <div class="subtitle">〜修行僧の葛藤〜</div>
 
                 <div class="instruction">
                     <p><strong>操作方法</strong></p>
                     <p>← → キー：移動</p>
                     <p>スペースキー：読経発射</p>
-                    <p>Z キー：煩悩即菩薩（功徳3で発動）</p>
+                    <p>Z キー：煩悩即菩薩（功徳6で発動）</p>
                     <p><br><strong>注意</strong></p>
                     <p style="color:#FFD700;">金色の「布施・持戒・忍辱・精進・禅定・智慧」に触れると功徳回復</p>
                 </div>
@@ -858,9 +863,10 @@
             <canvas id="gameCanvas" width="480" height="640"></canvas>
 
             <div id="info" class="hidden">
-                <div><span id="levelDisplay"></span> | 煩悩退散: <span id="score">0</span> / <span id="targetScore">108</span>
+                <div><span id="levelDisplay"></span> | 煩悩退散: <span id="score">0</span> / <span
+                        id="targetScore">108</span>
                 </div>
-                <div>精神力: <span id="spirit">3</span> | 功徳: <span id="kudoku" style="color:#fff">0</span>/3 | 連鎖数: <span
+                <div>精神力: <span id="spirit">3</span> | 功徳: <span id="kudoku" style="color:#fff">0</span>/6 | 連鎖数: <span
                         id="combo">0</span></div>
             </div>
 
@@ -907,6 +913,10 @@
         let touchRight = false;
         let touchSpecial = false;
 
+        // オートハイド機能用
+        let lastInputTime = Date.now();
+        const HIDE_DELAY = 3000; // 3秒で非表示
+
         // BGMと効果音
         const sounds = {
             bgm: new Audio('sounds/bgm.wav'),
@@ -948,7 +958,7 @@
         let score = 0;
         let spirit = 3;      // 精神力（HPシステム）
         let kudoku = 0;      // 功徳（MPシステム）
-        const maxKudoku = 3; // 最大功徳
+        const maxKudoku = 6; // 最大功徳
         let combo = 0;
         let maxCombo = 0;
         let frame = 0;
@@ -1145,6 +1155,19 @@
             rankingList.innerHTML = html;
         }
 
+        // ユーザー入力でタイマーリセット
+        function resetInputTimer() {
+            // プレイ中以外は処理しない（ただしスタート時などはリセットしたいかも？とりあえずプレイ中のみでOK）
+            lastInputTime = Date.now();
+            if (virtualControls.classList.contains('inactive')) {
+                virtualControls.classList.remove('inactive');
+            }
+        }
+
+        window.addEventListener('touchstart', resetInputTimer, { passive: true });
+        window.addEventListener('mousedown', resetInputTimer);
+        window.addEventListener('keydown', resetInputTimer);
+
         // イベントリスナー
         document.addEventListener('keydown', (e) => {
             if (gameState === 'playing') {
@@ -1186,7 +1209,7 @@
             const isWin = score >= targetScore && !settings.isInfinite;
 
             // シェアテキストを作成
-            let shareText = `念仏退散〜修行僧の葛藤〜\n`;
+            let shareText = `煩悩退散〜修行僧の葛藤〜\n`;
             shareText += `【${levelName}】\n`;
 
             if (isWin) {
@@ -1199,7 +1222,7 @@
             shareText += `最大連鎖: ${maxCombo}\n`;
 
             // ハッシュタグを追加
-            shareText += `\n#念仏退散 #般若心経EDM\n`;
+            shareText += `\n#煩悩退散 #般若心経EDM\n`;
             shareText += `\nhttps://tyukei.github.io/nenbutsu-muso/`;
 
             // X (Twitter) のシェアURLを作成
@@ -1220,7 +1243,7 @@
             const isWin = score >= targetScore && !settings.isInfinite;
 
             // シェアテキストを作成（Xと同じ内容）
-            let shareText = `念仏退散〜修行僧の葛藤〜\n`;
+            let shareText = `煩悩退散〜修行僧の葛藤〜\n`;
             shareText += `【${levelName}】\n`;
 
             if (isWin) {
@@ -1231,7 +1254,7 @@
 
             shareText += `撃破数: ${score}/${targetDisplay}\n`;
             shareText += `最大連鎖: ${maxCombo}\n`;
-            shareText += `\n#念仏退散 #般若心経EDM`;
+            shareText += `\n#煩悩退散 #般若心経EDM`;
 
             const gameUrl = 'https://tyukei.github.io/nenbutsu-muso/';
 
@@ -1702,6 +1725,16 @@
 
         function update() {
             if (gameState !== 'playing') return;
+
+            // オートハイド判定（スマホ表示の時のみ有効にするか、常時動かしても害はないが、クラス付与はDOM操作なので頻度を下げる）
+            // virtualControlsが表示されている（hiddenがない）場合のみ判定
+            if (!virtualControls.classList.contains('hidden')) {
+                if (Date.now() - lastInputTime > HIDE_DELAY) {
+                    if (!virtualControls.classList.contains('inactive')) {
+                        virtualControls.classList.add('inactive');
+                    }
+                }
+            }
 
             frame++;
 
