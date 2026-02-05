@@ -1236,7 +1236,8 @@
                 baseSpeed: 1.0,
                 spawnRate: 30, // Reduced from 50 (faster spawn)
                 speedIncrease: 0.04,
-                isInfinite: false
+                isInfinite: false,
+                initialSpirit: 3
             },
             normal: {
                 name: '仏性Lev2',
@@ -1244,7 +1245,8 @@
                 baseSpeed: 1.5,
                 spawnRate: 25, // Reduced from 40
                 speedIncrease: 0.06,
-                isInfinite: false
+                isInfinite: false,
+                initialSpirit: 4
             },
             hard: {
                 name: '仏性Lev3',
@@ -1252,7 +1254,8 @@
                 baseSpeed: 2.5,
                 spawnRate: 20, // Reduced from 30
                 speedIncrease: 0.08,
-                isInfinite: false
+                isInfinite: false,
+                initialSpirit: 5
             },
             demon: {
                 name: '鬼レベル',
@@ -1260,7 +1263,8 @@
                 baseSpeed: 3.0,
                 spawnRate: 15, // Reduced from 25
                 speedIncrease: 0.12, // より速く加速
-                isInfinite: true
+                isInfinite: true,
+                initialSpirit: 5
             }
         };
 
@@ -1479,7 +1483,7 @@
             shareText += `【${levelName}】\n`;
 
             if (isWin) {
-                shareText += `✨解脱達成！✨\n`;
+                shareText += `✨仏性が育ちました！✨\n`;
             } else {
                 shareText += `煩悩に呑まれた...\n`;
             }
@@ -1513,7 +1517,7 @@
             shareText += `【${levelName}】\n`;
 
             if (isWin) {
-                shareText += `✨解脱達成！✨\n`;
+                shareText += `✨仏性が育ちました！✨\n`;
             } else {
                 shareText += `煩悩に呑まれた...\n`;
             }
@@ -1780,7 +1784,7 @@
 
             gameState = 'playing';
             score = 0;
-            spirit = 3;
+            spirit = settings.initialSpirit;
             kudoku = 0;
             combo = 0;
             maxCombo = 0;
@@ -2003,7 +2007,11 @@
             const targetDisplay = settings.isInfinite ? '∞' : targetScore;
 
             if (win) {
-                document.getElementById('resultTitle').textContent = '解脱達成!';
+                let titleText = '仏性が育ちました!';
+                if (currentLevel === 'hard') {
+                    titleText = '解脱達成';
+                }
+                document.getElementById('resultTitle').textContent = titleText;
                 document.getElementById('resultText').textContent = `${targetScore}の煩悩を全て打ち払いました`;
                 document.getElementById('currentScore').innerHTML =
                     `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}`;
