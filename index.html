@@ -315,6 +315,29 @@
             background: #000;
         }
 
+        .intro-skip-hint {
+            position: absolute;
+            right: 14px;
+            bottom: 12px;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            animation: introHintBlink 1.4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes introHintBlink {
+            0%,
+            100% {
+                opacity: 0.45;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
         .intro-message {
             position: absolute;
             opacity: 0;
@@ -464,6 +487,12 @@
 
         .mobile-mode .intro-sad {
             right: 8px;
+        }
+
+        .mobile-mode .intro-skip-hint {
+            right: 10px;
+            bottom: 10px;
+            font-size: 11px;
         }
 
         .mobile-mode #titlePersistentPray .persistent-happy {
@@ -1324,6 +1353,7 @@
                         <p id="titleIntroMessageTextSub"
                             style="color:#d4af37; font-weight:bold; font-size: 18px;"></p>
                     </div>
+                    <div class="intro-skip-hint">タップでスキップ</div>
                 </div>
                 <div id="titlePersistentPray">
                     <img class="persistent-happy" src="images/monk/monk_happy.png" alt="happy monk">
@@ -1679,6 +1709,7 @@
         let heartImpactUntil = 0;
         let heartPurifyUntil = 0;
         let heartStains = [];
+        let ropparamitsuBannerUntil = 0;
         let titleIntroPlayed = false;
         let titleIntroRunning = false;
         let titleIntroTimers = [];
@@ -1739,6 +1770,10 @@
             heartPurifyUntil = performance.now() + 800;
         }
 
+        function triggerRoppaBanner() {
+            ropparamitsuBannerUntil = performance.now() + 1100;
+        }
+
 
         // 難易度設定
         let currentLevel = 'normal';
@@ -1750,9 +1785,10 @@
             easy: {
                 name: '仏性Lev1',
                 targetScore: 36,
-                baseSpeed: 1.0,
-                spawnRate: 30, // Reduced from 50 (faster spawn)
+                baseSpeed: 0.9,
+                spawnRate: 34,
                 speedIncrease: 0.04,
+                nenbutsuRate: 0.5,
                 isInfinite: false,
                 initialSpirit: 3
             },
@@ -1780,6 +1816,7 @@
                 baseSpeed: 3.0,
                 spawnRate: 15, // Reduced from 25
                 speedIncrease: 0.12, // より速く加速
+                nenbutsuRate: 0.3,
                 isInfinite: true,
                 initialSpirit: 5
             }
@@ -2426,6 +2463,7 @@
             heartImpactUntil = 0;
             heartPurifyUntil = 0;
             heartStains = [];
+            ropparamitsuBannerUntil = 0;
             bullets.length = 0;
             enemies.length = 0;
             particles.length = 0;
@@ -2470,11 +2508,12 @@
         }
 
         function spawnEnemy() {
-            // 30%の確率で六波羅蜜（布施・持戒・忍辱・精進・禅定・智慧）が出現
-            const isNenbutsu = Math.random() < 0.3;
+            const settings = levelSettings[currentLevel];
+            // レベルごとの確率で六波羅蜜（布施・持戒・忍辱・精進・禅定・智慧）が出現
+            const nenbutsuRate = settings.nenbutsuRate ?? 0.3;
+            const isNenbutsu = Math.random() < nenbutsuRate;
             const ropparamitsuList = ['布施', '持戒', '忍辱', '精進', '禅定', '智慧'];
             const bonnou = isNenbutsu ? ropparamitsuList[Math.floor(Math.random() * ropparamitsuList.length)] : bonnouList[Math.floor(Math.random() * bonnouList.length)];
-            const settings = levelSettings[currentLevel];
             // スピード = 基本速度 + ランダム + 進行に応じて加速
             const speed = baseSpeed + Math.random() * 1.5 + (score * settings.speedIncrease); // Random variance reduced from 3.0
 
@@ -2808,7 +2847,11 @@
                         enemies[i].y + enemies[i].height / 2,
                         enemies[i].color);
                     enemies.splice(i, 1);
+                    const prevKudoku = kudoku;
                     kudoku = Math.min(kudoku + 1, maxKudoku);
+                    if (prevKudoku < maxKudoku && kudoku === maxKudoku) {
+                        triggerRoppaBanner();
+                    }
                     triggerHeartPurify();
                     updateUI();
                     playSound('hit_bounas');
@@ -3065,6 +3108,23 @@
                 ctx.shadowBlur = 15;
                 ctx.shadowColor = '#ffd700';
                 ctx.fillText(`×${combo} COMBO!`, canvas.width / 2, 50);
+                ctx.restore();
+            }
+
+            if (now < ropparamitsuBannerUntil) {
+                const remain = ropparamitsuBannerUntil - now;
+                const fadeIn = Math.min(1, (1100 - remain) / 180);
+                const fadeOut = Math.min(1, remain / 260);
+                const alpha = Math.min(fadeIn, fadeOut);
+
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowBlur = 18;
+                ctx.shadowColor = `rgba(255, 215, 90, ${alpha.toFixed(3)})`;
+                ctx.fillStyle = `rgba(255, 236, 166, ${alpha.toFixed(3)})`;
+                ctx.font = 'bold 44px sans-serif';
+                ctx.fillText('六波羅蜜成就', canvas.width / 2, canvas.height * 0.34);
                 ctx.restore();
             }
         }
