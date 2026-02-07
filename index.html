@@ -1757,13 +1757,7 @@
         const passwordSubmitBtn = document.getElementById('passwordSubmitBtn');
         const passwordCancelBtn = document.getElementById('passwordCancelBtn');
 
-        unlockBtn.addEventListener('click', () => {
-            passwordModal.classList.remove('hidden');
-            passwordInput.value = '';
-            passwordMessage.textContent = '';
-            passwordMessage.className = '';
-            setTimeout(() => passwordInput.focus(), 100);
-        });
+
 
         passwordCancelBtn.addEventListener('click', () => {
             passwordModal.classList.add('hidden');
@@ -2687,10 +2681,7 @@
             openTutorial();
         });
 
-        menuDevBtn.addEventListener('click', () => {
-            menuModal.classList.add('hidden');
-            passwordModal.classList.remove('hidden');
-        });
+
 
         // Initialize
         // showTitle(); // Removed direct call, moved to initSettings
