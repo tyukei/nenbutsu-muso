@@ -86,6 +86,10 @@
             padding: 30px 20px;
         }
 
+        #levelScreen {
+            overflow-x: hidden;
+        }
+
         .mobile-mode .screen {
             padding: 20px 10px;
         }
@@ -101,6 +105,10 @@
             margin-bottom: 5px;
             text-shadow: 0 0 20px rgba(212, 175, 55, 1);
             animation: glow 2s ease-in-out infinite;
+        }
+
+        #levelScreen h1 {
+            font-size: clamp(32px, 8vw, 40px);
         }
 
         .mobile-mode h1 {
@@ -159,9 +167,10 @@
         }
 
         .title-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
             max-width: 420px;
             margin: 0 auto;
         }
@@ -262,6 +271,238 @@
             margin-bottom: 30px;
         }
 
+        /* Title Intro */
+        #titleScreen {
+            overflow: hidden;
+            padding: 0;
+        }
+
+        #titleMainContent {
+            position: relative;
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        #titleMainContent.intro-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #titleIntroOverlay {
+            position: absolute;
+            inset: 0;
+            z-index: 40;
+            pointer-events: auto;
+        }
+
+        #titleIntroOverlay.intro-fadeout {
+            opacity: 0;
+            transition: opacity 0.22s ease;
+        }
+
+        .intro-black {
+            position: absolute;
+            inset: 0;
+            background: #000;
+        }
+
+        .intro-skip-hint {
+            position: absolute;
+            right: 14px;
+            bottom: 12px;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            animation: introHintBlink 1.4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes introHintBlink {
+            0%,
+            100% {
+                opacity: 0.45;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .intro-message {
+            position: absolute;
+            opacity: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        .intro-message p {
+            white-space: pre-line;
+            text-shadow: none;
+        }
+
+        .intro-message.intro-active {
+            animation: introMessageIn 0.45s ease-out forwards;
+        }
+
+        .intro-monk {
+            position: absolute;
+            bottom: 0;
+            width: 112px;
+            opacity: 0;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
+            transform: translateY(30px) scale(0.92);
+        }
+
+        .intro-happy {
+            left: 14px;
+        }
+
+        .intro-sad {
+            right: 14px;
+        }
+
+        .intro-pray {
+            left: 50%;
+            transform: translateX(-50%) translateY(34px) scale(0.9);
+        }
+
+        .intro-happy.intro-active {
+            animation: introHappyIn 0.45s ease-out forwards;
+        }
+
+        .intro-sad.intro-active {
+            animation: introSadIn 0.45s ease-out forwards;
+        }
+
+        .intro-pray.intro-active {
+            animation: introPrayIn 0.5s ease-out forwards;
+        }
+
+        @keyframes introHappyIn {
+            from {
+                opacity: 0;
+                transform: translate(-18px, 34px) scale(0.88);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        @keyframes introSadIn {
+            from {
+                opacity: 0;
+                transform: translate(18px, 34px) scale(0.88);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        @keyframes introPrayIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(36px) scale(0.86);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+
+        @keyframes introMessageIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #titlePersistentPray {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+        }
+
+        #titlePersistentPray img {
+            width: 112px;
+            display: block;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
+            position: absolute;
+            bottom: 0;
+        }
+
+        #titlePersistentPray .persistent-happy {
+            left: 14px;
+        }
+
+        #titlePersistentPray .persistent-sad {
+            right: 14px;
+        }
+
+        #titlePersistentPray .persistent-pray {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #titlePersistentPray.visible {
+            opacity: 1;
+        }
+
+        .mobile-mode .intro-monk,
+        .mobile-mode #titlePersistentPray img {
+            width: 90px;
+        }
+
+        .mobile-mode #titleMainContent {
+            padding: 20px 10px;
+        }
+
+        .mobile-mode .intro-happy {
+            left: 8px;
+        }
+
+        .mobile-mode .intro-sad {
+            right: 8px;
+        }
+
+        .mobile-mode .intro-skip-hint {
+            right: 10px;
+            bottom: 10px;
+            font-size: 11px;
+        }
+
+        .mobile-mode #titlePersistentPray .persistent-happy {
+            left: 8px;
+        }
+
+        .mobile-mode #titlePersistentPray .persistent-sad {
+            right: 8px;
+        }
+
         #currentScore {
             font-size: 28px;
             color: #ffd700;
@@ -271,91 +512,88 @@
 
         .level-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 15px;
             margin: 20px 0;
-            max-width: 500px;
+            width: 100%;
+            max-width: 420px;
+            justify-items: stretch;
         }
 
         .level-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 15px;
+            padding: 18px 12px;
             min-height: 100px;
             justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            margin: 0;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .level-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+            border-color: #ffd700;
         }
 
         .level-name {
             font-size: 20px;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
+            color: #d4af37;
+            font-weight: bold;
         }
 
         .level-desc {
             font-size: 13px;
             opacity: 0.8;
+            color: #ccc;
         }
 
         .level-lock {
             font-size: 12px;
             opacity: 0.6;
             margin-top: 5px;
+            color: #888;
         }
 
         .level-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            filter: grayscale(70%);
+            filter: grayscale(100%);
+            border-color: #555;
         }
 
         .level-btn:disabled:hover {
             transform: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: none;
         }
 
         #levelDemon {
             grid-column: 2;
             grid-row: 2;
-        }
-
-        #levelEasy {
-            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
-        }
-
-        #levelEasy:hover {
-            box-shadow: 0 7px 20px rgba(33, 150, 243, 0.6);
-        }
-
-        #levelNormal {
-            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
-        }
-
-        #levelNormal:hover {
-            box-shadow: 0 7px 20px rgba(255, 152, 0, 0.6);
-        }
-
-        #levelHard {
-            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
-        }
-
-        #levelHard:hover {
-            box-shadow: 0 7px 20px rgba(244, 67, 54, 0.6);
-        }
-
-        #levelDemon {
-            background: linear-gradient(135deg, #9c27b0 0%, #4a148c 100%);
-            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+            background: linear-gradient(135deg, #2c0e37 0%, #1a0520 100%);
+            border-color: #9c27b0;
             animation: demonPulse 2s ease-in-out infinite;
-            grid-column: 2;
-            grid-row: 2;
+        }
+
+        #levelDemon .level-name {
+            color: #e040fb;
         }
 
         #levelDemon:hover {
-            box-shadow: 0 7px 20px rgba(156, 39, 176, 0.6);
+            box-shadow: 0 0 20px rgba(156, 39, 176, 0.6);
+            border-color: #e040fb;
         }
+
+
 
         #levelDemon.hidden {
             display: none !important;
@@ -462,16 +700,22 @@
         }
 
         .unlock-btn {
-            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid #4caf50;
+            color: #4caf50;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
             font-size: 16px;
             padding: 10px 30px;
             min-width: 180px;
             margin-top: 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
         }
 
         .unlock-btn:hover {
-            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
+            background: #4caf50;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
         }
 
         /* Settings Modal */
@@ -771,21 +1015,35 @@
         /* Share Buttons Container */
         .share-buttons {
             display: flex;
-            gap: 10px;
             justify-content: center;
-            flex-wrap: wrap;
+            gap: 5px;
             margin-top: 10px;
+            width: 100%;
+        }
+
+        #gameOverScreen button {
+            width: 32%;
+            max-width: none;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            padding: 8px 0;
+            min-width: 0;
+            line-height: 1.2;
+            white-space: nowrap;
         }
 
         /* X (Twitter) Share Button */
         .share-btn {
             background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
             box-shadow: 0 5px 15px rgba(29, 161, 242, 0.4);
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            min-width: 180px;
+            gap: 4px;
+            min-width: 0;
         }
 
         .share-btn:hover {
@@ -794,23 +1052,52 @@
 
         .share-btn::before {
             content: '𝕏';
-            font-size: 20px;
+            font-size: 14px;
             font-weight: bold;
         }
 
-        /* Facebook Share Button */
-        .share-btn-fb {
-            background: linear-gradient(135deg, #1877F2 0%, #0d5dbf 100%);
-            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            min-width: 180px;
+
+        /* Result Image */
+        /* Result Image */
+        .result-image {
+            max-width: 200px;
+            margin: -20px auto;
+            display: block;
+            position: relative;
+            position: relative;
+            z-index: 1;
         }
 
-        .share-btn-fb:hover {
-            box-shadow: 0 7px 20px rgba(24, 119, 242, 0.6);
+        /* Result Stats Grid */
+        .result-stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 14px 0;
+            width: 100%;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 8px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            min-height: 80px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 4px;
+            white-space: nowrap;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            color: #ffd700;
+            font-weight: bold;
+            line-height: 1.2;
         }
 
         /* 煩悩メッセージ表示 */
@@ -818,7 +1105,7 @@
             position: fixed;
             top: calc((100vh - 640px) / 2);
             right: 20px;
-            width: 320px;
+            width: 260px;
             max-height: 640px;
             overflow-y: auto;
             z-index: 20;
@@ -850,7 +1137,7 @@
         }
 
         .bonnou-title {
-            font-size: 20px;
+            font-size: 19px;
             color: #ff6f00;
             text-shadow: 0 0 10px rgba(255, 111, 0, 0.8);
             font-weight: bold;
@@ -858,7 +1145,7 @@
         }
 
         .bonnou-desc {
-            font-size: 13px;
+            font-size: 12px;
             color: #ffd700;
             line-height: 1.4;
         }
@@ -926,6 +1213,127 @@
         .shake {
             animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
         }
+
+        /* ToS & Tutorial Modals */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
+        }
+
+        .modal-container {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 3px solid #d4af37;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
+        }
+
+        .modal-title {
+            color: #d4af37;
+            font-size: 28px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .tos-content {
+            text-align: left;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            height: 200px;
+            overflow-y: scroll;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            /* Enables square aspect ratio regardless of width */
+            margin-bottom: 20px;
+            background: #000;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .carousel-slide.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: #d4af37;
+        }
+
+        .menu-btn {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid #d4af37;
+            color: #fff;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            text-align: center;
+        }
+
+        .menu-btn:hover {
+            background: #d4af37;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -934,30 +1342,49 @@
         <div id="gameContainer">
             <!-- タイトル画面 -->
             <div id="titleScreen" class="screen">
-                <button id="openSettingsBtn" aria-label="設定">⚙️</button>
-                <div class="title-logo"></div>
-                <h1>煩悩退散</h1>
-                <div class="subtitle">〜修行僧の葛藤〜</div>
-
-                <div class="instruction">
-                    <p><strong>操作方法</strong></p>
-                    <p>← → キー：移動</p>
-                    <p>スペースキー：読経発射</p>
-                    <br>
-                    <p><strong>特別ルール</strong></p>
-                    <p style="color:#FFD700; font-weight:bold;">
-                        六波羅蜜（金色の文字）を<br>
-                        6回 積む（体で受け止める）と、<br>
-                        自動で画面の煩悩を全て浄化！
-                    </p>
+                <div id="titleIntroOverlay">
+                    <div class="intro-black"></div>
+                    <img id="introMonkHappy" class="intro-monk intro-happy" src="images/monk/monk_happy.png" alt="happy monk">
+                    <img id="introMonkSad" class="intro-monk intro-sad" src="images/monk/monk_sad.png" alt="sad monk">
+                    <img id="introMonkPray" class="intro-monk intro-pray" src="images/monk/monk_pray.png" alt="praying monk">
+                    <div id="titleIntroMessage" class="intro-message instruction">
+                        <p id="titleIntroMessageTextMain"
+                            style="font-size: 16px; font-weight: bold; margin-bottom: 10px;"></p>
+                        <p id="titleIntroMessageTextSub"
+                            style="color:#d4af37; font-weight:bold; font-size: 18px;"></p>
+                    </div>
+                    <div class="intro-skip-hint">タップでスキップ</div>
+                </div>
+                <div id="titlePersistentPray">
+                    <img class="persistent-happy" src="images/monk/monk_happy.png" alt="happy monk">
+                    <img class="persistent-sad" src="images/monk/monk_sad.png" alt="sad monk">
+                    <img class="persistent-pray" src="images/monk/monk_pray.png" alt="praying monk">
                 </div>
 
-                <div class="title-buttons">
-                    <button id="startBtn">修行の開始</button>
-                    <button id="rankingBtn">修行の軌跡</button>
-                </div>
+                <div id="titleMainContent">
+                    <!-- Floating Menu Button Removed -->
+                    <div class="title-logo"></div>
+                    <h1>煩悩退散</h1>
+                    <div class="subtitle">〜修行僧の葛藤〜</div>
 
-                <div id="version-display"></div>
+                    <div class="instruction">
+                        <p style="font-size: 16px; font-weight: bold; margin-bottom: 10px;">
+                            降り注ぐ<span style="color:#ff4444;">煩悩</span>の雨……<br>
+                            迷わず撃て！悟りはその先にある。
+                        </p>
+                        <p style="color:#d4af37; font-weight:bold; font-size: 18px;">
+                            究極の徳（ハイスコア）を目指せ！
+                        </p>
+                    </div>
+
+                    <div class="title-buttons">
+                        <button id="startBtn" style="width: 200px;">修行の開始</button>
+                        <button id="rankingBtn" style="width: 200px;">修行の軌跡</button>
+                        <button id="menuBtn" style="width: 200px; margin-top: 0; font-size: 16px;">修行の準備</button>
+                    </div>
+
+                    <div id="version-display"></div>
+                </div>
             </div>
 
             <!-- レベル選択画面 -->
@@ -986,7 +1413,7 @@
                     </button>
                 </div>
 
-                <button id="unlockBtn" class="unlock-btn">開発者モード</button>
+
                 <button id="backFromLevelBtn">戻る</button>
             </div>
 
@@ -1011,13 +1438,13 @@
             <div id="gameOverScreen" class="screen hidden">
                 <h1 id="resultTitle"></h1>
                 <h2 id="resultText"></h2>
+                <img id="resultImage" class="result-image" src="" alt="result">
                 <div id="currentScore"></div>
                 <div class="share-buttons">
-                    <button id="shareBtn" class="share-btn">Xに共有</button>
-                    <button id="shareFbBtn" class="share-btn-fb">Facebookに共有</button>
+                    <button id="shareBtn" class="share-btn">共有</button>
+                    <button id="restartBtn">再修行</button>
+                    <button id="toTitleBtn">タイトル</button>
                 </div>
-                <button id="restartBtn">再び修行する</button>
-                <button id="toTitleBtn">タイトルに戻る</button>
             </div>
 
             <!-- 初期設定モーダル -->
@@ -1043,7 +1470,54 @@
                         <div class="settings-desc">※デフォルトはPCです</div>
                     </div>
 
-                    <button id="settingsSubmitBtn">決定して開始</button>
+                    <button id="settingsSubmitBtn">決定</button>
+                </div>
+            </div>
+
+            <!-- 利用規約モーダル -->
+            <div id="tosModal" class="modal hidden">
+                <div class="modal-container">
+                    <h2 class="modal-title">利用規約</h2>
+                    <div class="tos-content">
+                        <p><strong>第1条（目的）</strong></p>
+                        <p>本規約は、当ゲーム「煩悩退散」の利用に関する条件を定めるものです。</p>
+                        <br>
+                        <p><strong>第2条（免責）</strong></p>
+                        <p>本ゲームの利用により生じた損害について、開発者は一切の責任を負いません。</p>
+                        <br>
+                        <p><strong>第3条（禁止事項）</strong></p>
+                        <p>公序良俗に反する行為、不正アクセス、その他開発者が不適切と判断する行為を禁止します。</p>
+                        <br>
+                        <p><strong>第4条（変更）</strong></p>
+                        <p>本規約は予告なく変更される場合があります。</p>
+                        <br>
+                        <p>ゲームをお楽しみいただく前に、上記内容をご確認ください。</p>
+                    </div>
+                    <button id="tosAgreeBtn">同意する</button>
+                </div>
+            </div>
+
+            <!-- チュートリアルモーダル -->
+            <div id="tutorialModal" class="modal hidden">
+                <div class="modal-container">
+                    <h2 class="modal-title">修行の心得</h2>
+
+                    <div class="carousel-container">
+                        <img src="images/tutorial/slide1.png" class="carousel-slide active" alt="基本操作">
+                        <img src="images/tutorial/slide2.png" class="carousel-slide" alt="煩悩を撃て">
+                        <img src="images/tutorial/slide3.png" class="carousel-slide" alt="六波羅蜜を集めよ">
+                    </div>
+
+                    <div class="carousel-dots">
+                        <span class="dot active" onclick="setSlide(0)"></span>
+                        <span class="dot" onclick="setSlide(1)"></span>
+                        <span class="dot" onclick="setSlide(2)"></span>
+                    </div>
+
+                    <div class="carousel-controls">
+                        <button id="prevSlideBtn" style="min-width:100px;">前へ</button>
+                        <button id="nextSlideBtn" style="min-width:100px;">次へ</button>
+                    </div>
                 </div>
             </div>
 
@@ -1076,6 +1550,21 @@
             </div>
         </div>
 
+        <!-- メニューモーダル -->
+        <div id="menuModal" class="modal hidden">
+            <div class="modal-container" style="max-width: 300px; text-align: center;">
+                <h2 style="color: #d4af37; margin-bottom: 20px;">メニュー</h2>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <button id="menuSettingsBtn" class="menu-btn">設定</button>
+                    <button id="menuTosBtn" class="menu-btn">利用規約</button>
+                    <button id="menuTutorialBtn" class="menu-btn">修行の心得</button>
+
+                    <button id="closeMenuBtn" class="menu-btn"
+                        style="margin-top: 10px; background: #555; border-color: #777;">閉じる</button>
+                </div>
+            </div>
+        </div>
+
         <!-- 煩悩メッセージ表示 -->
         <div id="bonnouMessageContainer"></div>
     </main>
@@ -1086,6 +1575,15 @@
 
         // 画面要素
         const titleScreen = document.getElementById('titleScreen');
+        const titleIntroOverlay = document.getElementById('titleIntroOverlay');
+        const titleMainContent = document.getElementById('titleMainContent');
+        const titlePersistentPray = document.getElementById('titlePersistentPray');
+        const introMonkHappy = document.getElementById('introMonkHappy');
+        const introMonkSad = document.getElementById('introMonkSad');
+        const introMonkPray = document.getElementById('introMonkPray');
+        const titleIntroMessage = document.getElementById('titleIntroMessage');
+        const titleIntroMessageTextMain = document.getElementById('titleIntroMessageTextMain');
+        const titleIntroMessageTextSub = document.getElementById('titleIntroMessageTextSub');
         const levelScreen = document.getElementById('levelScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
         const rankingScreen = document.getElementById('rankingScreen');
@@ -1096,8 +1594,19 @@
         const startBtn = document.getElementById('startBtn');
         const restartBtn = document.getElementById('restartBtn');
         const rankingBtn = document.getElementById('rankingBtn');
+        // const tutorialBtn = document.getElementById('tutorialBtn'); // Title button removed
         const backToTitleBtn = document.getElementById('backToTitleBtn');
         const toTitleBtn = document.getElementById('toTitleBtn');
+
+        // ToS & Tutorial Elements
+        const tosModal = document.getElementById('tosModal');
+        const tosAgreeBtn = document.getElementById('tosAgreeBtn');
+        const tutorialModal = document.getElementById('tutorialModal');
+        const prevSlideBtn = document.getElementById('prevSlideBtn');
+        const nextSlideBtn = document.getElementById('nextSlideBtn');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
 
         // 仮想コントローラーボタン
         const leftBtn = document.getElementById('leftBtn');
@@ -1113,6 +1622,10 @@
         // オートハイド機能用
         let lastInputTime = Date.now();
         const HIDE_DELAY = 3000; // 3秒で非表示
+
+        // 画像リソース
+        const monkImage = new Image();
+        monkImage.src = 'images/monk/monk_back.png';
 
         // BGMと効果音
         const sounds = {
@@ -1185,12 +1698,25 @@
         let gameState = 'title'; // 'title', 'level', 'playing', 'gameover', 'ranking'
         let score = 0;
         let spirit = 3;      // 精神力（HPシステム）
+        let maxSpirit = 3;   // 現在難易度での最大精神力
         let kudoku = 0;      // 功徳（MPシステム）
         const maxKudoku = 6; // 最大功徳
         let combo = 0;
         let maxCombo = 0;
         let frame = 0;
         let lastBonnou = ''; // 最後にやられた煩悩
+        let heartFlashUntil = 0;
+        let heartImpactUntil = 0;
+        let heartPurifyUntil = 0;
+        let heartStains = [];
+        let ropparamitsuBannerUntil = 0;
+        let titleIntroPlayed = false;
+        let titleIntroRunning = false;
+        let titleIntroTimers = [];
+        let titleIntroTypingTimer = null;
+        const titleIntroPhraseMain = '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。';
+        const titleIntroPhraseSub = '究極の徳（ハイスコア）を目指せ！';
+        const introRedWord = '煩悩';
 
         // 煩悩メッセージ表示
         const bonnouMessageContainer = document.getElementById('bonnouMessageContainer');
@@ -1222,6 +1748,32 @@
             }
         }
 
+        function triggerHeartBreach(x) {
+            const now = performance.now();
+            heartFlashUntil = now + 260;
+            heartImpactUntil = now + 260;
+
+            const safeMaxSpirit = Math.max(1, maxSpirit);
+            const dangerRatio = 1 - Math.max(0, spirit) / safeMaxSpirit;
+            heartStains.push({
+                x: Math.max(0, Math.min(canvas.width, x)),
+                width: 42 + Math.random() * 34,
+                createdAt: now,
+                duration: 2600 + dangerRatio * 2200,
+                maxAlpha: 0.28 + dangerRatio * 0.25
+            });
+
+            if (heartStains.length > 18) heartStains.shift();
+        }
+
+        function triggerHeartPurify() {
+            heartPurifyUntil = performance.now() + 800;
+        }
+
+        function triggerRoppaBanner() {
+            ropparamitsuBannerUntil = performance.now() + 1100;
+        }
+
 
         // 難易度設定
         let currentLevel = 'normal';
@@ -1233,9 +1785,10 @@
             easy: {
                 name: '仏性Lev1',
                 targetScore: 36,
-                baseSpeed: 1.0,
-                spawnRate: 30, // Reduced from 50 (faster spawn)
+                baseSpeed: 0.9,
+                spawnRate: 34,
                 speedIncrease: 0.04,
+                nenbutsuRate: 0.5,
                 isInfinite: false,
                 initialSpirit: 3
             },
@@ -1263,6 +1816,7 @@
                 baseSpeed: 3.0,
                 spawnRate: 15, // Reduced from 25
                 speedIncrease: 0.12, // より速く加速
+                nenbutsuRate: 0.3,
                 isInfinite: true,
                 initialSpirit: 5
             }
@@ -1437,6 +1991,14 @@
             keys[e.key] = false;
         });
 
+        titleIntroOverlay.addEventListener('click', skipTitleIntro);
+        titleIntroOverlay.addEventListener('touchstart', skipTitleIntro, { passive: true });
+        document.addEventListener('keydown', () => {
+            if (titleIntroRunning) {
+                skipTitleIntro();
+            }
+        });
+
         startBtn.addEventListener('click', showLevelSelect);
         restartBtn.addEventListener('click', showLevelSelect);
         rankingBtn.addEventListener('click', showRanking);
@@ -1502,38 +2064,6 @@
             window.open(twitterUrl, '_blank', 'width=550,height=420');
         }
 
-        // Facebook シェアボタン
-        const shareFbBtn = document.getElementById('shareFbBtn');
-        shareFbBtn.addEventListener('click', shareToFacebook);
-
-        function shareToFacebook() {
-            const levelName = levelSettings[currentLevel].name;
-            const settings = levelSettings[currentLevel];
-            const targetDisplay = settings.isInfinite ? '∞' : targetScore;
-            const isWin = score >= targetScore && !settings.isInfinite;
-
-            // シェアテキストを作成（Xと同じ内容）
-            let shareText = `煩悩退散〜修行僧の葛藤〜\n`;
-            shareText += `【${levelName}】\n`;
-
-            if (isWin) {
-                shareText += `✨仏性が育ちました！✨\n`;
-            } else {
-                shareText += `煩悩に呑まれた...\n`;
-            }
-
-            shareText += `撃破数: ${score}/${targetDisplay}\n`;
-            shareText += `最大連鎖: ${maxCombo}\n`;
-            shareText += `\n#煩悩退散 #般若心経EDM`;
-
-            const gameUrl = 'https://tyukei.github.io/nenbutsu-muso/';
-
-            // Facebookのシェアダイアログを開く（quoteパラメータで引用テキストを追加）
-            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gameUrl)}&quote=${encodeURIComponent(shareText)}`;
-
-            // 新しいウィンドウで開く
-            window.open(facebookUrl, '_blank', 'width=550,height=420');
-        }
 
         // レベル選択ボタン
         document.getElementById('levelEasy').addEventListener('click', () => {
@@ -1558,17 +2088,11 @@
         const passwordModal = document.getElementById('passwordModal');
         const passwordInput = document.getElementById('passwordInput');
         const passwordMessage = document.getElementById('passwordMessage');
-        const unlockBtn = document.getElementById('unlockBtn');
+
         const passwordSubmitBtn = document.getElementById('passwordSubmitBtn');
         const passwordCancelBtn = document.getElementById('passwordCancelBtn');
 
-        unlockBtn.addEventListener('click', () => {
-            passwordModal.classList.remove('hidden');
-            passwordInput.value = '';
-            passwordMessage.textContent = '';
-            passwordMessage.className = '';
-            setTimeout(() => passwordInput.focus(), 100);
-        });
+
 
         passwordCancelBtn.addEventListener('click', () => {
             passwordModal.classList.add('hidden');
@@ -1716,6 +2240,136 @@
             }
         });
 
+        function clearTitleIntroTimers() {
+            titleIntroTimers.forEach(timer => clearTimeout(timer));
+            titleIntroTimers = [];
+            if (titleIntroTypingTimer) {
+                clearInterval(titleIntroTypingTimer);
+                titleIntroTypingTimer = null;
+            }
+        }
+
+        function queueTitleIntro(callback, delay) {
+            const timer = setTimeout(callback, delay);
+            titleIntroTimers.push(timer);
+        }
+
+        function resetTitleIntroVisualState() {
+            titleIntroOverlay.classList.remove('hidden', 'intro-fadeout');
+            introMonkHappy.classList.remove('intro-active');
+            introMonkSad.classList.remove('intro-active');
+            introMonkPray.classList.remove('intro-active');
+            titleIntroMessage.classList.remove('intro-active');
+            titleIntroMessageTextMain.innerHTML = '';
+            titleIntroMessageTextSub.textContent = '';
+            titleMainContent.classList.remove('intro-visible');
+            titlePersistentPray.classList.remove('visible');
+            titlePersistentPray.classList.add('hidden');
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function renderIntroMainText(typedText) {
+            const redStart = titleIntroPhraseMain.indexOf(introRedWord);
+            const redEnd = redStart + introRedWord.length;
+
+            if (redStart < 0) {
+                titleIntroMessageTextMain.innerHTML = escapeHtml(typedText);
+                return;
+            }
+
+            let html = '';
+            if (typedText.length <= redStart) {
+                html = escapeHtml(typedText);
+            } else {
+                html += escapeHtml(typedText.slice(0, redStart));
+                const redTypedLength = Math.min(typedText.length - redStart, introRedWord.length);
+                if (redTypedLength > 0) {
+                    html += `<span style="color:#ff4444;">${escapeHtml(introRedWord.slice(0, redTypedLength))}</span>`;
+                }
+                if (typedText.length > redEnd) {
+                    html += escapeHtml(typedText.slice(redEnd));
+                }
+            }
+            titleIntroMessageTextMain.innerHTML = html;
+        }
+
+        function alignIntroMessageToInstruction() {
+            const instruction = titleMainContent.querySelector('.instruction');
+            if (!instruction) return;
+            const screenRect = titleScreen.getBoundingClientRect();
+            const instructionRect = instruction.getBoundingClientRect();
+            titleIntroMessage.style.left = `${instructionRect.left - screenRect.left}px`;
+            titleIntroMessage.style.top = `${instructionRect.top - screenRect.top}px`;
+            titleIntroMessage.style.width = `${instructionRect.width}px`;
+            titleIntroMessage.style.maxWidth = `${instructionRect.width}px`;
+        }
+
+        function finishTitleIntro() {
+            clearTitleIntroTimers();
+            titleIntroRunning = false;
+            titleIntroPlayed = true;
+
+            introMonkHappy.classList.add('intro-active');
+            introMonkSad.classList.add('intro-active');
+            introMonkPray.classList.add('intro-active');
+            titleIntroMessage.classList.add('intro-active');
+            renderIntroMainText(titleIntroPhraseMain);
+            titleIntroMessageTextSub.textContent = titleIntroPhraseSub;
+            titlePersistentPray.classList.remove('hidden');
+            titlePersistentPray.classList.add('visible');
+            titleMainContent.classList.add('intro-visible');
+            titleIntroOverlay.classList.add('intro-fadeout');
+
+            queueTitleIntro(() => {
+                titleIntroOverlay.classList.add('hidden');
+                titleIntroOverlay.classList.remove('intro-fadeout');
+            }, 220);
+        }
+
+        function skipTitleIntro() {
+            if (!titleIntroRunning) return;
+            finishTitleIntro();
+        }
+
+        function startTitleIntro() {
+            clearTitleIntroTimers();
+            titleIntroRunning = true;
+            resetTitleIntroVisualState();
+            alignIntroMessageToInstruction();
+            titleIntroMessage.classList.add('intro-active');
+
+            let charIndex = 0;
+            const fullText = `${titleIntroPhraseMain}\n${titleIntroPhraseSub}`;
+            const threshold = titleIntroPhraseMain.length;
+            titleIntroTypingTimer = setInterval(() => {
+                if (!titleIntroRunning) return;
+                charIndex += 1;
+                if (charIndex <= threshold) {
+                    renderIntroMainText(titleIntroPhraseMain.slice(0, charIndex));
+                    titleIntroMessageTextSub.textContent = '';
+                } else {
+                    renderIntroMainText(titleIntroPhraseMain);
+                    titleIntroMessageTextSub.textContent = titleIntroPhraseSub.slice(0, charIndex - threshold - 1);
+                }
+                if (charIndex >= fullText.length) {
+                    clearInterval(titleIntroTypingTimer);
+                    titleIntroTypingTimer = null;
+
+                    queueTitleIntro(() => introMonkHappy.classList.add('intro-active'), 300);
+                    queueTitleIntro(() => introMonkSad.classList.add('intro-active'), 800);
+                    queueTitleIntro(() => introMonkPray.classList.add('intro-active'), 1300);
+                    queueTitleIntro(() => titleMainContent.classList.add('intro-visible'), 1900);
+                    queueTitleIntro(() => finishTitleIntro(), 2300);
+                }
+            }, 110);
+        }
+
         function showTitle() {
             gameState = 'title';
             titleScreen.classList.remove('hidden');
@@ -1724,6 +2378,19 @@
             rankingScreen.classList.add('hidden');
             infoPanel.classList.add('hidden');
             virtualControls.classList.add('hidden');
+            bonnouMessageContainer.innerHTML = ''; // Added: clear bonnou messages
+
+            if (!titleIntroPlayed) {
+                startTitleIntro();
+            } else {
+                clearTitleIntroTimers();
+                titleIntroRunning = false;
+                titleIntroOverlay.classList.add('hidden');
+                titleIntroOverlay.classList.remove('intro-fadeout');
+                titlePersistentPray.classList.remove('hidden');
+                titlePersistentPray.classList.add('visible');
+                titleMainContent.classList.add('intro-visible');
+            }
         }
 
         function showLevelSelect() {
@@ -1732,6 +2399,7 @@
             levelScreen.classList.remove('hidden');
             gameOverScreen.classList.add('hidden');
             rankingScreen.classList.add('hidden');
+            bonnouMessageContainer.innerHTML = ''; // Added: clear bonnou messages
 
             // レベルのロック状態を更新
             const levelEasyBtn = document.getElementById('levelEasy');
@@ -1785,11 +2453,17 @@
             gameState = 'playing';
             score = 0;
             spirit = settings.initialSpirit;
+            maxSpirit = settings.initialSpirit;
             kudoku = 0;
             combo = 0;
             maxCombo = 0;
             frame = 0;
             lastBonnou = '';
+            heartFlashUntil = 0;
+            heartImpactUntil = 0;
+            heartPurifyUntil = 0;
+            heartStains = [];
+            ropparamitsuBannerUntil = 0;
             bullets.length = 0;
             enemies.length = 0;
             particles.length = 0;
@@ -1834,11 +2508,12 @@
         }
 
         function spawnEnemy() {
-            // 30%の確率で六波羅蜜（布施・持戒・忍辱・精進・禅定・智慧）が出現
-            const isNenbutsu = Math.random() < 0.3;
+            const settings = levelSettings[currentLevel];
+            // レベルごとの確率で六波羅蜜（布施・持戒・忍辱・精進・禅定・智慧）が出現
+            const nenbutsuRate = settings.nenbutsuRate ?? 0.3;
+            const isNenbutsu = Math.random() < nenbutsuRate;
             const ropparamitsuList = ['布施', '持戒', '忍辱', '精進', '禅定', '智慧'];
             const bonnou = isNenbutsu ? ropparamitsuList[Math.floor(Math.random() * ropparamitsuList.length)] : bonnouList[Math.floor(Math.random() * bonnouList.length)];
-            const settings = levelSettings[currentLevel];
             // スピード = 基本速度 + ランダム + 進行に応じて加速
             const speed = baseSpeed + Math.random() * 1.5 + (score * settings.speedIncrease); // Random variance reduced from 3.0
 
@@ -2002,9 +2677,13 @@
             // ランキング保存
             saveRanking(score, maxCombo);
 
-            const levelName = levelSettings[currentLevel].name;
             const settings = levelSettings[currentLevel];
             const targetDisplay = settings.isInfinite ? '∞' : targetScore;
+            const levelValue = settings.isInfinite ? '鬼' : ({
+                easy: '1',
+                normal: '2',
+                hard: '3'
+            }[currentLevel] || currentLevel);
 
             if (win) {
                 let titleText = '仏性が育ちました!';
@@ -2013,8 +2692,25 @@
                 }
                 document.getElementById('resultTitle').textContent = titleText;
                 document.getElementById('resultText').textContent = `${targetScore}の煩悩を全て打ち払いました`;
-                document.getElementById('currentScore').innerHTML =
-                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}`;
+                document.getElementById('currentScore').innerHTML = `
+                    <div class="result-stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">仏性Lev</div>
+                            <div class="stat-value">${levelValue}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">撃破数</div>
+                            <div class="stat-value">${score} / ${targetDisplay}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">最大連鎖</div>
+                            <div class="stat-value">${maxCombo}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">獲得功徳</div>
+                            <div class="stat-value">${kudoku}</div>
+                        </div>
+                    </div>`;
             } else {
                 document.getElementById('resultTitle').textContent = '煩悩に呑まれた';
                 if (settings.isInfinite) {
@@ -2022,8 +2718,33 @@
                 } else {
                     document.getElementById('resultText').textContent = `「${lastBonnou}」に心を侵されてしまいました`;
                 }
-                document.getElementById('currentScore').innerHTML =
-                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}`;
+                document.getElementById('currentScore').innerHTML = `
+                    <div class="result-stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">仏性Lev</div>
+                            <div class="stat-value">${levelValue}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">撃破数</div>
+                            <div class="stat-value">${score} / ${targetDisplay}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">最大連鎖</div>
+                            <div class="stat-value">${maxCombo}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">獲得功徳</div>
+                            <div class="stat-value">${kudoku}</div>
+                        </div>
+                    </div>`;
+            }
+
+            // Set Result Image
+            const resultImage = document.getElementById('resultImage');
+            if (win) {
+                resultImage.src = 'images/monk/monk_happy.png';
+            } else {
+                resultImage.src = 'images/monk/monk_sad.png';
             }
         }
 
@@ -2097,10 +2818,12 @@
                         enemies.splice(i, 1);
                     } else {
                         // 煩悩は画面外に出たらダメージ
+                        const breachX = enemies[i].x + enemies[i].width / 2;
                         lastBonnou = enemies[i].text; // やられた煩悩を記録
                         showBonnouMessage(enemies[i].text); // 煩悩メッセージを3秒表示
                         enemies.splice(i, 1);
                         spirit--;
+                        triggerHeartBreach(breachX);
                         combo = 0;
                         playSound('damage');
                         shakeScreen(); // ダメージ時に画面を揺らす
@@ -2124,14 +2847,16 @@
                         enemies[i].y + enemies[i].height / 2,
                         enemies[i].color);
                     enemies.splice(i, 1);
+                    const prevKudoku = kudoku;
                     kudoku = Math.min(kudoku + 1, maxKudoku);
+                    if (prevKudoku < maxKudoku && kudoku === maxKudoku) {
+                        triggerRoppaBanner();
+                    }
+                    triggerHeartPurify();
                     updateUI();
                     playSound('hit_bounas');
 
-                    // Auto-trigger special attack if full
-                    if (kudoku >= maxKudoku) {
-                        activateSpecialAttack();
-                    }
+
                     continue;
                 }
 
@@ -2177,7 +2902,9 @@
             }
         }
 
-        function draw() {
+        function draw(timestamp) {
+            const now = timestamp || performance.now();
+
             // 背景をクリア
             ctx.fillStyle = 'rgba(15, 12, 41, 0.2)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2196,26 +2923,35 @@
             ctx.save();
             ctx.translate(player.x, player.y);
 
-            // 体（袈裟）
-            ctx.fillStyle = '#ff6f00';
-            ctx.fillRect(-player.width / 2, -10, player.width, 30);
+            if (monkImage.complete && monkImage.naturalWidth !== 0) {
+                // 画像を描画（中心に合わせて調整）
+                // 少し大きくし、表示位置を下げる（下にはみ出し許容）
+                const imgSize = 108;
+                const yOffset = 6;
+                ctx.drawImage(monkImage, -imgSize / 2, -imgSize / 2 + yOffset, imgSize, imgSize);
+            } else {
+                // 画像読み込み前のフォールバック（元の描画ロジック）
+                // 体（袈裟）
+                ctx.fillStyle = '#ff6f00';
+                ctx.fillRect(-player.width / 2, -10, player.width, 30);
 
-            // 頭
-            ctx.fillStyle = '#ffb74d';
-            ctx.beginPath();
-            ctx.arc(0, -20, 15, 0, Math.PI * 2);
-            ctx.fill();
+                // 頭
+                ctx.fillStyle = '#ffb74d';
+                ctx.beginPath();
+                ctx.arc(0, -20, 15, 0, Math.PI * 2);
+                ctx.fill();
 
-            // 合掌
-            ctx.fillStyle = '#ffe0b2';
-            ctx.fillRect(-5, 0, 10, 15);
+                // 合掌
+                ctx.fillStyle = '#ffe0b2';
+                ctx.fillRect(-5, 0, 10, 15);
 
-            // 光背
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.arc(0, -10, 30, 0, Math.PI * 2);
-            ctx.stroke();
+                // 光背
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(0, -10, 30, 0, Math.PI * 2);
+                ctx.stroke();
+            }
 
             ctx.restore();
 
@@ -2250,8 +2986,17 @@
 
                 // 煩悩の形
                 ctx.beginPath();
-                ctx.ellipse(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2,
-                    enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
+                if (enemy.isNenbutsu) {
+                    // 六波羅蜜は丸（楕円）のまま
+                    ctx.ellipse(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2,
+                        enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
+                } else {
+                    // 煩悩は逆三角（🔽）
+                    ctx.moveTo(enemy.x, enemy.y);
+                    ctx.lineTo(enemy.x + enemy.width, enemy.y);
+                    ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
+                    ctx.closePath();
+                }
                 ctx.fill();
 
                 ctx.shadowBlur = 0;
@@ -2278,6 +3023,82 @@
                 ctx.globalAlpha = 1;
             });
 
+            // 「心」を示すボトム境界線（煩悩より前面）
+            ctx.save();
+            const safeMaxSpirit = Math.max(1, maxSpirit);
+            const spiritRatio = Math.max(0, spirit) / safeMaxSpirit;
+            const heartbeat = (Math.sin(now * 0.012) + 1) / 2;
+            let barRGB = '255, 105, 180';  // 安定: ピンク
+            let glowRGB = '255, 105, 180';
+            if (spiritRatio <= 0.34) {
+                barRGB = '255, 59, 92';    // 瀕死: 赤
+                glowRGB = '255, 45, 85';
+            } else if (spiritRatio <= 0.67) {
+                barRGB = '211, 70, 154';   // 危険: 赤紫
+                glowRGB = '214, 51, 132';
+            }
+
+            let barHeight = 12 + Math.round(heartbeat * 4);
+            if (now < heartImpactUntil) {
+                const impactProgress = (heartImpactUntil - now) / 260;
+                barHeight += Math.ceil(8 * Math.max(0, impactProgress));
+            }
+
+            const flashActive = now < heartFlashUntil && Math.floor((heartFlashUntil - now) / 60) % 2 === 0;
+            let barAlpha = 0.78 + heartbeat * 0.18;
+            let glowAlpha = 0.88 + heartbeat * 0.12;
+            let glowBlur = 10 + heartbeat * 8;
+            if (flashActive) {
+                barRGB = '255, 209, 234';
+                glowRGB = '255, 143, 200';
+                barAlpha = 0.96;
+                glowAlpha = 1.0;
+                glowBlur = 16;
+            }
+
+            ctx.fillStyle = `rgba(${barRGB}, ${barAlpha.toFixed(3)})`;
+            ctx.shadowBlur = glowBlur;
+            ctx.shadowColor = `rgba(${glowRGB}, ${glowAlpha.toFixed(3)})`;
+            ctx.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
+            ctx.shadowBlur = 0;
+
+            // バー全体の脈動ハイライト（横いっぱい）
+            const highlightHeight = Math.max(2, Math.round(barHeight * 0.35));
+            ctx.fillStyle = `rgba(255, 235, 246, ${(0.12 + heartbeat * 0.16).toFixed(3)})`;
+            ctx.fillRect(0, canvas.height - barHeight, canvas.width, highlightHeight);
+
+            // 侵入痕（黒い染み）
+            const activeStains = [];
+            for (const stain of heartStains) {
+                const age = now - stain.createdAt;
+                if (age >= stain.duration) continue;
+                activeStains.push(stain);
+
+                const life = 1 - age / stain.duration;
+                const alpha = stain.maxAlpha * life;
+                const centerY = canvas.height - barHeight / 2;
+
+                ctx.fillStyle = `rgba(40, 0, 30, ${alpha.toFixed(3)})`;
+                ctx.beginPath();
+                ctx.ellipse(stain.x, centerY, stain.width / 2, Math.max(5, barHeight * 0.95), 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = `rgba(15, 0, 12, ${(alpha * 0.8).toFixed(3)})`;
+                ctx.beginPath();
+                ctx.ellipse(stain.x, centerY, stain.width * 0.28, Math.max(3, barHeight * 0.6), 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            heartStains = activeStains;
+
+            // 六波羅蜜取得時の浄化ライン（全幅）
+            const purifying = now < heartPurifyUntil;
+            if (purifying) {
+                const purifyHeight = 4 + Math.round(heartbeat * 2);
+                ctx.fillStyle = 'rgba(255, 240, 188, 0.62)';
+                ctx.fillRect(0, canvas.height - barHeight - purifyHeight, canvas.width, purifyHeight);
+            }
+            ctx.restore();
+
             // コンボ表示
             if (combo > 2) {
                 ctx.save();
@@ -2287,6 +3108,23 @@
                 ctx.shadowBlur = 15;
                 ctx.shadowColor = '#ffd700';
                 ctx.fillText(`×${combo} COMBO!`, canvas.width / 2, 50);
+                ctx.restore();
+            }
+
+            if (now < ropparamitsuBannerUntil) {
+                const remain = ropparamitsuBannerUntil - now;
+                const fadeIn = Math.min(1, (1100 - remain) / 180);
+                const fadeOut = Math.min(1, remain / 260);
+                const alpha = Math.min(fadeIn, fadeOut);
+
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowBlur = 18;
+                ctx.shadowColor = `rgba(255, 215, 90, ${alpha.toFixed(3)})`;
+                ctx.fillStyle = `rgba(255, 236, 166, ${alpha.toFixed(3)})`;
+                ctx.font = 'bold 44px sans-serif';
+                ctx.fillText('六波羅蜜成就', canvas.width / 2, canvas.height * 0.34);
                 ctx.restore();
             }
         }
@@ -2308,7 +3146,7 @@
             if (timeScale > 4) timeScale = 4;
 
             update(timeScale);
-            draw();
+            draw(timestamp);
 
             requestAnimationFrame(gameLoop);
         }
@@ -2320,7 +3158,17 @@
         // Initialize Settings
         const settingsModal = document.getElementById('settingsModal');
         const settingsSubmitBtn = document.getElementById('settingsSubmitBtn');
-        const openSettingsBtn = document.getElementById('openSettingsBtn');
+        // const openSettingsBtn = document.getElementById('openSettingsBtn'); // Replaced by Menu
+        const menuBtn = document.getElementById('menuBtn');
+        const menuModal = document.getElementById('menuModal');
+        // const tutorialBtn = document.getElementById('tutorialBtn'); // Replaced by Menu inside modal
+
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const menuSettingsBtn = document.getElementById('menuSettingsBtn');
+        const menuTosBtn = document.getElementById('menuTosBtn');
+        const menuTutorialBtn = document.getElementById('menuTutorialBtn');
+
+
         const toggleBtns = document.querySelectorAll('.toggle-btn');
 
         // Default temporary settings for the modal
@@ -2417,12 +3265,18 @@
             // Apply settings
             applySettings(tempSettings);
 
-            // Hide modal
+            // Hide settings modal
             settingsModal.classList.add('hidden');
 
-            // Show title (if not already there, but we are essentially toggling modal)
-            if (gameState === 'title') {
-                showTitle();
+            // Check if ToS AGREED
+            const tosAgreed = localStorage.getItem('nenbunTosAgreed');
+            if (!tosAgreed) {
+                // Determine flow: Settings -> ToS -> Tutorial -> Title
+                tosModal.classList.remove('hidden');
+            } else {
+                if (gameState === 'title') {
+                    showTitle();
+                }
             }
 
             // Attempt to unlock audio immediately if sound is ON (since user clicked a button)
@@ -2431,15 +3285,118 @@
             }
         });
 
-        openSettingsBtn.addEventListener('click', () => {
+        // Menu Interactions
+        menuBtn.addEventListener('click', () => {
+            // playSound('select');
+            menuModal.classList.remove('hidden');
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            menuModal.classList.add('hidden');
+        });
+
+        menuSettingsBtn.addEventListener('click', () => {
+            menuModal.classList.add('hidden');
             loadTempSettingsFromStorage();
             updateToggleButtons();
             settingsModal.classList.remove('hidden');
         });
 
+        menuTosBtn.addEventListener('click', () => {
+            menuModal.classList.add('hidden');
+            tosModal.classList.remove('hidden');
+        });
+
+        menuTutorialBtn.addEventListener('click', () => {
+            menuModal.classList.add('hidden');
+            openTutorial();
+        });
+
+
+
         // Initialize
         // showTitle(); // Removed direct call, moved to initSettings
         initSettings();
+
+        // Title Screen Tutorial Button Removed - Now accessed via Menu
+        /*
+        tutorialBtn.addEventListener('click', () => {
+            openTutorial();
+        });
+        */
+
+        // ToS Logic
+        tosAgreeBtn.addEventListener('click', () => {
+            localStorage.setItem('nenbunTosAgreed', 'true');
+            tosModal.classList.add('hidden');
+
+            // Removed automatic tutorial open
+            // openTutorial();
+
+            if (gameState === 'title') {
+                showTitle();
+            }
+        });
+
+        // Tutorial Logic
+        function openTutorial() {
+            currentSlide = 0;
+            updateSlides();
+            tutorialModal.classList.remove('hidden');
+        }
+
+        function updateSlides() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.style.display = 'flex'; // Changed to flex for centering
+                    slide.classList.add('active');
+                } else {
+                    slide.style.display = 'none';
+                    slide.classList.remove('active');
+                }
+            });
+
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+
+            prevSlideBtn.disabled = currentSlide === 0;
+            prevSlideBtn.style.opacity = currentSlide === 0 ? 0.3 : 1;
+
+            if (currentSlide === slides.length - 1) {
+                nextSlideBtn.textContent = '閉じる';
+            } else {
+                nextSlideBtn.textContent = '次へ';
+            }
+        }
+
+        prevSlideBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlides();
+            }
+        });
+
+        nextSlideBtn.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlides();
+            } else {
+                // Close tutorial
+                tutorialModal.classList.add('hidden');
+                // Ensure audio is unlocked if just starting
+                if (tempSettings.sound === 'on') unlockAudio();
+
+                showTitle();
+            }
+        });
+
+        function setSlide(index) {
+            currentSlide = index;
+            updateSlides();
+        }
+
     </script>
 </body>
 
