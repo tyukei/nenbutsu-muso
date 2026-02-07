@@ -817,30 +817,32 @@
         /* Result Stats Grid */
         .result-stats-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
             margin: 10px 0;
             width: 100%;
         }
 
         .stat-item {
             background: rgba(0, 0, 0, 0.3);
-            padding: 8px 5px;
+            padding: 4px 2px;
             border-radius: 5px;
             text-align: center;
             border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
         .stat-label {
-            font-size: 10px;
+            font-size: 9px;
             color: #ccc;
             margin-bottom: 2px;
+            white-space: nowrap;
         }
 
         .stat-value {
-            font-size: 16px;
+            font-size: 13px;
             color: #ffd700;
             font-weight: bold;
+            line-height: 1.2;
         }
 
         /* 煩悩メッセージ表示 */
