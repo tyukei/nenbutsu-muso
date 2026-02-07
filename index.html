@@ -271,6 +271,158 @@
             margin-bottom: 30px;
         }
 
+        /* Title Intro */
+        #titleScreen {
+            overflow: hidden;
+            padding: 0;
+        }
+
+        #titleMainContent {
+            position: relative;
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        #titleMainContent.intro-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #titleIntroOverlay {
+            position: absolute;
+            inset: 0;
+            z-index: 40;
+            pointer-events: auto;
+        }
+
+        #titleIntroOverlay.intro-fadeout {
+            opacity: 0;
+            transition: opacity 0.22s ease;
+        }
+
+        .intro-black {
+            position: absolute;
+            inset: 0;
+            background: #000;
+        }
+
+        .intro-monk {
+            position: absolute;
+            bottom: 0;
+            width: 112px;
+            opacity: 0;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
+            transform: translateY(30px) scale(0.92);
+        }
+
+        .intro-happy {
+            left: 14px;
+        }
+
+        .intro-sad {
+            right: 14px;
+        }
+
+        .intro-pray {
+            left: 50%;
+            transform: translateX(-50%) translateY(34px) scale(0.9);
+        }
+
+        .intro-happy.intro-active {
+            animation: introHappyIn 0.45s ease-out forwards;
+        }
+
+        .intro-sad.intro-active {
+            animation: introSadIn 0.45s ease-out forwards;
+        }
+
+        .intro-pray.intro-active {
+            animation: introPrayIn 0.5s ease-out forwards;
+        }
+
+        @keyframes introHappyIn {
+            from {
+                opacity: 0;
+                transform: translate(-18px, 34px) scale(0.88);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        @keyframes introSadIn {
+            from {
+                opacity: 0;
+                transform: translate(18px, 34px) scale(0.88);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        @keyframes introPrayIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(36px) scale(0.86);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+
+        #titlePersistentPray {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+        }
+
+        #titlePersistentPray img {
+            width: 112px;
+            display: block;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
+        }
+
+        #titlePersistentPray.visible {
+            opacity: 1;
+        }
+
+        .mobile-mode .intro-monk,
+        .mobile-mode #titlePersistentPray img {
+            width: 90px;
+        }
+
+        .mobile-mode #titleMainContent {
+            padding: 20px 10px;
+        }
+
+        .mobile-mode .intro-happy {
+            left: 8px;
+        }
+
+        .mobile-mode .intro-sad {
+            right: 8px;
+        }
+
         #currentScore {
             font-size: 28px;
             color: #ffd700;
@@ -1110,28 +1262,40 @@
         <div id="gameContainer">
             <!-- タイトル画面 -->
             <div id="titleScreen" class="screen">
-                <!-- Floating Menu Button Removed -->
-                <div class="title-logo"></div>
-                <h1>煩悩退散</h1>
-                <div class="subtitle">〜修行僧の葛藤〜</div>
-
-                <div class="instruction">
-                    <p style="font-size: 16px; font-weight: bold; margin-bottom: 10px;">
-                        降り注ぐ<span style="color:#ff4444;">煩悩</span>の雨……<br>
-                        迷わず撃て！悟りはその先にある。
-                    </p>
-                    <p style="color:#d4af37; font-weight:bold; font-size: 18px;">
-                        究極の徳（ハイスコア）を目指せ！
-                    </p>
+                <div id="titleIntroOverlay">
+                    <div class="intro-black"></div>
+                    <img id="introMonkHappy" class="intro-monk intro-happy" src="images/monk/monk_happy.png" alt="happy monk">
+                    <img id="introMonkSad" class="intro-monk intro-sad" src="images/monk/monk_sad.png" alt="sad monk">
+                    <img id="introMonkPray" class="intro-monk intro-pray" src="images/monk/monk_pray.png" alt="praying monk">
+                </div>
+                <div id="titlePersistentPray">
+                    <img src="images/monk/monk_pray.png" alt="praying monk">
                 </div>
 
-                <div class="title-buttons">
-                    <button id="startBtn" style="width: 200px;">修行の開始</button>
-                    <button id="rankingBtn" style="width: 200px;">修行の軌跡</button>
-                    <button id="menuBtn" style="width: 200px; margin-top: 0; font-size: 16px;">修行の準備</button>
-                </div>
+                <div id="titleMainContent">
+                    <!-- Floating Menu Button Removed -->
+                    <div class="title-logo"></div>
+                    <h1>煩悩退散</h1>
+                    <div class="subtitle">〜修行僧の葛藤〜</div>
 
-                <div id="version-display"></div>
+                    <div class="instruction">
+                        <p style="font-size: 16px; font-weight: bold; margin-bottom: 10px;">
+                            降り注ぐ<span style="color:#ff4444;">煩悩</span>の雨……<br>
+                            迷わず撃て！悟りはその先にある。
+                        </p>
+                        <p style="color:#d4af37; font-weight:bold; font-size: 18px;">
+                            究極の徳（ハイスコア）を目指せ！
+                        </p>
+                    </div>
+
+                    <div class="title-buttons">
+                        <button id="startBtn" style="width: 200px;">修行の開始</button>
+                        <button id="rankingBtn" style="width: 200px;">修行の軌跡</button>
+                        <button id="menuBtn" style="width: 200px; margin-top: 0; font-size: 16px;">修行の準備</button>
+                    </div>
+
+                    <div id="version-display"></div>
+                </div>
             </div>
 
             <!-- レベル選択画面 -->
@@ -1322,6 +1486,12 @@
 
         // 画面要素
         const titleScreen = document.getElementById('titleScreen');
+        const titleIntroOverlay = document.getElementById('titleIntroOverlay');
+        const titleMainContent = document.getElementById('titleMainContent');
+        const titlePersistentPray = document.getElementById('titlePersistentPray');
+        const introMonkHappy = document.getElementById('introMonkHappy');
+        const introMonkSad = document.getElementById('introMonkSad');
+        const introMonkPray = document.getElementById('introMonkPray');
         const levelScreen = document.getElementById('levelScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
         const rankingScreen = document.getElementById('rankingScreen');
@@ -1447,6 +1617,9 @@
         let heartImpactUntil = 0;
         let heartPurifyUntil = 0;
         let heartStains = [];
+        let titleIntroPlayed = false;
+        let titleIntroRunning = false;
+        let titleIntroTimers = [];
 
         // 煩悩メッセージ表示
         const bonnouMessageContainer = document.getElementById('bonnouMessageContainer');
@@ -1715,6 +1888,14 @@
             keys[e.key] = false;
         });
 
+        titleIntroOverlay.addEventListener('click', skipTitleIntro);
+        titleIntroOverlay.addEventListener('touchstart', skipTitleIntro, { passive: true });
+        document.addEventListener('keydown', () => {
+            if (titleIntroRunning) {
+                skipTitleIntro();
+            }
+        });
+
         startBtn.addEventListener('click', showLevelSelect);
         restartBtn.addEventListener('click', showLevelSelect);
         rankingBtn.addEventListener('click', showRanking);
@@ -1956,6 +2137,62 @@
             }
         });
 
+        function clearTitleIntroTimers() {
+            titleIntroTimers.forEach(timer => clearTimeout(timer));
+            titleIntroTimers = [];
+        }
+
+        function queueTitleIntro(callback, delay) {
+            const timer = setTimeout(callback, delay);
+            titleIntroTimers.push(timer);
+        }
+
+        function resetTitleIntroVisualState() {
+            titleIntroOverlay.classList.remove('hidden', 'intro-fadeout');
+            introMonkHappy.classList.remove('intro-active');
+            introMonkSad.classList.remove('intro-active');
+            introMonkPray.classList.remove('intro-active');
+            titleMainContent.classList.remove('intro-visible');
+            titlePersistentPray.classList.remove('visible');
+            titlePersistentPray.classList.add('hidden');
+        }
+
+        function finishTitleIntro() {
+            clearTitleIntroTimers();
+            titleIntroRunning = false;
+            titleIntroPlayed = true;
+
+            introMonkHappy.classList.add('intro-active');
+            introMonkSad.classList.add('intro-active');
+            introMonkPray.classList.add('intro-active');
+            titlePersistentPray.classList.remove('hidden');
+            titlePersistentPray.classList.add('visible');
+            titleMainContent.classList.add('intro-visible');
+            titleIntroOverlay.classList.add('intro-fadeout');
+
+            queueTitleIntro(() => {
+                titleIntroOverlay.classList.add('hidden');
+                titleIntroOverlay.classList.remove('intro-fadeout');
+            }, 220);
+        }
+
+        function skipTitleIntro() {
+            if (!titleIntroRunning) return;
+            finishTitleIntro();
+        }
+
+        function startTitleIntro() {
+            clearTitleIntroTimers();
+            titleIntroRunning = true;
+            resetTitleIntroVisualState();
+
+            queueTitleIntro(() => introMonkHappy.classList.add('intro-active'), 350);
+            queueTitleIntro(() => introMonkSad.classList.add('intro-active'), 850);
+            queueTitleIntro(() => introMonkPray.classList.add('intro-active'), 1350);
+            queueTitleIntro(() => titleMainContent.classList.add('intro-visible'), 1950);
+            queueTitleIntro(() => finishTitleIntro(), 2350);
+        }
+
         function showTitle() {
             gameState = 'title';
             titleScreen.classList.remove('hidden');
@@ -1965,6 +2202,18 @@
             infoPanel.classList.add('hidden');
             virtualControls.classList.add('hidden');
             bonnouMessageContainer.innerHTML = ''; // Added: clear bonnou messages
+
+            if (!titleIntroPlayed) {
+                startTitleIntro();
+            } else {
+                clearTitleIntroTimers();
+                titleIntroRunning = false;
+                titleIntroOverlay.classList.add('hidden');
+                titleIntroOverlay.classList.remove('intro-fadeout');
+                titlePersistentPray.classList.remove('hidden');
+                titlePersistentPray.classList.add('visible');
+                titleMainContent.classList.add('intro-visible');
+            }
         }
 
         function showLevelSelect() {
