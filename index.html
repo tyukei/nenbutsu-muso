@@ -86,6 +86,10 @@
             padding: 30px 20px;
         }
 
+        #levelScreen {
+            overflow-x: hidden;
+        }
+
         .mobile-mode .screen {
             padding: 20px 10px;
         }
@@ -101,6 +105,10 @@
             margin-bottom: 5px;
             text-shadow: 0 0 20px rgba(212, 175, 55, 1);
             animation: glow 2s ease-in-out infinite;
+        }
+
+        #levelScreen h1 {
+            font-size: clamp(32px, 8vw, 40px);
         }
 
         .mobile-mode h1 {
@@ -272,17 +280,19 @@
 
         .level-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 15px;
             margin: 20px 0;
-            max-width: 500px;
+            width: 100%;
+            max-width: 420px;
+            justify-items: stretch;
         }
 
         .level-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 15px;
+            padding: 18px 12px;
             min-height: 100px;
             justify-content: center;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -291,6 +301,9 @@
             color: #fff;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
             transition: all 0.3s ease;
+            margin: 0;
+            min-width: 0;
+            width: 100%;
         }
 
         .level-btn:hover {
@@ -841,7 +854,7 @@
         }
 
         .stat-label {
-            font-size: 9px;
+            font-size: 11px;
             color: #ccc;
             margin-bottom: 2px;
             white-space: nowrap;
@@ -2203,9 +2216,13 @@
             // ランキング保存
             saveRanking(score, maxCombo);
 
-            const levelName = levelSettings[currentLevel].name;
             const settings = levelSettings[currentLevel];
             const targetDisplay = settings.isInfinite ? '∞' : targetScore;
+            const levelValue = settings.isInfinite ? '鬼' : ({
+                easy: '1',
+                normal: '2',
+                hard: '3'
+            }[currentLevel] || currentLevel);
 
             if (win) {
                 let titleText = '仏性が育ちました!';
@@ -2218,7 +2235,7 @@
                     <div class="result-stats-container">
                         <div class="stat-item">
                             <div class="stat-label">仏性Lev</div>
-                            <div class="stat-value">${levelName}</div>
+                            <div class="stat-value">${levelValue}</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-label">撃破数</div>
@@ -2244,7 +2261,7 @@
                     <div class="result-stats-container">
                         <div class="stat-item">
                             <div class="stat-label">仏性Lev</div>
-                            <div class="stat-value">${levelName}</div>
+                            <div class="stat-value">${levelValue}</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-label">撃破数</div>
