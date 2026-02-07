@@ -797,20 +797,6 @@
             font-weight: bold;
         }
 
-        /* Facebook Share Button */
-        .share-btn-fb {
-            background: linear-gradient(135deg, #1877F2 0%, #0d5dbf 100%);
-            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            min-width: 180px;
-        }
-
-        .share-btn-fb:hover {
-            box-shadow: 0 7px 20px rgba(24, 119, 242, 0.6);
-        }
 
         /* 煩悩メッセージ表示 */
         #bonnouMessageContainer {
@@ -1132,7 +1118,6 @@
                 <div id="currentScore"></div>
                 <div class="share-buttons">
                     <button id="shareBtn" class="share-btn">Xに共有</button>
-                    <button id="shareFbBtn" class="share-btn-fb">Facebookに共有</button>
                 </div>
                 <button id="restartBtn">再び修行する</button>
                 <button id="toTitleBtn">タイトルに戻る</button>
@@ -1697,38 +1682,6 @@
             window.open(twitterUrl, '_blank', 'width=550,height=420');
         }
 
-        // Facebook シェアボタン
-        const shareFbBtn = document.getElementById('shareFbBtn');
-        shareFbBtn.addEventListener('click', shareToFacebook);
-
-        function shareToFacebook() {
-            const levelName = levelSettings[currentLevel].name;
-            const settings = levelSettings[currentLevel];
-            const targetDisplay = settings.isInfinite ? '∞' : targetScore;
-            const isWin = score >= targetScore && !settings.isInfinite;
-
-            // シェアテキストを作成（Xと同じ内容）
-            let shareText = `煩悩退散〜修行僧の葛藤〜\n`;
-            shareText += `【${levelName}】\n`;
-
-            if (isWin) {
-                shareText += `✨仏性が育ちました！✨\n`;
-            } else {
-                shareText += `煩悩に呑まれた...\n`;
-            }
-
-            shareText += `撃破数: ${score}/${targetDisplay}\n`;
-            shareText += `最大連鎖: ${maxCombo}\n`;
-            shareText += `\n#煩悩退散 #般若心経EDM`;
-
-            const gameUrl = 'https://tyukei.github.io/nenbutsu-muso/';
-
-            // Facebookのシェアダイアログを開く（quoteパラメータで引用テキストを追加）
-            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gameUrl)}&quote=${encodeURIComponent(shareText)}`;
-
-            // 新しいウィンドウで開く
-            window.open(facebookUrl, '_blank', 'width=550,height=420');
-        }
 
         // レベル選択ボタン
         document.getElementById('levelEasy').addEventListener('click', () => {
