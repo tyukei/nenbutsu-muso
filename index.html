@@ -2484,13 +2484,14 @@
                 ctx.stroke();
             }
 
-            // 修行僧の下に「心」を示すピンクのボトムバー
-            ctx.fillStyle = '#ff69b4';
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = '#ff69b4';
-            ctx.fillRect(-48, 34, 96, 8);
-            ctx.shadowBlur = 0;
+            ctx.restore();
 
+            // 「心」を示すピンクのボトムバー（画面下いっぱい）
+            ctx.save();
+            ctx.fillStyle = '#ff69b4';
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = '#ff69b4';
+            ctx.fillRect(0, canvas.height - 12, canvas.width, 12);
             ctx.restore();
 
             // 弾（念仏）の描画
