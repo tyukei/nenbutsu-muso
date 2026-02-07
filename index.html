@@ -1305,6 +1305,10 @@
         let lastInputTime = Date.now();
         const HIDE_DELAY = 3000; // 3秒で非表示
 
+        // 画像リソース
+        const monkImage = new Image();
+        monkImage.src = 'images/monk/monk_back.png';
+
         // BGMと効果音
         const sounds = {
             bgm: new Audio('sounds/bgm.wav'),
@@ -2388,26 +2392,34 @@
             ctx.save();
             ctx.translate(player.x, player.y);
 
-            // 体（袈裟）
-            ctx.fillStyle = '#ff6f00';
-            ctx.fillRect(-player.width / 2, -10, player.width, 30);
+            if (monkImage.complete && monkImage.naturalWidth !== 0) {
+                // 画像を描画（中心に合わせて調整）
+                // 元の描画サイズ感を参考に、少し大きめに描画して見栄えを良くする
+                const imgSize = 70;
+                ctx.drawImage(monkImage, -imgSize / 2, -imgSize / 2 - 10, imgSize, imgSize);
+            } else {
+                // 画像読み込み前のフォールバック（元の描画ロジック）
+                // 体（袈裟）
+                ctx.fillStyle = '#ff6f00';
+                ctx.fillRect(-player.width / 2, -10, player.width, 30);
 
-            // 頭
-            ctx.fillStyle = '#ffb74d';
-            ctx.beginPath();
-            ctx.arc(0, -20, 15, 0, Math.PI * 2);
-            ctx.fill();
+                // 頭
+                ctx.fillStyle = '#ffb74d';
+                ctx.beginPath();
+                ctx.arc(0, -20, 15, 0, Math.PI * 2);
+                ctx.fill();
 
-            // 合掌
-            ctx.fillStyle = '#ffe0b2';
-            ctx.fillRect(-5, 0, 10, 15);
+                // 合掌
+                ctx.fillStyle = '#ffe0b2';
+                ctx.fillRect(-5, 0, 10, 15);
 
-            // 光背
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.arc(0, -10, 30, 0, Math.PI * 2);
-            ctx.stroke();
+                // 光背
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(0, -10, 30, 0, Math.PI * 2);
+                ctx.stroke();
+            }
 
             ctx.restore();
 
