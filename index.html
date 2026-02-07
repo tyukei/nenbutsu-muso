@@ -926,6 +926,106 @@
         .shake {
             animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
         }
+
+        /* ToS & Tutorial Modals */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
+        }
+
+        .modal-container {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 3px solid #d4af37;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
+        }
+
+        .modal-title {
+            color: #d4af37;
+            font-size: 28px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .tos-content {
+            text-align: left;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            height: 200px;
+            overflow-y: scroll;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            /* Adjust based on image aspect ratio */
+            margin-bottom: 20px;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .carousel-slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .carousel-slide.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: #d4af37;
+        }
     </style>
 </head>
 
@@ -956,6 +1056,8 @@
                     <button id="startBtn">修行の開始</button>
                     <button id="rankingBtn">修行の軌跡</button>
                 </div>
+                <!-- チュートリアルボタン追加 -->
+                <button id="tutorialBtn" style="margin-top: 10px; font-size: 14px; padding: 8px 16px;">指南書を見る</button>
 
                 <div id="version-display"></div>
             </div>
@@ -1043,7 +1145,73 @@
                         <div class="settings-desc">※デフォルトはPCです</div>
                     </div>
 
-                    <button id="settingsSubmitBtn">決定して開始</button>
+                    <button id="settingsSubmitBtn">決定して次へ</button>
+                </div>
+            </div>
+
+            <!-- 利用規約モーダル -->
+            <div id="tosModal" class="modal hidden">
+                <div class="modal-container">
+                    <h2 class="modal-title">利用規約</h2>
+                    <div class="tos-content">
+                        <p><strong>第1条（目的）</strong></p>
+                        <p>本規約は、当ゲーム「煩悩退散」の利用に関する条件を定めるものです。</p>
+                        <br>
+                        <p><strong>第2条（免責）</strong></p>
+                        <p>本ゲームの利用により生じた損害について、開発者は一切の責任を負いません。</p>
+                        <br>
+                        <p><strong>第3条（禁止事項）</strong></p>
+                        <p>公序良俗に反する行為、不正アクセス、その他開発者が不適切と判断する行為を禁止します。</p>
+                        <br>
+                        <p><strong>第4条（変更）</strong></p>
+                        <p>本規約は予告なく変更される場合があります。</p>
+                        <br>
+                        <p>ゲームをお楽しみいただく前に、上記内容をご確認ください。</p>
+                    </div>
+                    <button id="tosAgreeBtn">同意して進む</button>
+                </div>
+            </div>
+
+            <!-- チュートリアルモーダル -->
+            <div id="tutorialModal" class="modal hidden">
+                <div class="modal-container">
+                    <h2 class="modal-title">修行の心得</h2>
+
+                    <div class="carousel-container">
+                        <!-- Placeholder slides since no images provided yet -->
+                        <div class="carousel-slide active"
+                            style="background:#333; display:flex; justify-content:center; align-items:center;">
+                            <div>
+                                <div style="font-size:50px;">🎮</div>
+                                <p>基本操作</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide"
+                            style="background:#444; display:none; justify-content:center; align-items:center;">
+                            <div>
+                                <div style="font-size:50px;">👻</div>
+                                <p>煩悩を撃て</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide"
+                            style="background:#555; display:none; justify-content:center; align-items:center;">
+                            <div>
+                                <div style="font-size:50px;">✨</div>
+                                <p>六波羅蜜を集めよ</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-dots">
+                        <span class="dot active" onclick="setSlide(0)"></span>
+                        <span class="dot" onclick="setSlide(1)"></span>
+                        <span class="dot" onclick="setSlide(2)"></span>
+                    </div>
+
+                    <div class="carousel-controls">
+                        <button id="prevSlideBtn" style="min-width:100px;">前へ</button>
+                        <button id="nextSlideBtn" style="min-width:100px;">次へ</button>
+                    </div>
                 </div>
             </div>
 
@@ -1096,8 +1264,19 @@
         const startBtn = document.getElementById('startBtn');
         const restartBtn = document.getElementById('restartBtn');
         const rankingBtn = document.getElementById('rankingBtn');
+        const tutorialBtn = document.getElementById('tutorialBtn');
         const backToTitleBtn = document.getElementById('backToTitleBtn');
         const toTitleBtn = document.getElementById('toTitleBtn');
+
+        // ToS & Tutorial Elements
+        const tosModal = document.getElementById('tosModal');
+        const tosAgreeBtn = document.getElementById('tosAgreeBtn');
+        const tutorialModal = document.getElementById('tutorialModal');
+        const prevSlideBtn = document.getElementById('prevSlideBtn');
+        const nextSlideBtn = document.getElementById('nextSlideBtn');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
 
         // 仮想コントローラーボタン
         const leftBtn = document.getElementById('leftBtn');
@@ -2131,6 +2310,7 @@
                     // Auto-trigger special attack if full
                     if (kudoku >= maxKudoku) {
                         activateSpecialAttack();
+                        break;
                     }
                     continue;
                 }
@@ -2250,8 +2430,17 @@
 
                 // 煩悩の形
                 ctx.beginPath();
-                ctx.ellipse(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2,
-                    enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
+                if (enemy.isNenbutsu) {
+                    // 六波羅蜜は丸（楕円）のまま
+                    ctx.ellipse(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2,
+                        enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
+                } else {
+                    // 煩悩は逆三角（🔽）
+                    ctx.moveTo(enemy.x, enemy.y);
+                    ctx.lineTo(enemy.x + enemy.width, enemy.y);
+                    ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
+                    ctx.closePath();
+                }
                 ctx.fill();
 
                 ctx.shadowBlur = 0;
@@ -2417,12 +2606,18 @@
             // Apply settings
             applySettings(tempSettings);
 
-            // Hide modal
+            // Hide settings modal
             settingsModal.classList.add('hidden');
 
-            // Show title (if not already there, but we are essentially toggling modal)
-            if (gameState === 'title') {
-                showTitle();
+            // Check if ToS AGREED
+            const tosAgreed = localStorage.getItem('nenbunTosAgreed');
+            if (!tosAgreed) {
+                // Determine flow: Settings -> ToS -> Tutorial -> Title
+                tosModal.classList.remove('hidden');
+            } else {
+                if (gameState === 'title') {
+                    showTitle();
+                }
             }
 
             // Attempt to unlock audio immediately if sound is ON (since user clicked a button)
@@ -2440,6 +2635,78 @@
         // Initialize
         // showTitle(); // Removed direct call, moved to initSettings
         initSettings();
+
+        // Title Screen Tutorial Button
+        tutorialBtn.addEventListener('click', () => {
+            openTutorial();
+        });
+
+        // ToS Logic
+        tosAgreeBtn.addEventListener('click', () => {
+            localStorage.setItem('nenbunTosAgreed', 'true');
+            tosModal.classList.add('hidden');
+            openTutorial();
+        });
+
+        // Tutorial Logic
+        function openTutorial() {
+            currentSlide = 0;
+            updateSlides();
+            tutorialModal.classList.remove('hidden');
+        }
+
+        function updateSlides() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.style.display = 'flex'; // Changed to flex for centering
+                    slide.classList.add('active');
+                } else {
+                    slide.style.display = 'none';
+                    slide.classList.remove('active');
+                }
+            });
+
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+
+            prevSlideBtn.disabled = currentSlide === 0;
+            prevSlideBtn.style.opacity = currentSlide === 0 ? 0.3 : 1;
+
+            if (currentSlide === slides.length - 1) {
+                nextSlideBtn.textContent = '閉じる';
+            } else {
+                nextSlideBtn.textContent = '次へ';
+            }
+        }
+
+        prevSlideBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlides();
+            }
+        });
+
+        nextSlideBtn.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlides();
+            } else {
+                // Close tutorial
+                tutorialModal.classList.add('hidden');
+                // Ensure audio is unlocked if just starting
+                if (tempSettings.sound === 'on') unlockAudio();
+
+                showTitle();
+            }
+        });
+
+        function setSlide(index) {
+            currentSlide = index;
+            updateSlides();
+        }
+
     </script>
 </body>
 
