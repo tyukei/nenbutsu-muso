@@ -1436,12 +1436,17 @@
         let gameState = 'title'; // 'title', 'level', 'playing', 'gameover', 'ranking'
         let score = 0;
         let spirit = 3;      // 精神力（HPシステム）
+        let maxSpirit = 3;   // 現在難易度での最大精神力
         let kudoku = 0;      // 功徳（MPシステム）
         const maxKudoku = 6; // 最大功徳
         let combo = 0;
         let maxCombo = 0;
         let frame = 0;
         let lastBonnou = ''; // 最後にやられた煩悩
+        let heartFlashUntil = 0;
+        let heartImpactUntil = 0;
+        let heartPurifyUntil = 0;
+        let heartStains = [];
 
         // 煩悩メッセージ表示
         const bonnouMessageContainer = document.getElementById('bonnouMessageContainer');
@@ -1471,6 +1476,28 @@
                     }, 500);
                 }, 3000);
             }
+        }
+
+        function triggerHeartBreach(x) {
+            const now = performance.now();
+            heartFlashUntil = now + 260;
+            heartImpactUntil = now + 260;
+
+            const safeMaxSpirit = Math.max(1, maxSpirit);
+            const dangerRatio = 1 - Math.max(0, spirit) / safeMaxSpirit;
+            heartStains.push({
+                x: Math.max(0, Math.min(canvas.width, x)),
+                width: 42 + Math.random() * 34,
+                createdAt: now,
+                duration: 2600 + dangerRatio * 2200,
+                maxAlpha: 0.28 + dangerRatio * 0.25
+            });
+
+            if (heartStains.length > 18) heartStains.shift();
+        }
+
+        function triggerHeartPurify() {
+            heartPurifyUntil = performance.now() + 800;
         }
 
 
@@ -2000,11 +2027,16 @@
             gameState = 'playing';
             score = 0;
             spirit = settings.initialSpirit;
+            maxSpirit = settings.initialSpirit;
             kudoku = 0;
             combo = 0;
             maxCombo = 0;
             frame = 0;
             lastBonnou = '';
+            heartFlashUntil = 0;
+            heartImpactUntil = 0;
+            heartPurifyUntil = 0;
+            heartStains = [];
             bullets.length = 0;
             enemies.length = 0;
             particles.length = 0;
@@ -2358,10 +2390,12 @@
                         enemies.splice(i, 1);
                     } else {
                         // 煩悩は画面外に出たらダメージ
+                        const breachX = enemies[i].x + enemies[i].width / 2;
                         lastBonnou = enemies[i].text; // やられた煩悩を記録
                         showBonnouMessage(enemies[i].text); // 煩悩メッセージを3秒表示
                         enemies.splice(i, 1);
                         spirit--;
+                        triggerHeartBreach(breachX);
                         combo = 0;
                         playSound('damage');
                         shakeScreen(); // ダメージ時に画面を揺らす
@@ -2386,6 +2420,7 @@
                         enemies[i].color);
                     enemies.splice(i, 1);
                     kudoku = Math.min(kudoku + 1, maxKudoku);
+                    triggerHeartPurify();
                     updateUI();
                     playSound('hit_bounas');
 
@@ -2435,7 +2470,9 @@
             }
         }
 
-        function draw() {
+        function draw(timestamp) {
+            const now = timestamp || performance.now();
+
             // 背景をクリア
             ctx.fillStyle = 'rgba(15, 12, 41, 0.2)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2486,12 +2523,76 @@
 
             ctx.restore();
 
-            // 「心」を示すピンクのボトムバー（画面下いっぱい）
+            // 「心」を示すボトム境界線
             ctx.save();
-            ctx.fillStyle = '#ff69b4';
+            const safeMaxSpirit = Math.max(1, maxSpirit);
+            const spiritRatio = Math.max(0, spirit) / safeMaxSpirit;
+            let barColor = '#ff69b4';      // 安定: ピンク
+            let glowColor = '#ff69b4';
+            if (spiritRatio <= 0.34) {
+                barColor = '#ff3b5c';      // 瀕死: 赤
+                glowColor = '#ff2d55';
+            } else if (spiritRatio <= 0.67) {
+                barColor = '#d3469a';      // 危険: 赤紫
+                glowColor = '#d63384';
+            }
+
+            let barHeight = 12;
+            if (now < heartImpactUntil) {
+                const impactProgress = (heartImpactUntil - now) / 260;
+                barHeight += Math.ceil(8 * Math.max(0, impactProgress));
+            }
+
+            const flashActive = now < heartFlashUntil && Math.floor((heartFlashUntil - now) / 60) % 2 === 0;
+            if (flashActive) {
+                barColor = '#ffd1ea';
+                glowColor = '#ff8fc8';
+            }
+
+            ctx.fillStyle = barColor;
             ctx.shadowBlur = 12;
-            ctx.shadowColor = '#ff69b4';
-            ctx.fillRect(0, canvas.height - 12, canvas.width, 12);
+            ctx.shadowColor = glowColor;
+            ctx.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
+            ctx.shadowBlur = 0;
+
+            // 侵入痕（黒い染み）
+            const activeStains = [];
+            for (const stain of heartStains) {
+                const age = now - stain.createdAt;
+                if (age >= stain.duration) continue;
+                activeStains.push(stain);
+
+                const life = 1 - age / stain.duration;
+                const alpha = stain.maxAlpha * life;
+                const centerY = canvas.height - barHeight / 2;
+
+                ctx.fillStyle = `rgba(40, 0, 30, ${alpha.toFixed(3)})`;
+                ctx.beginPath();
+                ctx.ellipse(stain.x, centerY, stain.width / 2, Math.max(5, barHeight * 0.95), 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = `rgba(15, 0, 12, ${(alpha * 0.8).toFixed(3)})`;
+                ctx.beginPath();
+                ctx.ellipse(stain.x, centerY, stain.width * 0.28, Math.max(3, barHeight * 0.6), 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            heartStains = activeStains;
+
+            // 中央の微弱パルス（六波羅蜜取得時は浄化色）
+            const pulse = (Math.sin(now * 0.012) + 1) / 2;
+            const pulseWidth = 90 + pulse * 55;
+            const pulseHeight = 16 + pulse * 5;
+            const pulseY = canvas.height - barHeight - 5;
+            const purifying = now < heartPurifyUntil;
+            ctx.fillStyle = purifying ? 'rgba(255, 246, 215, 0.34)' : 'rgba(255, 150, 215, 0.20)';
+            ctx.beginPath();
+            ctx.ellipse(canvas.width / 2, pulseY, pulseWidth / 2, pulseHeight / 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (purifying) {
+                ctx.fillStyle = 'rgba(255, 235, 180, 0.55)';
+                ctx.fillRect(canvas.width / 2 - 40, canvas.height - barHeight - 2, 80, 3);
+            }
             ctx.restore();
 
             // 弾（念仏）の描画
@@ -2592,7 +2693,7 @@
             if (timeScale > 4) timeScale = 4;
 
             update(timeScale);
-            draw();
+            draw(timestamp);
 
             requestAnimationFrame(gameLoop);
         }
