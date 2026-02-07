@@ -315,6 +315,34 @@
             background: #000;
         }
 
+        .intro-message {
+            position: absolute;
+            left: 50%;
+            top: 170px;
+            transform: translateX(-50%);
+            width: min(100%, 400px);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            text-align: center;
+            opacity: 0;
+        }
+
+        .intro-message p {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0;
+            min-height: 24px;
+            white-space: pre-line;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.35);
+        }
+
+        .intro-message.intro-active {
+            animation: introMessageIn 0.45s ease-out forwards;
+        }
+
         .intro-monk {
             position: absolute;
             bottom: 0;
@@ -385,11 +413,23 @@
             }
         }
 
+        @keyframes introMessageIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
         #titlePersistentPray {
             position: absolute;
-            left: 50%;
             bottom: 0;
-            transform: translateX(-50%);
+            left: 0;
+            width: 100%;
             z-index: 20;
             opacity: 0;
             transition: opacity 0.25s ease;
@@ -400,6 +440,21 @@
             width: 112px;
             display: block;
             filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
+            position: absolute;
+            bottom: 0;
+        }
+
+        #titlePersistentPray .persistent-happy {
+            left: 14px;
+        }
+
+        #titlePersistentPray .persistent-sad {
+            right: 14px;
+        }
+
+        #titlePersistentPray .persistent-pray {
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         #titlePersistentPray.visible {
@@ -411,6 +466,17 @@
             width: 90px;
         }
 
+        .mobile-mode .intro-message {
+            top: 145px;
+            width: min(96%, 350px);
+            padding: 12px;
+        }
+
+        .mobile-mode .intro-message p {
+            font-size: 14px;
+            min-height: 20px;
+        }
+
         .mobile-mode #titleMainContent {
             padding: 20px 10px;
         }
@@ -420,6 +486,14 @@
         }
 
         .mobile-mode .intro-sad {
+            right: 8px;
+        }
+
+        .mobile-mode #titlePersistentPray .persistent-happy {
+            left: 8px;
+        }
+
+        .mobile-mode #titlePersistentPray .persistent-sad {
             right: 8px;
         }
 
@@ -1267,9 +1341,14 @@
                     <img id="introMonkHappy" class="intro-monk intro-happy" src="images/monk/monk_happy.png" alt="happy monk">
                     <img id="introMonkSad" class="intro-monk intro-sad" src="images/monk/monk_sad.png" alt="sad monk">
                     <img id="introMonkPray" class="intro-monk intro-pray" src="images/monk/monk_pray.png" alt="praying monk">
+                    <div id="titleIntroMessage" class="intro-message">
+                        <p id="titleIntroMessageText"></p>
+                    </div>
                 </div>
                 <div id="titlePersistentPray">
-                    <img src="images/monk/monk_pray.png" alt="praying monk">
+                    <img class="persistent-happy" src="images/monk/monk_happy.png" alt="happy monk">
+                    <img class="persistent-sad" src="images/monk/monk_sad.png" alt="sad monk">
+                    <img class="persistent-pray" src="images/monk/monk_pray.png" alt="praying monk">
                 </div>
 
                 <div id="titleMainContent">
@@ -1492,6 +1571,8 @@
         const introMonkHappy = document.getElementById('introMonkHappy');
         const introMonkSad = document.getElementById('introMonkSad');
         const introMonkPray = document.getElementById('introMonkPray');
+        const titleIntroMessage = document.getElementById('titleIntroMessage');
+        const titleIntroMessageText = document.getElementById('titleIntroMessageText');
         const levelScreen = document.getElementById('levelScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
         const rankingScreen = document.getElementById('rankingScreen');
@@ -1620,6 +1701,8 @@
         let titleIntroPlayed = false;
         let titleIntroRunning = false;
         let titleIntroTimers = [];
+        let titleIntroTypingTimer = null;
+        const titleIntroPhrase = '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。\n究極の徳（ハイスコア）を目指せ！';
 
         // 煩悩メッセージ表示
         const bonnouMessageContainer = document.getElementById('bonnouMessageContainer');
@@ -2140,6 +2223,10 @@
         function clearTitleIntroTimers() {
             titleIntroTimers.forEach(timer => clearTimeout(timer));
             titleIntroTimers = [];
+            if (titleIntroTypingTimer) {
+                clearInterval(titleIntroTypingTimer);
+                titleIntroTypingTimer = null;
+            }
         }
 
         function queueTitleIntro(callback, delay) {
@@ -2152,6 +2239,8 @@
             introMonkHappy.classList.remove('intro-active');
             introMonkSad.classList.remove('intro-active');
             introMonkPray.classList.remove('intro-active');
+            titleIntroMessage.classList.remove('intro-active');
+            titleIntroMessageText.textContent = '';
             titleMainContent.classList.remove('intro-visible');
             titlePersistentPray.classList.remove('visible');
             titlePersistentPray.classList.add('hidden');
@@ -2165,6 +2254,8 @@
             introMonkHappy.classList.add('intro-active');
             introMonkSad.classList.add('intro-active');
             introMonkPray.classList.add('intro-active');
+            titleIntroMessage.classList.add('intro-active');
+            titleIntroMessageText.textContent = titleIntroPhrase;
             titlePersistentPray.classList.remove('hidden');
             titlePersistentPray.classList.add('visible');
             titleMainContent.classList.add('intro-visible');
@@ -2185,12 +2276,24 @@
             clearTitleIntroTimers();
             titleIntroRunning = true;
             resetTitleIntroVisualState();
+            titleIntroMessage.classList.add('intro-active');
 
-            queueTitleIntro(() => introMonkHappy.classList.add('intro-active'), 350);
-            queueTitleIntro(() => introMonkSad.classList.add('intro-active'), 850);
-            queueTitleIntro(() => introMonkPray.classList.add('intro-active'), 1350);
-            queueTitleIntro(() => titleMainContent.classList.add('intro-visible'), 1950);
-            queueTitleIntro(() => finishTitleIntro(), 2350);
+            let charIndex = 0;
+            titleIntroTypingTimer = setInterval(() => {
+                if (!titleIntroRunning) return;
+                charIndex += 1;
+                titleIntroMessageText.textContent = titleIntroPhrase.slice(0, charIndex);
+                if (charIndex >= titleIntroPhrase.length) {
+                    clearInterval(titleIntroTypingTimer);
+                    titleIntroTypingTimer = null;
+
+                    queueTitleIntro(() => introMonkHappy.classList.add('intro-active'), 300);
+                    queueTitleIntro(() => introMonkSad.classList.add('intro-active'), 800);
+                    queueTitleIntro(() => introMonkPray.classList.add('intro-active'), 1300);
+                    queueTitleIntro(() => titleMainContent.classList.add('intro-visible'), 1900);
+                    queueTitleIntro(() => finishTitleIntro(), 2300);
+                }
+            }, 110);
         }
 
         function showTitle() {
