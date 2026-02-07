@@ -798,6 +798,13 @@
         }
 
 
+        /* Result Image */
+        .result-image {
+            max-width: 200px;
+            margin: 10px auto;
+            display: block;
+        }
+
         /* 煩悩メッセージ表示 */
         #bonnouMessageContainer {
             position: fixed;
@@ -1115,6 +1122,7 @@
             <div id="gameOverScreen" class="screen hidden">
                 <h1 id="resultTitle"></h1>
                 <h2 id="resultText"></h2>
+                <img id="resultImage" class="result-image" src="" alt="result">
                 <div id="currentScore"></div>
                 <div class="share-buttons">
                     <button id="shareBtn" class="share-btn">共有</button>
@@ -2168,6 +2176,14 @@
                 }
                 document.getElementById('currentScore').innerHTML =
                     `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}`;
+            }
+
+            // Set Result Image
+            const resultImage = document.getElementById('resultImage');
+            if (win) {
+                resultImage.src = 'images/monk/monk_happy.png';
+            } else {
+                resultImage.src = 'images/monk/monk_sad.png';
             }
         }
 
