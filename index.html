@@ -317,26 +317,14 @@
 
         .intro-message {
             position: absolute;
-            left: 50%;
-            top: 170px;
-            transform: translateX(-50%);
-            width: min(100%, 400px);
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #d4af37;
-            background: rgba(212, 175, 55, 0.1);
-            text-align: center;
             opacity: 0;
+            margin: 0;
+            text-align: center;
         }
 
         .intro-message p {
-            color: #ffd700;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 0;
-            min-height: 24px;
             white-space: pre-line;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.35);
+            text-shadow: none;
         }
 
         .intro-message.intro-active {
@@ -464,17 +452,6 @@
         .mobile-mode .intro-monk,
         .mobile-mode #titlePersistentPray img {
             width: 90px;
-        }
-
-        .mobile-mode .intro-message {
-            top: 145px;
-            width: min(96%, 350px);
-            padding: 12px;
-        }
-
-        .mobile-mode .intro-message p {
-            font-size: 14px;
-            min-height: 20px;
         }
 
         .mobile-mode #titleMainContent {
@@ -1341,8 +1318,11 @@
                     <img id="introMonkHappy" class="intro-monk intro-happy" src="images/monk/monk_happy.png" alt="happy monk">
                     <img id="introMonkSad" class="intro-monk intro-sad" src="images/monk/monk_sad.png" alt="sad monk">
                     <img id="introMonkPray" class="intro-monk intro-pray" src="images/monk/monk_pray.png" alt="praying monk">
-                    <div id="titleIntroMessage" class="intro-message">
-                        <p id="titleIntroMessageText"></p>
+                    <div id="titleIntroMessage" class="intro-message instruction">
+                        <p id="titleIntroMessageTextMain"
+                            style="font-size: 16px; font-weight: bold; margin-bottom: 10px;"></p>
+                        <p id="titleIntroMessageTextSub"
+                            style="color:#d4af37; font-weight:bold; font-size: 18px;"></p>
                     </div>
                 </div>
                 <div id="titlePersistentPray">
@@ -1572,7 +1552,8 @@
         const introMonkSad = document.getElementById('introMonkSad');
         const introMonkPray = document.getElementById('introMonkPray');
         const titleIntroMessage = document.getElementById('titleIntroMessage');
-        const titleIntroMessageText = document.getElementById('titleIntroMessageText');
+        const titleIntroMessageTextMain = document.getElementById('titleIntroMessageTextMain');
+        const titleIntroMessageTextSub = document.getElementById('titleIntroMessageTextSub');
         const levelScreen = document.getElementById('levelScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
         const rankingScreen = document.getElementById('rankingScreen');
@@ -1702,7 +1683,9 @@
         let titleIntroRunning = false;
         let titleIntroTimers = [];
         let titleIntroTypingTimer = null;
-        const titleIntroPhrase = '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。\n究極の徳（ハイスコア）を目指せ！';
+        const titleIntroPhraseMain = '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。';
+        const titleIntroPhraseSub = '究極の徳（ハイスコア）を目指せ！';
+        const introRedWord = '煩悩';
 
         // 煩悩メッセージ表示
         const bonnouMessageContainer = document.getElementById('bonnouMessageContainer');
@@ -2240,10 +2223,54 @@
             introMonkSad.classList.remove('intro-active');
             introMonkPray.classList.remove('intro-active');
             titleIntroMessage.classList.remove('intro-active');
-            titleIntroMessageText.textContent = '';
+            titleIntroMessageTextMain.innerHTML = '';
+            titleIntroMessageTextSub.textContent = '';
             titleMainContent.classList.remove('intro-visible');
             titlePersistentPray.classList.remove('visible');
             titlePersistentPray.classList.add('hidden');
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function renderIntroMainText(typedText) {
+            const redStart = titleIntroPhraseMain.indexOf(introRedWord);
+            const redEnd = redStart + introRedWord.length;
+
+            if (redStart < 0) {
+                titleIntroMessageTextMain.innerHTML = escapeHtml(typedText);
+                return;
+            }
+
+            let html = '';
+            if (typedText.length <= redStart) {
+                html = escapeHtml(typedText);
+            } else {
+                html += escapeHtml(typedText.slice(0, redStart));
+                const redTypedLength = Math.min(typedText.length - redStart, introRedWord.length);
+                if (redTypedLength > 0) {
+                    html += `<span style="color:#ff4444;">${escapeHtml(introRedWord.slice(0, redTypedLength))}</span>`;
+                }
+                if (typedText.length > redEnd) {
+                    html += escapeHtml(typedText.slice(redEnd));
+                }
+            }
+            titleIntroMessageTextMain.innerHTML = html;
+        }
+
+        function alignIntroMessageToInstruction() {
+            const instruction = titleMainContent.querySelector('.instruction');
+            if (!instruction) return;
+            const screenRect = titleScreen.getBoundingClientRect();
+            const instructionRect = instruction.getBoundingClientRect();
+            titleIntroMessage.style.left = `${instructionRect.left - screenRect.left}px`;
+            titleIntroMessage.style.top = `${instructionRect.top - screenRect.top}px`;
+            titleIntroMessage.style.width = `${instructionRect.width}px`;
+            titleIntroMessage.style.maxWidth = `${instructionRect.width}px`;
         }
 
         function finishTitleIntro() {
@@ -2255,7 +2282,8 @@
             introMonkSad.classList.add('intro-active');
             introMonkPray.classList.add('intro-active');
             titleIntroMessage.classList.add('intro-active');
-            titleIntroMessageText.textContent = titleIntroPhrase;
+            renderIntroMainText(titleIntroPhraseMain);
+            titleIntroMessageTextSub.textContent = titleIntroPhraseSub;
             titlePersistentPray.classList.remove('hidden');
             titlePersistentPray.classList.add('visible');
             titleMainContent.classList.add('intro-visible');
@@ -2276,14 +2304,23 @@
             clearTitleIntroTimers();
             titleIntroRunning = true;
             resetTitleIntroVisualState();
+            alignIntroMessageToInstruction();
             titleIntroMessage.classList.add('intro-active');
 
             let charIndex = 0;
+            const fullText = `${titleIntroPhraseMain}\n${titleIntroPhraseSub}`;
+            const threshold = titleIntroPhraseMain.length;
             titleIntroTypingTimer = setInterval(() => {
                 if (!titleIntroRunning) return;
                 charIndex += 1;
-                titleIntroMessageText.textContent = titleIntroPhrase.slice(0, charIndex);
-                if (charIndex >= titleIntroPhrase.length) {
+                if (charIndex <= threshold) {
+                    renderIntroMainText(titleIntroPhraseMain.slice(0, charIndex));
+                    titleIntroMessageTextSub.textContent = '';
+                } else {
+                    renderIntroMainText(titleIntroPhraseMain);
+                    titleIntroMessageTextSub.textContent = titleIntroPhraseSub.slice(0, charIndex - threshold - 1);
+                }
+                if (charIndex >= fullText.length) {
                     clearInterval(titleIntroTypingTimer);
                     titleIntroTypingTimer = null;
 
