@@ -2527,33 +2527,45 @@
             ctx.save();
             const safeMaxSpirit = Math.max(1, maxSpirit);
             const spiritRatio = Math.max(0, spirit) / safeMaxSpirit;
-            let barColor = '#ff69b4';      // 安定: ピンク
-            let glowColor = '#ff69b4';
+            const heartbeat = (Math.sin(now * 0.012) + 1) / 2;
+            let barRGB = '255, 105, 180';  // 安定: ピンク
+            let glowRGB = '255, 105, 180';
             if (spiritRatio <= 0.34) {
-                barColor = '#ff3b5c';      // 瀕死: 赤
-                glowColor = '#ff2d55';
+                barRGB = '255, 59, 92';    // 瀕死: 赤
+                glowRGB = '255, 45, 85';
             } else if (spiritRatio <= 0.67) {
-                barColor = '#d3469a';      // 危険: 赤紫
-                glowColor = '#d63384';
+                barRGB = '211, 70, 154';   // 危険: 赤紫
+                glowRGB = '214, 51, 132';
             }
 
-            let barHeight = 12;
+            let barHeight = 12 + Math.round(heartbeat * 4);
             if (now < heartImpactUntil) {
                 const impactProgress = (heartImpactUntil - now) / 260;
                 barHeight += Math.ceil(8 * Math.max(0, impactProgress));
             }
 
             const flashActive = now < heartFlashUntil && Math.floor((heartFlashUntil - now) / 60) % 2 === 0;
+            let barAlpha = 0.78 + heartbeat * 0.18;
+            let glowAlpha = 0.88 + heartbeat * 0.12;
+            let glowBlur = 10 + heartbeat * 8;
             if (flashActive) {
-                barColor = '#ffd1ea';
-                glowColor = '#ff8fc8';
+                barRGB = '255, 209, 234';
+                glowRGB = '255, 143, 200';
+                barAlpha = 0.96;
+                glowAlpha = 1.0;
+                glowBlur = 16;
             }
 
-            ctx.fillStyle = barColor;
-            ctx.shadowBlur = 12;
-            ctx.shadowColor = glowColor;
+            ctx.fillStyle = `rgba(${barRGB}, ${barAlpha.toFixed(3)})`;
+            ctx.shadowBlur = glowBlur;
+            ctx.shadowColor = `rgba(${glowRGB}, ${glowAlpha.toFixed(3)})`;
             ctx.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
             ctx.shadowBlur = 0;
+
+            // バー全体の脈動ハイライト（横いっぱい）
+            const highlightHeight = Math.max(2, Math.round(barHeight * 0.35));
+            ctx.fillStyle = `rgba(255, 235, 246, ${(0.12 + heartbeat * 0.16).toFixed(3)})`;
+            ctx.fillRect(0, canvas.height - barHeight, canvas.width, highlightHeight);
 
             // 侵入痕（黒い染み）
             const activeStains = [];
@@ -2578,20 +2590,12 @@
             }
             heartStains = activeStains;
 
-            // 中央の微弱パルス（六波羅蜜取得時は浄化色）
-            const pulse = (Math.sin(now * 0.012) + 1) / 2;
-            const pulseWidth = 90 + pulse * 55;
-            const pulseHeight = 16 + pulse * 5;
-            const pulseY = canvas.height - barHeight - 5;
+            // 六波羅蜜取得時の浄化ライン（全幅）
             const purifying = now < heartPurifyUntil;
-            ctx.fillStyle = purifying ? 'rgba(255, 246, 215, 0.34)' : 'rgba(255, 150, 215, 0.20)';
-            ctx.beginPath();
-            ctx.ellipse(canvas.width / 2, pulseY, pulseWidth / 2, pulseHeight / 2, 0, 0, Math.PI * 2);
-            ctx.fill();
-
             if (purifying) {
-                ctx.fillStyle = 'rgba(255, 235, 180, 0.55)';
-                ctx.fillRect(canvas.width / 2 - 40, canvas.height - barHeight - 2, 80, 3);
+                const purifyHeight = 4 + Math.round(heartbeat * 2);
+                ctx.fillStyle = 'rgba(255, 240, 188, 0.62)';
+                ctx.fillRect(0, canvas.height - barHeight - purifyHeight, canvas.width, purifyHeight);
             }
             ctx.restore();
 
