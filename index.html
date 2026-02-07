@@ -1185,7 +1185,7 @@
                         <br>
                         <p>ゲームをお楽しみいただく前に、上記内容をご確認ください。</p>
                     </div>
-                    <button id="tosAgreeBtn">同意して進む</button>
+                    <button id="tosAgreeBtn">同意する</button>
                 </div>
             </div>
 
@@ -2692,7 +2692,13 @@
         tosAgreeBtn.addEventListener('click', () => {
             localStorage.setItem('nenbunTosAgreed', 'true');
             tosModal.classList.add('hidden');
-            openTutorial();
+
+            // Removed automatic tutorial open
+            // openTutorial();
+
+            if (gameState === 'title') {
+                showTitle();
+            }
         });
 
         // Tutorial Logic
