@@ -2523,7 +2523,75 @@
 
             ctx.restore();
 
-            // 「心」を示すボトム境界線
+            // 弾（念仏）の描画
+            bullets.forEach(bullet => {
+                ctx.save();
+                ctx.fillStyle = bullet.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = bullet.color;
+
+                // 光る弾
+                ctx.beginPath();
+                ctx.ellipse(bullet.x, bullet.y, bullet.width / 2, bullet.height / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // 卍マーク
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('卍', bullet.x, bullet.y + 5);
+
+                ctx.restore();
+            });
+
+            // 敵（煩悩）の描画
+            enemies.forEach(enemy => {
+                ctx.save();
+                ctx.fillStyle = enemy.color;
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = enemy.color;
+
+                // 煩悩の形
+                ctx.beginPath();
+                if (enemy.isNenbutsu) {
+                    // 六波羅蜜は丸（楕円）のまま
+                    ctx.ellipse(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2,
+                        enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
+                } else {
+                    // 煩悩は逆三角（🔽）
+                    ctx.moveTo(enemy.x, enemy.y);
+                    ctx.lineTo(enemy.x + enemy.width, enemy.y);
+                    ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
+                    ctx.closePath();
+                }
+                ctx.fill();
+
+                ctx.shadowBlur = 0;
+
+                // テキスト
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(enemy.text, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+
+                ctx.restore();
+            });
+
+
+
+            // パーティクルの描画
+            particles.forEach(particle => {
+                ctx.fillStyle = particle.color;
+                ctx.globalAlpha = particle.life / 40;
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            });
+
+            // 「心」を示すボトム境界線（煩悩より前面）
             ctx.save();
             const safeMaxSpirit = Math.max(1, maxSpirit);
             const spiritRatio = Math.max(0, spirit) / safeMaxSpirit;
@@ -2598,74 +2666,6 @@
                 ctx.fillRect(0, canvas.height - barHeight - purifyHeight, canvas.width, purifyHeight);
             }
             ctx.restore();
-
-            // 弾（念仏）の描画
-            bullets.forEach(bullet => {
-                ctx.save();
-                ctx.fillStyle = bullet.color;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = bullet.color;
-
-                // 光る弾
-                ctx.beginPath();
-                ctx.ellipse(bullet.x, bullet.y, bullet.width / 2, bullet.height / 2, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                // 卍マーク
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 14px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText('卍', bullet.x, bullet.y + 5);
-
-                ctx.restore();
-            });
-
-            // 敵（煩悩）の描画
-            enemies.forEach(enemy => {
-                ctx.save();
-                ctx.fillStyle = enemy.color;
-                ctx.shadowBlur = 20;
-                ctx.shadowColor = enemy.color;
-
-                // 煩悩の形
-                ctx.beginPath();
-                if (enemy.isNenbutsu) {
-                    // 六波羅蜜は丸（楕円）のまま
-                    ctx.ellipse(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2,
-                        enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
-                } else {
-                    // 煩悩は逆三角（🔽）
-                    ctx.moveTo(enemy.x, enemy.y);
-                    ctx.lineTo(enemy.x + enemy.width, enemy.y);
-                    ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
-                    ctx.closePath();
-                }
-                ctx.fill();
-
-                ctx.shadowBlur = 0;
-
-                // テキスト
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 16px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(enemy.text, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
-
-                ctx.restore();
-            });
-
-
-
-            // パーティクルの描画
-            particles.forEach(particle => {
-                ctx.fillStyle = particle.color;
-                ctx.globalAlpha = particle.life / 40;
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            });
 
             // コンボ表示
             if (combo > 2) {
