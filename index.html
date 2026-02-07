@@ -1054,8 +1054,7 @@
         <div id="gameContainer">
             <!-- タイトル画面 -->
             <div id="titleScreen" class="screen">
-                <button id="menuBtn" aria-label="メニュー"
-                    style="position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); border: 2px solid #d4af37; border-radius: 5px; font-size: 20px; padding: 5px 10px; cursor: pointer; z-index: 100; color: #d4af37; box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);">☰</button>
+                <!-- Floating Menu Button Removed -->
                 <div class="title-logo"></div>
                 <h1>煩悩退散</h1>
                 <div class="subtitle">〜修行僧の葛藤〜</div>
@@ -1073,7 +1072,7 @@
                 <div class="title-buttons">
                     <button id="startBtn" style="width: 200px;">修行の開始</button>
                     <button id="rankingBtn" style="width: 200px;">修行の軌跡</button>
-                    <button id="tutorialBtn" style="width: 200px; margin-top: 0; font-size: 16px;">修行の指南書</button>
+                    <button id="menuBtn" style="width: 200px; margin-top: 0; font-size: 16px;">修行の支度</button>
                 </div>
 
                 <div id="version-display"></div>
@@ -1277,7 +1276,7 @@
         const startBtn = document.getElementById('startBtn');
         const restartBtn = document.getElementById('restartBtn');
         const rankingBtn = document.getElementById('rankingBtn');
-        const tutorialBtn = document.getElementById('tutorialBtn');
+        // const tutorialBtn = document.getElementById('tutorialBtn'); // Title button removed
         const backToTitleBtn = document.getElementById('backToTitleBtn');
         const toTitleBtn = document.getElementById('toTitleBtn');
 
@@ -2525,6 +2524,8 @@
         // const openSettingsBtn = document.getElementById('openSettingsBtn'); // Replaced by Menu
         const menuBtn = document.getElementById('menuBtn');
         const menuModal = document.getElementById('menuModal');
+        // const tutorialBtn = document.getElementById('tutorialBtn'); // Replaced by Menu inside modal
+
         const closeMenuBtn = document.getElementById('closeMenuBtn');
         const menuSettingsBtn = document.getElementById('menuSettingsBtn');
         const menuTosBtn = document.getElementById('menuTosBtn');
@@ -2683,10 +2684,12 @@
         // showTitle(); // Removed direct call, moved to initSettings
         initSettings();
 
-        // Title Screen Tutorial Button
+        // Title Screen Tutorial Button Removed - Now accessed via Menu
+        /*
         tutorialBtn.addEventListener('click', () => {
             openTutorial();
         });
+        */
 
         // ToS Logic
         tosAgreeBtn.addEventListener('click', () => {
