@@ -2203,8 +2203,25 @@
                 }
                 document.getElementById('resultTitle').textContent = titleText;
                 document.getElementById('resultText').textContent = `${targetScore}の煩悩を全て打ち払いました`;
-                document.getElementById('currentScore').innerHTML =
-                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}<br>獲得功徳: ${kudoku}`;
+                document.getElementById('currentScore').innerHTML = `
+                    <div class="result-stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">仏性Lev</div>
+                            <div class="stat-value">${levelName}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">撃破数</div>
+                            <div class="stat-value">${score} / ${targetDisplay}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">最大連鎖</div>
+                            <div class="stat-value">${maxCombo}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">獲得功徳</div>
+                            <div class="stat-value">${kudoku}</div>
+                        </div>
+                    </div>`;
             } else {
                 document.getElementById('resultTitle').textContent = '煩悩に呑まれた';
                 if (settings.isInfinite) {
@@ -2212,8 +2229,25 @@
                 } else {
                     document.getElementById('resultText').textContent = `「${lastBonnou}」に心を侵されてしまいました`;
                 }
-                document.getElementById('currentScore').innerHTML =
-                    `【${levelName}】<br>撃破数: ${score} / ${targetDisplay}<br>最大連鎖: ${maxCombo}<br>獲得功徳: ${kudoku}`;
+                document.getElementById('currentScore').innerHTML = `
+                    <div class="result-stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">仏性Lev</div>
+                            <div class="stat-value">${levelName}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">撃破数</div>
+                            <div class="stat-value">${score} / ${targetDisplay}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">最大連鎖</div>
+                            <div class="stat-value">${maxCombo}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">獲得功徳</div>
+                            <div class="stat-value">${kudoku}</div>
+                        </div>
+                    </div>`;
             }
 
             // Set Result Image
