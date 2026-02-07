@@ -769,16 +769,25 @@
 
         /* Share Buttons Container */
         .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
             margin-top: 10px;
-            text-align: center;
             width: 100%;
         }
 
         #gameOverScreen button {
-            width: 80%;
-            max-width: 300px;
-            margin: 10px auto;
-            display: block;
+            width: 32%;
+            max-width: none;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            padding: 8px 0;
+            min-width: 0;
+            line-height: 1.2;
+            white-space: nowrap;
         }
 
         /* X (Twitter) Share Button */
@@ -788,8 +797,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            min-width: 180px;
+            gap: 4px;
+            min-width: 0;
         }
 
         .share-btn:hover {
@@ -798,7 +807,7 @@
 
         .share-btn::before {
             content: '𝕏';
-            font-size: 20px;
+            font-size: 14px;
             font-weight: bold;
         }
 
@@ -1166,9 +1175,9 @@
                 <div id="currentScore"></div>
                 <div class="share-buttons">
                     <button id="shareBtn" class="share-btn">共有</button>
+                    <button id="restartBtn">再修行</button>
+                    <button id="toTitleBtn">タイトル</button>
                 </div>
-                <button id="restartBtn">再び修行する</button>
-                <button id="toTitleBtn">タイトルに戻る</button>
             </div>
 
             <!-- 初期設定モーダル -->
