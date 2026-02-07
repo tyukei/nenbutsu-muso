@@ -159,9 +159,10 @@
         }
 
         .title-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
             max-width: 420px;
             margin: 0 auto;
         }
@@ -1051,7 +1052,7 @@
                     </p>
                 </div>
 
-                <div class="title-buttons" style="flex-direction: column; gap: 15px;">
+                <div class="title-buttons">
                     <button id="startBtn" style="width: 200px;">修行の開始</button>
                     <button id="rankingBtn" style="width: 200px;">修行の軌跡</button>
                     <button id="tutorialBtn" style="width: 200px; margin-top: 0; font-size: 16px;">修行の指南書</button>
