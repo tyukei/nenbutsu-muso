@@ -1866,6 +1866,7 @@
             rankingScreen.classList.add('hidden');
             infoPanel.classList.add('hidden');
             virtualControls.classList.add('hidden');
+            bonnouMessageContainer.innerHTML = ''; // Added: clear bonnou messages
         }
 
         function showLevelSelect() {
@@ -1874,6 +1875,7 @@
             levelScreen.classList.remove('hidden');
             gameOverScreen.classList.add('hidden');
             rankingScreen.classList.add('hidden');
+            bonnouMessageContainer.innerHTML = ''; // Added: clear bonnou messages
 
             // レベルのロック状態を更新
             const levelEasyBtn = document.getElementById('levelEasy');
