@@ -1117,7 +1117,7 @@
                 <h2 id="resultText"></h2>
                 <div id="currentScore"></div>
                 <div class="share-buttons">
-                    <button id="shareBtn" class="share-btn">Xに共有</button>
+                    <button id="shareBtn" class="share-btn">共有</button>
                 </div>
                 <button id="restartBtn">再び修行する</button>
                 <button id="toTitleBtn">タイトルに戻る</button>
@@ -2340,7 +2340,7 @@
             if (monkImage.complete && monkImage.naturalWidth !== 0) {
                 // 画像を描画（中心に合わせて調整）
                 // 元の描画サイズ感を参考に、少し大きめに描画して見栄えを良くする
-                const imgSize = 70;
+                const imgSize = 90;
                 ctx.drawImage(monkImage, -imgSize / 2, -imgSize / 2 - 10, imgSize, imgSize);
             } else {
                 // 画像読み込み前のフォールバック（元の描画ロジック）
