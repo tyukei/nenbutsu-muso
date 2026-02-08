@@ -1823,6 +1823,15 @@ menuTutorialBtn.addEventListener('click', () => {
     openTutorial();
 });
 
+const menuDeveloperBtn = document.getElementById('menuDeveloperBtn');
+menuDeveloperBtn.addEventListener('click', () => {
+    menuModal.classList.add('hidden');
+    passwordModal.classList.remove('hidden');
+    passwordInput.value = '';
+    passwordMessage.textContent = '';
+    passwordInput.focus();
+});
+
 // Initialize
 initSettings();
 
