@@ -250,7 +250,7 @@ const levelSettings = {
         initialSpirit: 5
     },
     demon: {
-        name: '悪魔レベル',
+        name: 'Lev悪魔',
         targetScore: 324,
         baseSpeed: 3.0,
         spawnRate: 15, // Reduced from 25
@@ -364,7 +364,7 @@ function isLevelUnlocked(level) {
     if (level === 'easy') return true; // 仏性Lev1は常に解放
     if (level === 'normal') return cleared.includes('easy'); // 仏性Lev2はLev1クリアで解放
     if (level === 'hard') return cleared.includes('normal'); // 仏性Lev3はLev2クリアで解放
-    if (level === 'demon') return cleared.includes('hard'); // 悪魔レベルはLev3クリアで解放
+    if (level === 'demon') return cleared.includes('hard'); // Lev悪魔はLev3クリアで解放
     return false;
 }
 
@@ -571,7 +571,7 @@ function checkPassword() {
         message = '✓ 仏性Lev3を解放しました！';
         unlocked = true;
     } else if (password === 'nenbutsu-mashimashi3') {
-        // 悪魔レベルを解放（easy, normal, hardをクリア済みにする）
+        // Lev悪魔を解放（easy, normal, hardをクリア済みにする）
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
@@ -582,7 +582,7 @@ function checkPassword() {
             cleared.push('hard');
         }
         localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
-        message = '✓ 悪魔レベルを解放しました！';
+        message = '✓ Lev悪魔を解放しました！';
         unlocked = true;
     }
 
@@ -938,7 +938,7 @@ function showLevelSelect() {
         hardLock.style.display = hardUnlocked ? 'none' : 'block';
     }
 
-    // 悪魔レベルの表示/非表示
+    // Lev悪魔の表示/非表示
     const demonUnlocked = isLevelUnlocked('demon');
     const levelDemonBtn = document.getElementById('levelDemon');
     if (demonUnlocked) {
