@@ -247,12 +247,12 @@ const levelSettings = {
     },
     demon: {
         name: '悪魔レベル',
-        targetScore: 999999, // 実質無限
+        targetScore: 324,
         baseSpeed: 3.0,
         spawnRate: 15, // Reduced from 25
         speedIncrease: 0.12, // より速く加速
         nenbutsuRate: 0.3,
-        isInfinite: true,
+        isInfinite: false,
         initialSpirit: 5
     }
 };
@@ -1115,7 +1115,8 @@ function gameOver(win) {
     const levelValue = settings.isInfinite ? '悪魔' : ({
         easy: '1',
         normal: '2',
-        hard: '3'
+        hard: '3',
+        demon: '悪魔'
     }[currentLevel] || currentLevel);
 
     if (win) {
