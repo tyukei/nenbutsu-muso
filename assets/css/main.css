@@ -315,6 +315,7 @@
         }
 
         @keyframes introHintBlink {
+
             0%,
             100% {
                 opacity: 0.45;
@@ -1352,6 +1353,13 @@
 
         .carousel-nav-btn {
             min-width: 100px;
+        }
+
+        .mobile-mode .carousel-nav-btn {
+            min-width: 70px;
+            padding: 8px 16px;
+            font-size: 13px;
+            margin: 5px;
         }
 
         .info-kudoku {
