@@ -54,6 +54,10 @@ let touchLeft = false;
 let touchRight = false;
 let touchSpecial = false;
 
+// スワイプ操作用変数
+let dragTouchId = null;
+let lastTouchX = 0;
+
 // オートハイド機能用
 let lastInputTime = Date.now();
 const HIDE_DELAY = 3000; // 3秒で非表示
@@ -671,6 +675,81 @@ specialBtn.addEventListener('mousedown', (e) => {
     e.preventDefault();
     if (kudoku >= maxKudoku) {
         activateSpecialAttack();
+    }
+});
+
+// スワイプ操作の実装
+window.addEventListener('touchstart', (e) => {
+    // 既にドラッグ中なら無視
+    if (dragTouchId !== null) return;
+
+    // ゲーム中以外は無視
+    if (gameState !== 'playing') return;
+
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        const target = touch.target;
+
+        // ボタン類へのタッチは除外
+        if (target.closest('.control-btn') ||
+            target.closest('.title-button') ||
+            target.closest('.level-btn') ||
+            target.closest('.modal') ||
+            target.closest('#settingsModal')) {
+            continue;
+        }
+
+        // 有効なドラッグ開始
+        dragTouchId = touch.identifier;
+        lastTouchX = touch.clientX;
+        break;
+    }
+}, { passive: false });
+
+window.addEventListener('touchmove', (e) => {
+    if (dragTouchId === null) return;
+    if (gameState !== 'playing') return;
+
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        if (touch.identifier === dragTouchId) {
+            // スクロール防止
+            e.preventDefault();
+
+            const deltaX = touch.clientX - lastTouchX;
+            player.x += deltaX;
+
+            // 画面外に出ないように制限
+            if (player.x < 0) player.x = 0;
+            if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
+
+            lastTouchX = touch.clientX;
+            break;
+        }
+    }
+}, { passive: false });
+
+window.addEventListener('touchend', (e) => {
+    if (dragTouchId === null) return;
+
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        if (touch.identifier === dragTouchId) {
+            dragTouchId = null;
+            break;
+        }
+    }
+});
+
+window.addEventListener('touchcancel', (e) => {
+    if (dragTouchId === null) return;
+
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        if (touch.identifier === dragTouchId) {
+            dragTouchId = null;
+            break;
+        }
     }
 });
 
