@@ -462,6 +462,7 @@
         .mobile-mode .intro-monk,
         .mobile-mode #titlePersistentPray img {
             width: 90px;
+            bottom: 80px;
         }
 
         .mobile-mode #titleMainContent {
