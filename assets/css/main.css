@@ -315,10 +315,10 @@
             position: absolute;
             right: 14px;
             bottom: 12px;
-            color: rgba(255, 255, 255, 0.78);
+            color: #ffffff;
             font-size: 12px;
             letter-spacing: 0.08em;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
             animation: introHintBlink 1.4s ease-in-out infinite;
             pointer-events: none;
         }
@@ -327,7 +327,7 @@
 
             0%,
             100% {
-                opacity: 0.45;
+                opacity: 0.75;
             }
 
             50% {
