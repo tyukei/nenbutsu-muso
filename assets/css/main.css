@@ -234,7 +234,9 @@
         }
 
         .title-logo {
-            margin-bottom: 20px;
+            margin: 0 0 20px 0;
+            font-size: inherit;
+            font-weight: normal;
             animation: float 3s ease-in-out infinite;
         }
 
