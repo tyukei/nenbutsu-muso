@@ -234,9 +234,16 @@
         }
 
         .title-logo {
-            font-size: 56px;
             margin-bottom: 20px;
             animation: float 3s ease-in-out infinite;
+        }
+
+        .title-logo-img {
+            width: 90%;
+            max-width: 400px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
 
         @keyframes float {
