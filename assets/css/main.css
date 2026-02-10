@@ -234,7 +234,9 @@
         }
 
         .title-logo {
-            margin-bottom: 20px;
+            margin: 0 0 20px 0;
+            font-size: inherit;
+            font-weight: normal;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -313,10 +315,10 @@
             position: absolute;
             right: 14px;
             bottom: 12px;
-            color: rgba(255, 255, 255, 0.78);
+            color: #ffffff;
             font-size: 12px;
             letter-spacing: 0.08em;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
             animation: introHintBlink 1.4s ease-in-out infinite;
             pointer-events: none;
         }
@@ -325,7 +327,7 @@
 
             0%,
             100% {
-                opacity: 0.45;
+                opacity: 0.75;
             }
 
             50% {
@@ -806,6 +808,43 @@
             margin-top: 20px;
             font-size: 20px;
             padding: 15px;
+        }
+
+        /* モバイル版での環境設定調整 */
+        .mobile-mode .settings-container {
+            padding: 20px 15px;
+            max-width: 90%;
+        }
+
+        .mobile-mode .settings-container h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .mobile-mode .setting-group {
+            margin-bottom: 20px;
+        }
+
+        .mobile-mode .setting-label {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .mobile-mode .toggle-btn {
+            font-size: 13px;
+            padding: 8px 6px;
+        }
+
+        .mobile-mode .settings-desc {
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        .mobile-mode #settingsSubmitBtn {
+            font-size: 18px;
+            padding: 12px;
+            margin-top: 15px;
         }
 
         /* 仮想コントローラー */

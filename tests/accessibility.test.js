@@ -11,7 +11,7 @@ const fs = require('fs');
 
   try {
     // Navigate to the page
-    await page.goto('http://localhost:8080/');
+    await page.goto('file://' + __dirname + '/../index.html');
     console.log('✅ Page loaded successfully');
 
     // Run accessibility checks with axe-core
