@@ -59,6 +59,37 @@ PCとスマートフォンの両方に対応しており、単純ながらも奥
 *   **CSS3**: フレームワーク不使用
 *   **JavaScript (ES6+)**: Vanilla JS（ライブラリ不使用）
 
+## 🏗️ アーキテクチャ
+
+MVC (Model-View-Controller) パターンに基づき、状態管理 (`state.js`) と描画ロジック (`renderer.js`) を分離して設計しています。
+
+```mermaid
+graph TD
+    %% Core State & Config
+    CONFIG["config.js<br/>定数・設定"] --> STATE
+    STATE["state.js<br/>GameState<br/>(全状態管理)"] --> GAME
+    STATE --> RENDERER
+    STATE --> UI
+    STATE --> INPUT
+
+    %% Managers
+    AUDIO["audio.js<br/>音声管理"] --> GAME
+    AUDIO --> UI
+    DEVICE["device.js<br/>デバイス判定"] --> UI
+    EVENTS["events.js<br/>EventBus"] --> GAME
+    EVENTS --> UI
+
+    %% MVC Components
+    ENTITIES["entities.js<br/>Entity Classes"] --> GAME
+    RENDERER["renderer.js<br/>Renderer<br/>(View: Canvas)"] --> GAME
+    UI["ui.js<br/>UI Manager<br/>(View: DOM)"] --> MAIN
+    INPUT["input.js<br/>Input Manager"] --> MAIN
+
+    %% Entry Point
+    GAME["game.js<br/>Game Loop<br/>(Controller)"] --> MAIN
+    MAIN["main.js<br/>Entry Point"]
+```
+
 ## 📂 ディレクトリ構成
 
 *   `index.html`: ゲームのメインファイル
