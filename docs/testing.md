@@ -256,6 +256,12 @@ Lighthouse CIの設定ファイル:
 - `minScore`: 最低スコア（0.0〜1.0）
 - `warn` → `error`: 警告を失敗に変更
 
+## Discordと連携
+webhookで設定
+
+以下参照
+https://docs.github.com/en/webhooks/about-webhooks
+
 ---
 
 ## 参考リンク
