@@ -494,6 +494,12 @@ function detectDeviceInfo() {
         (navigator.maxTouchPoints > 0) ||
         (navigator.msMaxTouchPoints > 0);
 
+    // iPadOS 13+ detection (MacIntel + TouchPoints)
+    if (result.os === 'macos' && result.isTouch && navigator.maxTouchPoints > 1) {
+        result.os = 'ios';
+        result.device = 'tablet';
+    }
+
     return result;
 }
 
@@ -509,40 +515,31 @@ console.log(`👆 タッチ: ${deviceInfo.isTouch ? '対応' : '非対応'}`);
 
 // Mobile Mode Logic
 function checkMobileMode() {
-    // Check for saved setting first
-    const savedSettings = localStorage.getItem('nenbunSettings');
-    if (savedSettings) {
-        const settings = JSON.parse(savedSettings);
-        if (settings.mode === 'mobile') {
-            document.body.classList.add('mobile-mode');
-        } else {
-            document.body.classList.remove('mobile-mode');
-        }
-        return;
-    }
-
-    // 初回ロード時：デバイス情報から自動判定
+    // 初回ロード時：デバイス情報から自動判定（常に実行）
     let autoMode = 'pc'; // デフォルトはPC
 
-    // モバイルまたはタブレットの場合はモバイルモード
-    if (deviceInfo.device === 'mobile' || deviceInfo.device === 'tablet') {
+    // モバイル、タブレット、またはタッチ対応デバイスの場合はモバイルモード
+    if (deviceInfo.device === 'mobile' || deviceInfo.device === 'tablet' || deviceInfo.isTouch) {
         autoMode = 'mobile';
         document.body.classList.add('mobile-mode');
-        console.log('📱 モバイルデバイスを検出 → モバイルモードに自動設定');
+        console.log('📱 モバイル/タッチデバイスを検出 → モバイルモードに自動設定');
     } else {
         // デスクトップの場合はPCモード
         document.body.classList.remove('mobile-mode');
         console.log('💻 PCデバイスを検出 → PCモードに自動設定');
     }
 
-    // 自動判定した設定をlocalStorageに保存
-    const initialSettings = {
-        mode: autoMode,
-        bgmEnabled: true,
-        seEnabled: true
-    };
-    localStorage.setItem('nenbunSettings', JSON.stringify(initialSettings));
-    console.log('💾 初期設定を保存しました:', initialSettings);
+    // 自動判定した設定をlocalStorageに保存（または更新）
+    const savedSettings = localStorage.getItem('nenbunSettings');
+    let settings = savedSettings ? JSON.parse(savedSettings) : {};
+
+    // 既存の設定があっても、OSベースの自動判定を優先して上書き
+    settings.mode = autoMode;
+    settings.bgmEnabled = settings.bgmEnabled !== undefined ? settings.bgmEnabled : true;
+    settings.seEnabled = settings.seEnabled !== undefined ? settings.seEnabled : true;
+
+    localStorage.setItem('nenbunSettings', JSON.stringify(settings));
+    console.log('💾 OS検出に基づいて設定を更新しました:', settings);
 }
 
 // Run initial check
