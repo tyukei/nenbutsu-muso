@@ -18,7 +18,11 @@
 *   `/`: ルートディレクトリ (`index.html`, `GEMINI.md`)。
 *   `assets/`:
     *   `css/`: スタイルシート。
-    *   `js/`: ゲームロジック (`main.js`)。
+    *   `js/`: ゲームロジック (11ファイル構成)。
+        *   **Core**: `config.js` (設定), `state.js` (状態管理), `events.js` (イベントバス)
+        *   **Managers**: `audio.js` (音声), `device.js` (デバイス), `input.js` (入力)
+        *   **MVC**: `game.js` (Controller), `ui.js` (View: DOM), `renderer.js` (View: Canvas), `entities.js` (Model)
+        *   **Entry**: `main.js` (初期化)
 *   `images/`: キャラクター、UI、背景などの画像リソース。
     *   `monk/`: 僧侶の画像 (`monk_back.png`, `monk_happy.png` 等)。
     *   `tutorial/`: チュートリアル用画像。
@@ -27,39 +31,37 @@
 
 ## 主要なゲームシステム
 
-### 1. ゲームループと状態管理
-*   **ゲーム状態 (`gameState`)**: `'title'`, `'level'`, `'playing'`, `'gameover'`, `'ranking'` のいずれかの値を持ち、画面遷移とゲームロジックを制御します。
-*   **メインループ**: `requestAnimationFrame` を使用（`main.js` 内で実装）。
+### 1. アーキテクチャ (MVC + State Machine)
+*   **GameState (`GS`)**: `state.js` 内の `GS` オブジェクトで全状態（画面、スコア、エンティティ、入力）を一元管理。
+*   **メインループ**: `game.js` がコントローラーとしてロジックを回し、`renderer.js` が描画を担当。
 
 ### 2. 入力処理
-*   **PC**: キーボード操作 (矢印キーで移動, Spaceで発射, Zで必殺技)。`keys` オブジェクトで状態を管理。
-*   **モバイル**: 画面上の仮想ボタン (`virtualControls`) によるタッチ操作。`touchstart`, `touchend` イベントを使用。
-*   **モバイル判定**: `checkMobileMode()` 関数で画面幅または設定に基づき `mobile-mode` クラスを `body` に付与。
+*   **PC**: キーボード操作 (矢印キーで移動, Spaceで発射, Zで必殺技)。
+*   **モバイル**: 画面上の仮想ボタンとスワイプ操作に対応。
+*   **管理**: `input.js` が入力を正規化し、`GS.input` に状態を反映。
 
 ### 3. ゲームプレイ機能
-*   **精神力 (HP)**: `spirit` 変数で管理。被弾すると減少。
-*   **功徳 (MP)**: `kudoku` 変数で管理。敵を倒すと蓄積し、満タンで必殺技「煩悩即菩薩」が使用可能。
-*   **レベルシステム**: `easy` (仏性Lev1) 〜 `demon` (Lev悪魔)。`levelSettings` オブジェクトでパラメータ（速度、出現率、ターゲットスコア等）を定義。
-*   **自動レベル解放**: クリア状況を `localStorage` (`nenbunClearedLevels`) に保存。パスワードによる解放機能もあり。
+*   **精神力 (HP)**: `GS.play.spirit` で管理。被弾すると減少。
+*   **功徳 (MP)**: `GS.play.kudoku` で管理。MAX値は `config.js` で定義。
+*   **エンティティ**: `entities.js` 内の `Bullet`, `Enemy`, `Particle` クラスで管理。
+*   **レベルシステム**: `easy` 〜 `demon`。`levelSettings` (config.js) でパラメータ定義。
 
-### 4. 音声管理
-*   **Audio オブジェクト**: `sounds` オブジェクトで一元管理。
-*   **モバイル対応**: `unlockAudio()` 関数により、ユーザーインタラクション時に音声をアンロック（無音再生）して自動再生制限を回避。
+### 4. 音声・アセット
+*   **Audio**: `audio.js` で一元管理 (`sounds` オブジェクト)。モバイルの自動再生制限対策済み。
+*   **Renderer**: `renderer.js` が Canvas 描画を一手に引き受ける。
 
 ### 5. データ永続化
-*   **ランキング**: `localStorage` (`nenbunRankings`) にスコア、連鎖数、日付を保存。
-*   **設定**: `localStorage` (`nenbunSettings`) に音声設定や操作モードを保存。
+*   **ランキング**: `localStorage` (`nenbunRankings`)。
+*   **設定**: `localStorage` (`nenbunSettings`)。
+*   **レベル解放**: `localStorage` (`nenbunClearedLevels`)。
 
 ## 開発ガイドライン
 
-1.  **言語**: コード内のコメント、変数名（意図が分かる場合）、およびUIテキストは日本語を使用してください。
-2.  **依存関係**: 新たなnpmパッケージや外部ライブラリの追加は避け、標準Web APIで実装してください。
-3.  **レスポンシブデザイン**: モバイル表示（スマホ縦持ち）を優先し、PC表示でも崩れないようにCSSを調整してください。
-4.  **コードスタイル**:
-    *   `const`/`let` を適切に使い分ける。
-    *   DOM要素の取得はファイル上部でまとめて行う。
-    *   イベントリスナーは適切に管理する。
+1.  **状態管理**: グローバル変数は作らず、必ず `GS` オブジェクト (`state.js`) に追加してください。
+2.  **描画**: Canvas への描画処理は `game.js` ではなく `renderer.js` に記述してください。
+3.  **イベント**: 疎結合いが必要な場合は `events.js` の `EventBus` を使用してください。
+4.  **定数**: マジックナンバーは避け、`config.js` の定数を使用してください。
 
 ## 今後の拡張について
-*   新機能を追加する際は、既存の `gameState` フローを壊さないように注意してください。
-*   新しいアセット（画像・音声）を使用する場合は、適切なディレクトリに配置し、パスを確認してください。
+*   新機能追加時は `GS` オブジェクトの構造を維持し、適切なモジュールにロジックを配置してください。
+*   `gameState` (`GS.screen`) の遷移フローを守ってください。
