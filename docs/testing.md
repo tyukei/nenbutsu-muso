@@ -257,7 +257,7 @@ Lighthouse CIの設定ファイル:
 - `warn` → `error`: 警告を失敗に変更
 
 ## Discordと連携
-webhookで設定
+webhookで設定(リリース時のみ)
 
 以下参照
 https://docs.github.com/en/webhooks/about-webhooks
