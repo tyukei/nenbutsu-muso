@@ -31,12 +31,14 @@ function showBonnouMessage(bonnouText) {
 // ハートブリーチ関連
 function triggerHeartBreach(x) {
     const now = performance.now();
-    heartFlashUntil = now + 260;
-    heartImpactUntil = now + 260;
+    const { play, effects } = GS;
 
-    const safeMaxSpirit = Math.max(1, maxSpirit);
-    const dangerRatio = 1 - Math.max(0, spirit) / safeMaxSpirit;
-    heartStains.push({
+    effects.heartFlashUntil = now + 260;
+    effects.heartImpactUntil = now + 260;
+
+    const safeMaxSpirit = Math.max(1, play.maxSpirit);
+    const dangerRatio = 1 - Math.max(0, play.spirit) / safeMaxSpirit;
+    effects.heartStains.push({
         x: Math.max(0, Math.min(canvas.width, x)),
         width: 42 + Math.random() * 34,
         createdAt: now,
@@ -44,15 +46,15 @@ function triggerHeartBreach(x) {
         maxAlpha: 0.28 + dangerRatio * 0.25
     });
 
-    if (heartStains.length > 18) heartStains.shift();
+    if (effects.heartStains.length > 18) effects.heartStains.shift();
 }
 
 function triggerHeartPurify() {
-    heartPurifyUntil = performance.now() + 800;
+    GS.effects.heartPurifyUntil = performance.now() + 800;
 }
 
 function triggerRoppaBanner() {
-    ropparamitsuBannerUntil = performance.now() + 1100;
+    GS.effects.ropparamitsuBannerUntil = performance.now() + 1100;
 }
 
 // ランキングデータ
@@ -61,15 +63,15 @@ function loadRankings() {
     return saved ? JSON.parse(saved) : [];
 }
 
-function saveRanking(score, combo) {
+function saveRanking(scoreVal, comboVal) {
     const rankings = loadRankings();
     const now = new Date();
     rankings.push({
-        score: score,
-        combo: combo,
-        level: currentLevel,
-        levelName: levelSettings[currentLevel].name,
-        target: targetScore,
+        score: scoreVal,
+        combo: comboVal,
+        level: GS.level.current,
+        levelName: levelSettings[GS.level.current].name,
+        target: GS.level.targetScore,
         date: now.toLocaleDateString('ja-JP')
     });
     rankings.sort((a, b) => b.score - a.score);
@@ -126,17 +128,17 @@ function isLevelUnlocked(level) {
 
 // タイトルイントロ関連
 function clearTitleIntroTimers() {
-    titleIntroTimers.forEach(timer => clearTimeout(timer));
-    titleIntroTimers = [];
-    if (titleIntroTypingTimer) {
-        clearInterval(titleIntroTypingTimer);
-        titleIntroTypingTimer = null;
+    GS.intro.timers.forEach(timer => clearTimeout(timer));
+    GS.intro.timers = [];
+    if (GS.intro.typingTimer) {
+        clearInterval(GS.intro.typingTimer);
+        GS.intro.typingTimer = null;
     }
 }
 
 function queueTitleIntro(callback, delay) {
     const timer = setTimeout(callback, delay);
-    titleIntroTimers.push(timer);
+    GS.intro.timers.push(timer);
 }
 
 function resetTitleIntroVisualState() {
@@ -160,8 +162,8 @@ function escapeHtml(text) {
 }
 
 function renderIntroMainText(typedText) {
-    const redStart = titleIntroPhraseMain.indexOf(introRedWord);
-    const redEnd = redStart + introRedWord.length;
+    const redStart = TITLE_INTRO_PHRASE_MAIN.indexOf(INTRO_RED_WORD);
+    const redEnd = redStart + INTRO_RED_WORD.length;
 
     if (redStart < 0) {
         titleIntroMessageTextMain.innerHTML = escapeHtml(typedText);
@@ -173,9 +175,9 @@ function renderIntroMainText(typedText) {
         html = escapeHtml(typedText);
     } else {
         html += escapeHtml(typedText.slice(0, redStart));
-        const redTypedLength = Math.min(typedText.length - redStart, introRedWord.length);
+        const redTypedLength = Math.min(typedText.length - redStart, INTRO_RED_WORD.length);
         if (redTypedLength > 0) {
-            html += `<span class="text-bonnou-red">${escapeHtml(introRedWord.slice(0, redTypedLength))}</span>`;
+            html += `<span class="text-bonnou-red">${escapeHtml(INTRO_RED_WORD.slice(0, redTypedLength))}</span>`;
         }
         if (typedText.length > redEnd) {
             html += escapeHtml(typedText.slice(redEnd));
@@ -197,15 +199,15 @@ function alignIntroMessageToInstruction() {
 
 function finishTitleIntro() {
     clearTitleIntroTimers();
-    titleIntroRunning = false;
-    titleIntroPlayed = true;
+    GS.intro.running = false;
+    GS.intro.played = true;
 
     introMonkHappy.classList.add('intro-active');
     introMonkSad.classList.add('intro-active');
     introMonkPray.classList.add('intro-active');
     titleIntroMessage.classList.add('intro-active');
-    renderIntroMainText(titleIntroPhraseMain);
-    titleIntroMessageTextSub.textContent = titleIntroPhraseSub;
+    renderIntroMainText(TITLE_INTRO_PHRASE_MAIN);
+    titleIntroMessageTextSub.textContent = TITLE_INTRO_PHRASE_SUB;
     titlePersistentPray.classList.remove('hidden');
     titlePersistentPray.classList.add('visible');
     titleMainContent.classList.add('intro-visible');
@@ -218,33 +220,33 @@ function finishTitleIntro() {
 }
 
 function skipTitleIntro() {
-    if (!titleIntroRunning) return;
+    if (!GS.intro.running) return;
     finishTitleIntro();
 }
 
 function startTitleIntro() {
     clearTitleIntroTimers();
-    titleIntroRunning = true;
+    GS.intro.running = true;
     resetTitleIntroVisualState();
     alignIntroMessageToInstruction();
     titleIntroMessage.classList.add('intro-active');
 
     let charIndex = 0;
-    const fullText = `${titleIntroPhraseMain}\n${titleIntroPhraseSub}`;
-    const threshold = titleIntroPhraseMain.length;
-    titleIntroTypingTimer = setInterval(() => {
-        if (!titleIntroRunning) return;
+    const fullText = `${TITLE_INTRO_PHRASE_MAIN}\n${TITLE_INTRO_PHRASE_SUB}`;
+    const threshold = TITLE_INTRO_PHRASE_MAIN.length;
+    GS.intro.typingTimer = setInterval(() => {
+        if (!GS.intro.running) return;
         charIndex += 1;
         if (charIndex <= threshold) {
-            renderIntroMainText(titleIntroPhraseMain.slice(0, charIndex));
+            renderIntroMainText(TITLE_INTRO_PHRASE_MAIN.slice(0, charIndex));
             titleIntroMessageTextSub.textContent = '';
         } else {
-            renderIntroMainText(titleIntroPhraseMain);
-            titleIntroMessageTextSub.textContent = titleIntroPhraseSub.slice(0, charIndex - threshold - 1);
+            renderIntroMainText(TITLE_INTRO_PHRASE_MAIN);
+            titleIntroMessageTextSub.textContent = TITLE_INTRO_PHRASE_SUB.slice(0, charIndex - threshold - 1);
         }
         if (charIndex >= fullText.length) {
-            clearInterval(titleIntroTypingTimer);
-            titleIntroTypingTimer = null;
+            clearInterval(GS.intro.typingTimer);
+            GS.intro.typingTimer = null;
 
             queueTitleIntro(() => introMonkHappy.classList.add('intro-active'), 300);
             queueTitleIntro(() => introMonkSad.classList.add('intro-active'), 800);
@@ -257,7 +259,7 @@ function startTitleIntro() {
 
 // 画面遷移
 function showTitle() {
-    gameState = 'title';
+    GS.screen = 'title';
     titleScreen.classList.remove('hidden');
     levelScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
@@ -266,11 +268,11 @@ function showTitle() {
     virtualControls.classList.add('hidden');
     bonnouMessageContainer.innerHTML = '';
 
-    if (!titleIntroPlayed) {
+    if (!GS.intro.played) {
         startTitleIntro();
     } else {
         clearTitleIntroTimers();
-        titleIntroRunning = false;
+        GS.intro.running = false;
         titleIntroOverlay.classList.add('hidden');
         titleIntroOverlay.classList.remove('intro-fadeout');
         titlePersistentPray.classList.remove('hidden');
@@ -280,7 +282,7 @@ function showTitle() {
 }
 
 function showLevelSelect() {
-    gameState = 'level';
+    GS.screen = 'level';
     titleScreen.classList.add('hidden');
     levelScreen.classList.remove('hidden');
     gameOverScreen.classList.add('hidden');
@@ -318,7 +320,7 @@ function showLevelSelect() {
 }
 
 function showRanking() {
-    gameState = 'ranking';
+    GS.screen = 'ranking';
     titleScreen.classList.add('hidden');
     rankingScreen.classList.remove('hidden');
     displayRankings();
@@ -326,10 +328,11 @@ function showRanking() {
 
 // X (Twitter) シェア
 function shareToTwitter() {
-    const levelName = levelSettings[currentLevel].name;
-    const settings = levelSettings[currentLevel];
-    const targetDisplay = settings.isInfinite ? '∞' : targetScore;
-    const isWin = score >= targetScore && !settings.isInfinite;
+    const { play, level } = GS;
+    const levelName = levelSettings[level.current].name;
+    const settings = levelSettings[level.current];
+    const targetDisplay = settings.isInfinite ? '∞' : level.targetScore;
+    const isWin = play.score >= level.targetScore && !settings.isInfinite;
 
     let shareText = `煩悩退散〜修行僧の葛藤〜\n`;
     shareText += `【${levelName}】\n`;
@@ -340,8 +343,8 @@ function shareToTwitter() {
         shareText += `煩悩に呑まれた...\n`;
     }
 
-    shareText += `撃破数: ${score}/${targetDisplay}\n`;
-    shareText += `最大連鎖: ${maxCombo}\n`;
+    shareText += `撃破数: ${play.score}/${targetDisplay}\n`;
+    shareText += `最大連鎖: ${play.maxCombo}\n`;
     shareText += `\n#煩悩退散 #般若心経EDM\n`;
     shareText += `\nhttps://tyukei.github.io/nenbutsu-muso/`;
 
@@ -424,22 +427,24 @@ function checkPassword() {
 
 // UI更新
 function updateUI() {
-    const settings = levelSettings[currentLevel];
-    scoreDisplay.textContent = score;
-    targetScoreDisplay.textContent = settings.isInfinite ? '∞' : targetScore;
-    spiritDisplay.textContent = spirit;
+    const { play, level } = GS;
+    const settings = levelSettings[level.current];
 
-    kudokuDisplay.textContent = kudoku;
-    kudokuDisplay.style.color = kudoku >= maxKudoku ? '#ff0000' : '#fff';
+    scoreDisplay.textContent = play.score;
+    targetScoreDisplay.textContent = settings.isInfinite ? '∞' : level.targetScore;
+    spiritDisplay.textContent = play.spirit;
 
-    comboDisplay.textContent = combo;
+    kudokuDisplay.textContent = play.kudoku;
+    kudokuDisplay.style.color = play.kudoku >= MAX_KUDOKU ? '#ff0000' : '#fff';
+
+    comboDisplay.textContent = play.combo;
     levelDisplay.textContent = settings.name;
 
     updateSpecialButton();
 }
 
 function updateSpecialButton() {
-    if (kudoku >= maxKudoku) {
+    if (GS.play.kudoku >= MAX_KUDOKU) {
         specialBtn.classList.add('ready');
         specialBtn.classList.remove('disabled');
     } else {
@@ -581,7 +586,7 @@ settingsSubmitBtn.addEventListener('click', () => {
     if (!tosAgreed) {
         tosModal.classList.remove('hidden');
     } else {
-        if (gameState === 'title') {
+        if (GS.screen === 'title') {
             showTitle();
         }
     }
@@ -631,21 +636,21 @@ tosAgreeBtn.addEventListener('click', () => {
     localStorage.setItem('nenbunTosAgreed', 'true');
     tosModal.classList.add('hidden');
 
-    if (gameState === 'title') {
+    if (GS.screen === 'title') {
         showTitle();
     }
 });
 
 // チュートリアルロジック
 function openTutorial() {
-    currentSlide = 0;
+    GS.ui.currentSlide = 0;
     updateSlides();
     tutorialModal.classList.remove('hidden');
 }
 
 function updateSlides() {
     slides.forEach((slide, index) => {
-        if (index === currentSlide) {
+        if (index === GS.ui.currentSlide) {
             slide.style.display = 'flex';
             slide.classList.add('active');
         } else {
@@ -655,14 +660,14 @@ function updateSlides() {
     });
 
     dots.forEach((dot, index) => {
-        if (index === currentSlide) dot.classList.add('active');
+        if (index === GS.ui.currentSlide) dot.classList.add('active');
         else dot.classList.remove('active');
     });
 
-    prevSlideBtn.disabled = currentSlide === 0;
-    prevSlideBtn.style.opacity = currentSlide === 0 ? 0.3 : 1;
+    prevSlideBtn.disabled = GS.ui.currentSlide === 0;
+    prevSlideBtn.style.opacity = GS.ui.currentSlide === 0 ? 0.3 : 1;
 
-    if (currentSlide === slides.length - 1) {
+    if (GS.ui.currentSlide === slides.length - 1) {
         nextSlideBtn.textContent = '閉じる';
     } else {
         nextSlideBtn.textContent = '次へ';
@@ -670,15 +675,15 @@ function updateSlides() {
 }
 
 prevSlideBtn.addEventListener('click', () => {
-    if (currentSlide > 0) {
-        currentSlide--;
+    if (GS.ui.currentSlide > 0) {
+        GS.ui.currentSlide--;
         updateSlides();
     }
 });
 
 nextSlideBtn.addEventListener('click', () => {
-    if (currentSlide < slides.length - 1) {
-        currentSlide++;
+    if (GS.ui.currentSlide < slides.length - 1) {
+        GS.ui.currentSlide++;
         updateSlides();
     } else {
         tutorialModal.classList.add('hidden');
@@ -689,7 +694,7 @@ nextSlideBtn.addEventListener('click', () => {
 
 dots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
-        currentSlide = index;
+        GS.ui.currentSlide = index;
         updateSlides();
     });
 });

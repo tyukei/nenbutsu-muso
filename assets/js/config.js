@@ -1,5 +1,5 @@
 // ==========================================
-// config.js — 定数・DOM要素・ゲーム状態変数
+// config.js — 定数・DOM要素・設定データ
 // ==========================================
 
 const canvas = document.getElementById('gameCanvas');
@@ -45,7 +45,6 @@ const prevSlideBtn = document.getElementById('prevSlideBtn');
 const nextSlideBtn = document.getElementById('nextSlideBtn');
 const slides = document.querySelectorAll('.carousel-slide');
 const dots = document.querySelectorAll('.dot');
-let currentSlide = 0;
 
 // 仮想コントローラーボタン
 const leftBtn = document.getElementById('leftBtn');
@@ -60,59 +59,21 @@ const bonnouMessageContainer = document.getElementById('bonnouMessageContainer')
 const monkImage = new Image();
 monkImage.src = 'images/monk/monk_back.png';
 
-// ゲーム状態
-let gameState = 'title'; // 'title', 'level', 'playing', 'gameover', 'ranking'
-let score = 0;
-let spirit = 3;      // 精神力（HPシステム）
-let maxSpirit = 3;   // 現在難易度での最大精神力
-let kudoku = 0;      // 功徳（MPシステム）
-const maxKudoku = 6; // 最大功徳
-let combo = 0;
-let maxCombo = 0;
-let frame = 0;
-let lastBonnou = ''; // 最後にやられた煩悩
-let heartFlashUntil = 0;
-let heartImpactUntil = 0;
-let heartPurifyUntil = 0;
-let heartStains = [];
-let ropparamitsuBannerUntil = 0;
-let titleIntroPlayed = false;
-let titleIntroRunning = false;
-let titleIntroTimers = [];
-let titleIntroTypingTimer = null;
-const titleIntroPhraseMain = '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。';
-const titleIntroPhraseSub = '究極の徳（ハイスコア）を目指せ！';
-const introRedWord = '煩悩';
+// === 定数 ===
+const MAX_KUDOKU = 6;
+const HIDE_DELAY = 3000;
+const TARGET_FPS = 60;
+const STEP = 1000 / TARGET_FPS;
 
-// タッチ操作の状態
-let touchLeft = false;
-let touchRight = false;
-let touchSpecial = false;
+// タイトルイントロ テキスト定数
+const TITLE_INTRO_PHRASE_MAIN = '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。';
+const TITLE_INTRO_PHRASE_SUB = '究極の徳（ハイスコア）を目指せ！';
+const INTRO_RED_WORD = '煩悩';
 
-// スワイプ操作用変数
-let dragTouchId = null;
-let lastTouchX = 0;
-
-// オートハイド機能用
-let lastInputTime = Date.now();
-const HIDE_DELAY = 3000; // 3秒で非表示
-
-// キー入力
-const keys = {};
-let canShoot = true;
-let shootCooldown = 0;
-
-// ゲームオブジェクト
-const bullets = [];
-const enemies = [];
-const particles = [];
+// 六波羅蜜リスト
+const ROPPARAMITSU_LIST = ['布施', '持戒', '忍辱', '精進', '禅定', '智慧'];
 
 // 難易度設定
-let currentLevel = 'normal';
-let targetScore = 108; // クリアに必要な撃破数
-let baseSpeed = 1; // 基本速度
-let spawnRate = 40; // 敵出現間隔（小さいほど頻繁）
-
 const levelSettings = {
     easy: {
         name: '仏性Lev1',
@@ -203,9 +164,3 @@ const player = {
     height: 40,
     speed: 12
 };
-
-// Delta Time Management
-let lastTime = 0;
-let accumulator = 0;
-const TARGET_FPS = 60;
-const STEP = 1000 / TARGET_FPS;

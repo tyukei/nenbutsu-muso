@@ -4,7 +4,7 @@
 
 // ユーザー入力でタイマーリセット
 function resetInputTimer() {
-    lastInputTime = Date.now();
+    GS.input.lastInputTime = Date.now();
     if (virtualControls.classList.contains('inactive')) {
         virtualControls.classList.remove('inactive');
     }
@@ -16,32 +16,32 @@ window.addEventListener('keydown', resetInputTimer);
 
 // キーボードイベント
 document.addEventListener('keydown', (e) => {
-    if (gameState === 'playing') {
-        if (e.key === 'ArrowLeft') keys['ArrowLeft'] = true;
-        if (e.key === 'ArrowRight') keys['ArrowRight'] = true;
-        if (e.key === ' ' && canShoot) {
+    if (GS.screen === 'playing') {
+        if (e.key === 'ArrowLeft') GS.input.keys['ArrowLeft'] = true;
+        if (e.key === 'ArrowRight') GS.input.keys['ArrowRight'] = true;
+        if (e.key === ' ' && GS.input.canShoot) {
             e.preventDefault();
             shootBullet();
-            canShoot = false;
-            shootCooldown = 10;
+            GS.input.canShoot = false;
+            GS.input.shootCooldown = 10;
         }
-        if ((e.key === 'z' || e.key === 'Z') && kudoku >= maxKudoku) {
+        if ((e.key === 'z' || e.key === 'Z') && GS.play.kudoku >= MAX_KUDOKU) {
             activateSpecialAttack();
         }
     } else {
-        keys[e.key] = true;
+        GS.input.keys[e.key] = true;
     }
 });
 
 document.addEventListener('keyup', (e) => {
-    keys[e.key] = false;
+    GS.input.keys[e.key] = false;
 });
 
 // タイトルイントロスキップ
 titleIntroOverlay.addEventListener('click', skipTitleIntro);
 titleIntroOverlay.addEventListener('touchstart', skipTitleIntro, { passive: true });
 document.addEventListener('keydown', () => {
-    if (titleIntroRunning) {
+    if (GS.intro.running) {
         skipTitleIntro();
     }
 });
@@ -50,82 +50,82 @@ document.addEventListener('keydown', () => {
 // 左ボタン
 leftBtn.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    touchLeft = true;
+    GS.input.touchLeft = true;
 });
 leftBtn.addEventListener('touchend', (e) => {
     e.preventDefault();
-    touchLeft = false;
+    GS.input.touchLeft = false;
 });
 leftBtn.addEventListener('mousedown', (e) => {
     e.preventDefault();
-    touchLeft = true;
+    GS.input.touchLeft = true;
 });
 leftBtn.addEventListener('mouseup', (e) => {
     e.preventDefault();
-    touchLeft = false;
+    GS.input.touchLeft = false;
 });
 
 // 右ボタン
 rightBtn.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    touchRight = true;
+    GS.input.touchRight = true;
 });
 rightBtn.addEventListener('touchend', (e) => {
     e.preventDefault();
-    touchRight = false;
+    GS.input.touchRight = false;
 });
 rightBtn.addEventListener('mousedown', (e) => {
     e.preventDefault();
-    touchRight = true;
+    GS.input.touchRight = true;
 });
 rightBtn.addEventListener('mouseup', (e) => {
     e.preventDefault();
-    touchRight = false;
+    GS.input.touchRight = false;
 });
 
 // 念仏ボタン
 shootBtn.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    if (gameState === 'playing' && canShoot) {
+    if (GS.screen === 'playing' && GS.input.canShoot) {
         shootBullet();
-        canShoot = false;
-        shootCooldown = 10;
+        GS.input.canShoot = false;
+        GS.input.shootCooldown = 10;
     }
 });
 shootBtn.addEventListener('mousedown', (e) => {
     e.preventDefault();
-    if (gameState === 'playing' && canShoot) {
+    if (GS.screen === 'playing' && GS.input.canShoot) {
         shootBullet();
-        canShoot = false;
-        shootCooldown = 10;
+        GS.input.canShoot = false;
+        GS.input.shootCooldown = 10;
     }
 });
 
 // Special attack button
 specialBtn.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    if (kudoku >= maxKudoku) {
-        touchSpecial = true;
+    if (GS.play.kudoku >= MAX_KUDOKU) {
+        GS.input.touchSpecial = true;
         activateSpecialAttack();
     }
 });
 
 specialBtn.addEventListener('touchend', (e) => {
     e.preventDefault();
-    touchSpecial = false;
+    GS.input.touchSpecial = false;
 });
 
 specialBtn.addEventListener('mousedown', (e) => {
     e.preventDefault();
-    if (kudoku >= maxKudoku) {
+    if (GS.play.kudoku >= MAX_KUDOKU) {
         activateSpecialAttack();
     }
 });
 
 // スワイプ操作の実装
 window.addEventListener('touchstart', (e) => {
-    if (dragTouchId !== null) return;
-    if (gameState !== 'playing') return;
+    if (GS.input.dragTouchId !== null) return;
+    if (GS.screen !== 'playing') return;
 
     for (let i = 0; i < e.changedTouches.length; i++) {
         const touch = e.changedTouches[i];
@@ -139,52 +139,52 @@ window.addEventListener('touchstart', (e) => {
             continue;
         }
 
-        dragTouchId = touch.identifier;
-        lastTouchX = touch.clientX;
+        GS.input.dragTouchId = touch.identifier;
+        GS.input.lastTouchX = touch.clientX;
         break;
     }
 }, { passive: false });
 
 window.addEventListener('touchmove', (e) => {
-    if (dragTouchId === null) return;
-    if (gameState !== 'playing') return;
+    if (GS.input.dragTouchId === null) return;
+    if (GS.screen !== 'playing') return;
 
     for (let i = 0; i < e.changedTouches.length; i++) {
         const touch = e.changedTouches[i];
-        if (touch.identifier === dragTouchId) {
+        if (touch.identifier === GS.input.dragTouchId) {
             e.preventDefault();
 
-            const deltaX = touch.clientX - lastTouchX;
+            const deltaX = touch.clientX - GS.input.lastTouchX;
             player.x += deltaX;
 
             if (player.x < 0) player.x = 0;
             if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
 
-            lastTouchX = touch.clientX;
+            GS.input.lastTouchX = touch.clientX;
             break;
         }
     }
 }, { passive: false });
 
 window.addEventListener('touchend', (e) => {
-    if (dragTouchId === null) return;
+    if (GS.input.dragTouchId === null) return;
 
     for (let i = 0; i < e.changedTouches.length; i++) {
         const touch = e.changedTouches[i];
-        if (touch.identifier === dragTouchId) {
-            dragTouchId = null;
+        if (touch.identifier === GS.input.dragTouchId) {
+            GS.input.dragTouchId = null;
             break;
         }
     }
 });
 
 window.addEventListener('touchcancel', (e) => {
-    if (dragTouchId === null) return;
+    if (GS.input.dragTouchId === null) return;
 
     for (let i = 0; i < e.changedTouches.length; i++) {
         const touch = e.changedTouches[i];
-        if (touch.identifier === dragTouchId) {
-            dragTouchId = null;
+        if (touch.identifier === GS.input.dragTouchId) {
+            GS.input.dragTouchId = null;
             break;
         }
     }
