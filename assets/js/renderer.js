@@ -59,28 +59,36 @@ const Renderer = {
         if (len === 0) return;
 
         ctx.save();
-        ctx.shadowBlur = 15;
-        ctx.font = 'bold 14px sans-serif';
-        ctx.textAlign = 'center';
 
-        for (let i = 0; i < len; i++) {
-            const bullet = bullets[i];
-            ctx.fillStyle = bullet.color;
-            ctx.shadowColor = bullet.color;
+        if (bulletImage.complete && bulletImage.naturalWidth !== 0) {
+            // 画像描画 (2048px -> 28px)
+            const size = 28;
+            for (let i = 0; i < len; i++) {
+                const bullet = bullets[i];
+                // 中心に描画
+                ctx.drawImage(bulletImage, bullet.x - size / 2, bullet.y - size / 2, size, size);
+            }
+        } else {
+            // フォールバック描画
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = '#d4af37';
+            ctx.shadowColor = '#d4af37';
 
-            ctx.beginPath();
-            ctx.ellipse(bullet.x, bullet.y, bullet.width / 2, bullet.height / 2, 0, 0, Math.PI * 2);
-            ctx.fill();
-        }
+            for (let i = 0; i < len; i++) {
+                const bullet = bullets[i];
+                ctx.beginPath();
+                ctx.ellipse(bullet.x, bullet.y, bullet.width / 2, bullet.height / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
 
-        // テキストは影なしで描画した方が速いが、元の見た目を維持するため影ありのままにするなら上記でOK
-        // 元コードではテキスト描画時に shadowBlur = 0 にしていたため、それに合わせる
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = '#fff';
-
-        for (let i = 0; i < len; i++) {
-            const bullet = bullets[i];
-            ctx.fillText('卍', bullet.x, bullet.y + 5);
+            // テキストは画像がない場合だけ描画（あるいはオミット）
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.textAlign = 'center';
+            for (let i = 0; i < len; i++) {
+                ctx.fillText('卍', bullets[i].x, bullets[i].y + 5);
+            }
         }
 
         ctx.restore();

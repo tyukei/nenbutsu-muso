@@ -59,6 +59,9 @@ const bonnouMessageContainer = document.getElementById('bonnouMessageContainer')
 const monkImage = new Image();
 monkImage.src = 'images/monk/monk_back.png';
 
+const bulletImage = new Image();
+bulletImage.src = 'images/game/manzi.png';
+
 // === 定数 ===
 const MAX_KUDOKU = 6;
 const HIDE_DELAY = 3000;
