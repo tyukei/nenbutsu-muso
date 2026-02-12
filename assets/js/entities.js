@@ -15,6 +15,11 @@ class Bullet {
         this.color = '#d4af37';
     }
 
+    reset(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
     update(timeScale) {
         this.y -= this.speed * timeScale;
     }
@@ -29,6 +34,10 @@ class Bullet {
  */
 class Enemy {
     constructor(x, y, width, height, speed, text, color, isNenbutsu) {
+        this.reset(x, y, width, height, speed, text, color, isNenbutsu);
+    }
+
+    reset(x, y, width, height, speed, text, color, isNenbutsu) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -62,6 +71,10 @@ class Enemy {
  */
 class Particle {
     constructor(x, y, color) {
+        this.reset(x, y, color);
+    }
+
+    reset(x, y, color) {
         this.x = x;
         this.y = y;
         this.vx = (Math.random() - 0.5) * 16;
@@ -87,8 +100,18 @@ class Particle {
  * パーティクル生成ヘルパー
  */
 function createParticles(x, y, color) {
+    const pool = GS.pools.particles;
+    const particles = GS.entities.particles;
+
     for (let i = 0; i < 20; i++) {
-        GS.entities.particles.push(new Particle(x, y, color));
+        let p;
+        if (pool.length > 0) {
+            p = pool.pop();
+            p.reset(x, y, color);
+        } else {
+            p = new Particle(x, y, color);
+        }
+        particles.push(p);
     }
 }
 

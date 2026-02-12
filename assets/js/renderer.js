@@ -54,34 +54,62 @@ const Renderer = {
      * 弾（念仏）を描画
      */
     drawBullets() {
-        GS.entities.bullets.forEach(bullet => {
-            ctx.save();
-            ctx.fillStyle = bullet.color;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = bullet.color;
+        const bullets = GS.entities.bullets;
+        const len = bullets.length;
+        if (len === 0) return;
 
-            ctx.beginPath();
-            ctx.ellipse(bullet.x, bullet.y, bullet.width / 2, bullet.height / 2, 0, 0, Math.PI * 2);
-            ctx.fill();
+        ctx.save();
 
+        if (bulletImage.complete && bulletImage.naturalWidth !== 0) {
+            // 画像描画 (2048px -> 28px)
+            const size = 28;
+            for (let i = 0; i < len; i++) {
+                const bullet = bullets[i];
+                // 中心に描画
+                ctx.drawImage(bulletImage, bullet.x - size / 2, bullet.y - size / 2, size, size);
+            }
+        } else {
+            // フォールバック描画
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = '#d4af37';
+            ctx.shadowColor = '#d4af37';
+
+            for (let i = 0; i < len; i++) {
+                const bullet = bullets[i];
+                ctx.beginPath();
+                ctx.ellipse(bullet.x, bullet.y, bullet.width / 2, bullet.height / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // テキストは画像がない場合だけ描画（あるいはオミット）
             ctx.shadowBlur = 0;
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 14px sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('卍', bullet.x, bullet.y + 5);
+            for (let i = 0; i < len; i++) {
+                ctx.fillText('卍', bullets[i].x, bullets[i].y + 5);
+            }
+        }
 
-            ctx.restore();
-        });
+        ctx.restore();
     },
 
     /**
      * 敵（煩悩）を描画
      */
     drawEnemies() {
-        GS.entities.enemies.forEach(enemy => {
-            ctx.save();
+        const enemies = GS.entities.enemies;
+        const len = enemies.length;
+        if (len === 0) return;
+
+        ctx.save();
+
+        // Pass 1: 敵の本体（影あり）
+        ctx.shadowBlur = 20;
+
+        for (let i = 0; i < len; i++) {
+            const enemy = enemies[i];
             ctx.fillStyle = enemy.color;
-            ctx.shadowBlur = 20;
             ctx.shadowColor = enemy.color;
 
             ctx.beginPath();
@@ -95,31 +123,40 @@ const Renderer = {
                 ctx.closePath();
             }
             ctx.fill();
+        }
 
-            ctx.shadowBlur = 0;
+        // Pass 2: テキスト（影なし）
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
 
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 16px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+        for (let i = 0; i < len; i++) {
+            const enemy = enemies[i];
             ctx.fillText(enemy.text, enemy.getCenterX(), enemy.getCenterY());
+        }
 
-            ctx.restore();
-        });
+        ctx.restore();
     },
 
     /**
      * パーティクルを描画
      */
     drawParticles() {
-        GS.entities.particles.forEach(particle => {
+        const particles = GS.entities.particles;
+        const len = particles.length;
+        if (len === 0) return;
+
+        for (let i = 0; i < len; i++) {
+            const particle = particles[i];
             ctx.fillStyle = particle.color;
             ctx.globalAlpha = particle.life / 40;
             ctx.beginPath();
             ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
             ctx.fill();
-            ctx.globalAlpha = 1;
-        });
+        }
+        ctx.globalAlpha = 1;
     },
 
     /**

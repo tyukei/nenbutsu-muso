@@ -28,7 +28,15 @@ function startGame(level) {
 
 // 弾発射
 function shootBullet() {
-    GS.entities.bullets.push(new Bullet(player.x, player.y - 10));
+    const pool = GS.pools.bullets;
+    let b;
+    if (pool.length > 0) {
+        b = pool.pop();
+        b.reset(player.x, player.y - 10);
+    } else {
+        b = new Bullet(player.x, player.y - 10);
+    }
+    GS.entities.bullets.push(b);
     playSound('shoot');
 }
 
@@ -51,10 +59,21 @@ function spawnEnemy() {
         color = `hsl(${hue}, 70%, 50%)`;
     }
 
-    GS.entities.enemies.push(new Enemy(
-        Math.random() * (canvas.width - 60) + 30,
-        -50, 60, 50, speed, text, color, isNenbutsu
-    ));
+    const pool = GS.pools.enemies;
+    let e;
+    if (pool.length > 0) {
+        e = pool.pop();
+        e.reset(
+            Math.random() * (canvas.width - 60) + 30,
+            -50, 60, 50, speed, text, color, isNenbutsu
+        );
+    } else {
+        e = new Enemy(
+            Math.random() * (canvas.width - 60) + 30,
+            -50, 60, 50, speed, text, color, isNenbutsu
+        );
+    }
+    GS.entities.enemies.push(e);
 }
 
 // 必殺技
@@ -64,13 +83,17 @@ function activateSpecialAttack() {
     const { play, entities } = GS;
 
     let defeatedCount = 0;
-    entities.enemies.forEach(enemy => {
+    const enemies = entities.enemies;
+    const pool = GS.pools.enemies;
+
+    for (const enemy of enemies) {
         createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
         if (!enemy.isNenbutsu) {
             defeatedCount++;
         }
-    });
-    entities.enemies.length = 0;
+        pool.push(enemy); // プールに戻す
+    }
+    enemies.length = 0;
 
     play.score += defeatedCount;
     play.combo += defeatedCount;
@@ -212,6 +235,7 @@ function update(timeScale) {
     for (let i = entities.bullets.length - 1; i >= 0; i--) {
         entities.bullets[i].update(timeScale);
         if (entities.bullets[i].isOffScreen()) {
+            GS.pools.bullets.push(entities.bullets[i]);
             entities.bullets.splice(i, 1);
         }
     }
@@ -229,6 +253,7 @@ function update(timeScale) {
         entities.enemies[i].update(timeScale);
 
         if (entities.enemies[i].isOffScreen()) {
+            GS.pools.enemies.push(entities.enemies[i]);
             if (entities.enemies[i].isNenbutsu) {
                 entities.enemies.splice(i, 1);
             } else {
@@ -260,7 +285,10 @@ function update(timeScale) {
             createParticles(entities.enemies[i].getCenterX(),
                 entities.enemies[i].getCenterY(),
                 entities.enemies[i].color);
+
+            GS.pools.enemies.push(entities.enemies[i]); // Pool return
             entities.enemies.splice(i, 1);
+
             const prevKudoku = play.kudoku;
             play.kudoku = Math.min(play.kudoku + 1, MAX_KUDOKU);
             if (prevKudoku < MAX_KUDOKU && play.kudoku === MAX_KUDOKU) {
@@ -278,7 +306,11 @@ function update(timeScale) {
                 createParticles(entities.enemies[i].getCenterX(),
                     entities.enemies[i].getCenterY(),
                     entities.enemies[i].color);
+
+                GS.pools.bullets.push(entities.bullets[j]); // Pool return
                 entities.bullets.splice(j, 1);
+
+                GS.pools.enemies.push(entities.enemies[i]); // Pool return (will be spliced below)
 
                 if (entities.enemies[i].isNenbutsu) {
                     entities.enemies.splice(i, 1);
@@ -303,6 +335,7 @@ function update(timeScale) {
     for (let i = entities.particles.length - 1; i >= 0; i--) {
         entities.particles[i].update(timeScale);
         if (entities.particles[i].isDead()) {
+            GS.pools.particles.push(entities.particles[i]);
             entities.particles.splice(i, 1);
         }
     }
