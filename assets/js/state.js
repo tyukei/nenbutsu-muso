@@ -63,6 +63,12 @@ const GS = {
         particles: [],
     },
 
+    pools: {
+        bullets: [],
+        enemies: [],
+        particles: [],
+    },
+
     // 時間管理
     time: {
         lastTime: 0,
