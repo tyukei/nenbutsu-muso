@@ -64,13 +64,14 @@ function activateSpecialAttack() {
     const { play, entities } = GS;
 
     let defeatedCount = 0;
-    entities.enemies.forEach(enemy => {
+    const enemies = entities.enemies;
+    for (const enemy of enemies) {
         createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
         if (!enemy.isNenbutsu) {
             defeatedCount++;
         }
-    });
-    entities.enemies.length = 0;
+    }
+    enemies.length = 0;
 
     play.score += defeatedCount;
     play.combo += defeatedCount;
