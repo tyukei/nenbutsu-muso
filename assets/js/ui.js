@@ -334,7 +334,7 @@ function shareToTwitter() {
     const targetDisplay = settings.isInfinite ? '∞' : level.targetScore;
     const isWin = play.score >= level.targetScore && !settings.isInfinite;
 
-    let shareText = `煩悩退散〜修行僧の葛藤〜\n`;
+    let shareText = `煩悩シューティング\n`;
     shareText += `【${levelName}】\n`;
 
     if (isWin) {
@@ -345,7 +345,7 @@ function shareToTwitter() {
 
     shareText += `撃破数: ${play.score}/${targetDisplay}\n`;
     shareText += `最大連鎖: ${play.maxCombo}\n`;
-    shareText += `\n#煩悩退散 #般若心経EDM\n`;
+    shareText += `\n#煩悩シューティング #般若心経EDM\n`;
     shareText += `\nhttps://tyukei.github.io/nenbutsu-muso/`;
 
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;

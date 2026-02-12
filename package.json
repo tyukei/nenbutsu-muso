@@ -1,7 +1,7 @@
 {
     "name": "nenbutsu-muso",
     "version": "1.1.10",
-    "description": "煩悩退散〜修行僧の葛藤〜",
+    "description": "煩悩シューティング",
     "scripts": {
         "test": "npm run test:html && npm run test:performance && npm run test:accessibility",
         "test:html": "echo 'Please install vnu.jar manually for HTML validation'",
