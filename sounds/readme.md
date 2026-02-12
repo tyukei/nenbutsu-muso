@@ -5,10 +5,10 @@
 ```
 あなたのフォルダ/
   ├─ nenbutsu-musou-with-sound.html  （ゲーム本体）
-  └─ sounds/                          （音声フォルダ）
+  └─ sounds/               （音声フォルダ）
       ├─ bgm.mp3           （ゲーム中のBGM）
       ├─ shoot.mp3         （読経発射音）
-      ├─ hit.mp3           （煩悩退散音）
+      ├─ hit.mp3           （煩悩音）
       ├─ damage.mp3        （ダメージ音）
       ├─ gameover.mp3      （ゲームオーバー音）
       └─ clear.mp3         （クリア音）
