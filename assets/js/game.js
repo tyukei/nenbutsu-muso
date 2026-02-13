@@ -204,14 +204,14 @@ function update(timeScale) {
 
     const { play, input, entities, level, effects } = GS;
 
-    // オートハイド判定
-    if (!virtualControls.classList.contains('hidden')) {
-        if (Date.now() - input.lastInputTime > HIDE_DELAY) {
-            if (!virtualControls.classList.contains('inactive')) {
-                virtualControls.classList.add('inactive');
-            }
-        }
-    }
+    // オートハイド判定 (無効化)
+    // if (!virtualControls.classList.contains('hidden')) {
+    //     if (Date.now() - input.lastInputTime > HIDE_DELAY) {
+    //         if (!virtualControls.classList.contains('inactive')) {
+    //             virtualControls.classList.add('inactive');
+    //         }
+    //     }
+    // }
 
     play.frame++;
 
