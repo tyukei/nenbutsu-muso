@@ -41,16 +41,9 @@ initSettings();
 
 // キャンバスリサイズ処理
 function resizeCanvas() {
-    if (document.body.classList.contains('mobile-mode')) {
-        canvas.width = 480;
-        // Reserve 50px for footer
-        const availableHeight = window.innerHeight - 50;
-        const aspect = availableHeight / window.innerWidth;
-        canvas.height = Math.floor(480 * aspect);
-    } else {
-        canvas.width = 480;
-        canvas.height = 640;
-    }
+    // 常に固定解像度 (レターボックス方式)
+    canvas.width = 480;
+    canvas.height = 640;
 
     if (typeof player !== 'undefined') {
         player.y = canvas.height - 80;
