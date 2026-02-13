@@ -469,7 +469,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            z-index: 20;
+            z-index: 30;
             opacity: 0;
             transition: opacity 0.25s ease;
             pointer-events: none;
@@ -503,7 +503,7 @@
         .mobile-mode .intro-monk,
         .mobile-mode #titlePersistentPray img {
             width: 90px;
-            bottom: 40px;
+            bottom: 10px;
         }
 
         .mobile-mode #titleMainContent {
