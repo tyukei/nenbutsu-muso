@@ -536,6 +536,7 @@ function applySettings(settings) {
     } else {
         document.body.classList.remove('mobile-mode');
     }
+    resizeCanvas();
 
     // Apply Sound
     if (settings.sound === 'off') {
