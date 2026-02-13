@@ -43,7 +43,9 @@ initSettings();
 function resizeCanvas() {
     if (document.body.classList.contains('mobile-mode')) {
         canvas.width = 480;
-        const aspect = window.innerHeight / window.innerWidth;
+        // Reserve 50px for footer
+        const availableHeight = window.innerHeight - 50;
+        const aspect = availableHeight / window.innerWidth;
         canvas.height = Math.floor(480 * aspect);
     } else {
         canvas.width = 480;
