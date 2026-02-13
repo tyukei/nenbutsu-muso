@@ -154,7 +154,8 @@ window.addEventListener('touchmove', (e) => {
         if (touch.identifier === GS.input.dragTouchId) {
             e.preventDefault();
 
-            const deltaX = touch.clientX - GS.input.lastTouchX;
+            const scaleFactor = canvas.width / canvas.clientWidth;
+            const deltaX = (touch.clientX - GS.input.lastTouchX) * scaleFactor;
             player.x += deltaX;
 
             if (player.x < 0) player.x = 0;

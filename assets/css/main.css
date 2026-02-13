@@ -55,6 +55,23 @@
             color: #d4af37;
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
             margin-bottom: 10px;
+            pointer-events: none;
+            /* Click-through */
+        }
+
+        .mobile-mode #info {
+            position: fixed;
+            bottom: 15px;
+            left: 15px;
+            text-align: left;
+            z-index: 100;
+            font-size: 14px;
+            margin: 0;
+            width: auto;
+            max-width: 60%;
+            /* Prevent overlap with shoot button */
+            text-shadow: 2px 2px 2px #000;
+            /* Enhance readability against game bg */
         }
 
         .screen {
@@ -960,13 +977,11 @@
         }
 
         .mobile-mode #leftBtn {
-            left: 20px;
-            bottom: 30px;
+            display: none !important;
         }
 
         .mobile-mode #rightBtn {
-            left: 110px;
-            bottom: 30px;
+            display: none !important;
         }
 
         .mobile-mode #shootBtn {

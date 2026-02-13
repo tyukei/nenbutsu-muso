@@ -6,6 +6,7 @@
 function startGame(level) {
     GS.reset(level);
     player.x = canvas.width / 2;
+    player.y = canvas.height - 80;
 
     titleScreen.classList.add('hidden');
     levelScreen.classList.add('hidden');

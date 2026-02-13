@@ -38,3 +38,22 @@ versionDisplay.textContent = `v${version}`;
 
 // 初期化実行
 initSettings();
+
+// キャンバスリサイズ処理
+function resizeCanvas() {
+    if (document.body.classList.contains('mobile-mode')) {
+        canvas.width = 480;
+        const aspect = window.innerHeight / window.innerWidth;
+        canvas.height = Math.floor(480 * aspect);
+    } else {
+        canvas.width = 480;
+        canvas.height = 640;
+    }
+
+    if (typeof player !== 'undefined') {
+        player.y = canvas.height - 80;
+    }
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas(); // 初回実行
