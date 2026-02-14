@@ -11,7 +11,8 @@ PCとスマートフォンの両方に対応しており、単純ながらも奥
 プレイヤーは修行僧となり、空から降ってくる「煩悩（文字）」を「読経（ショット）」で浄化します。
 精神力（HP）が尽きる前に、より多くの徳を積み、高スコアを目指しましょう。
 
-<img width="462" height="612" alt="image" src="https://github.com/user-attachments/assets/057bb714-77b9-488d-861d-e4895fd99544" />
+<img width="474" height="634" alt="image" src="https://github.com/user-attachments/assets/b1320fb2-38bb-4058-ad1b-38876f013492" />
+
 
 
 ## ✨ 特徴
