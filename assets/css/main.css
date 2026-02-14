@@ -296,8 +296,8 @@
         }
 
         .title-logo-img {
-            width: 70%;
-            max-width: 280px;
+            width: 80%;
+            max-width: 340px;
             height: auto;
             display: block;
             margin: 0 auto;
@@ -1445,6 +1445,23 @@
             background: #d4af37;
             color: #1a1a2e;
             font-weight: bold;
+        }
+
+        .title-info-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        #version-display {
+            font-size: 12px;
+            color: #888;
+            font-family: 'MS Gothic', 'Courier New', monospace;
+            /* Remove absolute positioning if it was there, or adjust margins */
+            margin-top: 5px;
+            margin-bottom: 15px;
         }
 
         .intro-message-main,
