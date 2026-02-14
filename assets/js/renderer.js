@@ -135,8 +135,8 @@ const Renderer = {
 
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        const fontSize = 28; // 視認性向上のため少し大きく
-        const strokeWidth = 4;
+        const fontSize = 24; // 視認性向上のため少し大きく
+        const strokeWidth = 2;
 
         ctx.font = `bold ${fontSize}px "Noto Sans JP", sans-serif`;
         const metrics = ctx.measureText(text);
@@ -161,7 +161,7 @@ const Renderer = {
         ctx.strokeText(text, cx, cy);
 
         // 2. メイン文字
-        ctx.fillStyle = color;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
         ctx.fillText(text, cx, cy);
 
         this.textCache[key] = canvas;
@@ -197,6 +197,22 @@ const Renderer = {
         for (let i = 0; i < len; i++) {
             const enemy = enemies[i];
 
+            // 1. 敵の本体（単純な図形）
+            ctx.fillStyle = enemy.color;
+            ctx.shadowBlur = 0; // 毎フレームのShadowBlurは重いのでオフ
+
+            ctx.beginPath();
+            if (enemy.isNenbutsu) {
+                // 円形
+                ctx.arc(enemy.getCenterX(), enemy.getCenterY(), enemy.width / 2, 0, Math.PI * 2);
+            } else {
+                // 逆三角形
+                ctx.moveTo(enemy.x, enemy.y);
+                ctx.lineTo(enemy.x + enemy.width, enemy.y);
+                ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
+                ctx.closePath();
+            }
+            ctx.fill();
 
             // 2. テキスト（キャッシュ済み画像を使用）
             const textImg = this.getTextImage(enemy.text, enemy.color);
