@@ -79,6 +79,7 @@ const GS = {
     // UI状態
     ui: {
         currentSlide: 0,
+        visitorCount: null,
     },
 
     /**
