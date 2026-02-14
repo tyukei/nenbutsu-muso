@@ -38,6 +38,7 @@ versionDisplay.textContent = `v${version}`;
 
 // 初期化実行
 initSettings();
+GS.loadTotalKudoku(); // 累計功徳をロード
 
 // キャンバスリサイズ処理
 function resizeCanvas() {

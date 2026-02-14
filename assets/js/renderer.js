@@ -95,6 +95,42 @@ const Renderer = {
     },
 
     /**
+     * テキストの画像キャッシュ
+     * key: `text_color`
+     * value: HTMLCanvasElement
+     */
+    textCache: {},
+
+    /**
+     * テキスト画像を生成または取得
+     */
+    getTextImage(text, color) {
+        const key = `${text}_${color}`;
+        if (this.textCache[key]) {
+            return this.textCache[key];
+        }
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const fontSize = 16;
+        // Shadow分を含めてサイズ確保
+        const size = fontSize * 2;
+        canvas.width = size * text.length + 20;
+        canvas.height = size + 20;
+
+        // 一度だけ描画
+        ctx.shadowBlur = 0; // テキスト自体は影なしで描画（軽量化）
+        ctx.fillStyle = '#fff';
+        ctx.font = `bold ${fontSize}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+        this.textCache[key] = canvas;
+        return canvas;
+    },
+
+    /**
      * 敵（煩悩）を描画
      */
     drawEnemies() {
@@ -104,37 +140,37 @@ const Renderer = {
 
         ctx.save();
 
-        // Pass 1: 敵の本体（影あり）
-        ctx.shadowBlur = 20;
+        // 共通設定
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
 
         for (let i = 0; i < len; i++) {
             const enemy = enemies[i];
+
+            // 1. 敵の本体（単純な図形）
             ctx.fillStyle = enemy.color;
-            ctx.shadowColor = enemy.color;
+            ctx.shadowBlur = 0; // 毎フレームのShadowBlurは重いのでオフ（または控えめに）
 
             ctx.beginPath();
             if (enemy.isNenbutsu) {
-                ctx.ellipse(enemy.getCenterX(), enemy.getCenterY(),
-                    enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
+                // 円形
+                ctx.arc(enemy.getCenterX(), enemy.getCenterY(), enemy.width / 2, 0, Math.PI * 2);
             } else {
+                // 逆三角形
                 ctx.moveTo(enemy.x, enemy.y);
                 ctx.lineTo(enemy.x + enemy.width, enemy.y);
                 ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
                 ctx.closePath();
             }
             ctx.fill();
-        }
 
-        // Pass 2: テキスト（影なし）
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
-        for (let i = 0; i < len; i++) {
-            const enemy = enemies[i];
-            ctx.fillText(enemy.text, enemy.getCenterX(), enemy.getCenterY());
+            // 2. テキスト（キャッシュ済み画像を使用）
+            const textImg = this.getTextImage(enemy.text, enemy.color);
+            // 画像の中心を描画位置に合わせる
+            ctx.drawImage(textImg,
+                enemy.getCenterX() - textImg.width / 2,
+                enemy.getCenterY() - textImg.height / 2
+            );
         }
 
         ctx.restore();
@@ -256,9 +292,29 @@ const Renderer = {
     },
 
     /**
-     * 六波羅蜜成就バナーを描画
+     * 六波羅蜜成就・煩悩即菩提バナーを描画
      */
     drawBanner(now) {
+        // 煩悩即菩提バナー
+        if (now < GS.effects.bonnouSokuBodaiBannerUntil) {
+            const remain = GS.effects.bonnouSokuBodaiBannerUntil - now;
+            const fadeIn = Math.min(1, (3000 - remain) / 300);
+            const fadeOut = Math.min(1, remain / 500);
+            const alpha = Math.min(fadeIn, fadeOut);
+
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowBlur = 25;
+            ctx.shadowColor = `rgba(255, 64, 129, ${alpha.toFixed(3)})`;
+            ctx.fillStyle = `rgba(255, 200, 220, ${alpha.toFixed(3)})`;
+            ctx.font = 'bold 48px "MS Mincho", serif';
+            ctx.fillText('煩悩即菩提', canvas.width / 2, canvas.height * 0.4);
+            ctx.restore();
+            return; // 優先表示
+        }
+
+        // 六波羅蜜バナー
         if (now < GS.effects.ropparamitsuBannerUntil) {
             const remain = GS.effects.ropparamitsuBannerUntil - now;
             const fadeIn = Math.min(1, (1100 - remain) / 180);
@@ -273,6 +329,29 @@ const Renderer = {
             ctx.fillStyle = `rgba(255, 236, 166, ${alpha.toFixed(3)})`;
             ctx.font = 'bold 44px sans-serif';
             ctx.fillText('六波羅蜜成就', canvas.width / 2, canvas.height * 0.34);
+            ctx.restore();
+        }
+    },
+
+    /**
+     * 「Zを押して」プロンプトを描画
+     */
+    drawPrompt(now) {
+        if (document.body.classList.contains('mobile-mode')) return;
+
+        // 必殺技発動可能な場合かつ、必殺技演出中でない場合
+        if (GS.play.kudoku >= MAX_KUDOKU && now >= GS.effects.bonnouSokuBodaiBannerUntil) {
+            const blink = (Math.sin(now * 0.01) + 1) / 2; // 0.0~1.0
+            const alpha = 0.5 + blink * 0.5; // 0.5~1.0
+
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = `rgba(255, 64, 129, ${alpha.toFixed(3)})`;
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+            ctx.font = 'bold 20px sans-serif';
+            ctx.fillText('Zを押して必殺技', canvas.width / 2, canvas.height - 100);
             ctx.restore();
         }
     },
@@ -295,5 +374,6 @@ const Renderer = {
         this.drawHeartBar(now);
         this.drawCombo();
         this.drawBanner(now);
+        this.drawPrompt(now);
     }
 };
