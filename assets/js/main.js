@@ -40,6 +40,8 @@ versionDisplay.textContent = `v${version}`;
 initSettings();
 GS.loadTotalKudoku(); // 累計功徳をロード
 Renderer.preCacheEnemies(); // 煩悩画像を事前キャッシュ
+fetchAndDisplayVisitorCount(); // 訪問者数を取得・表示
+
 
 // キャンバスリサイズ処理
 function resizeCanvas() {

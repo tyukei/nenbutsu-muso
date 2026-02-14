@@ -698,3 +698,42 @@ dots.forEach((dot, index) => {
         updateSlides();
     });
 });
+
+// 訪問者数取得 (CountAPI)
+function fetchAndDisplayVisitorCount() {
+    const visitorCountDisplay = document.getElementById('visitorCountDisplay');
+
+    // 既に取得済みの場合は表示のみ更新
+    if (GS.ui.visitorCount !== null) {
+        visitorCountDisplay.textContent = `あなたは ${GS.ui.visitorCount} 人目の修行者です`;
+        visitorCountDisplay.classList.remove('hidden');
+        return;
+    }
+
+    // APIサービスの切り替え (CountAPI -> CounterAPI)
+    // https://counterapi.dev/
+    // namespaceとkeyを指定してカウントアップ
+    const namespace = 'bonno-taisan-game';
+    const key = 'visits';
+    const url = `https://api.counterapi.dev/v1/${namespace}/${key}/up`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                // 初回アクセス等でキーがない場合などを考慮
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // counterapi.dev は { "count": 123 } を返す
+            GS.ui.visitorCount = data.count;
+            visitorCountDisplay.textContent = `あなたは ${GS.ui.visitorCount} 人目の修行者です`;
+            visitorCountDisplay.classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Visitor count fetch failed:', error);
+            // エラー時は非表示のままにするが、デバッグ用にログを出す
+            // 必要であればフォールバック表示を行う
+        });
+}

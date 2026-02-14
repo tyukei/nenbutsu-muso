@@ -70,6 +70,19 @@
             /* Click-through */
         }
 
+        .visitor-count {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #d4af37;
+            font-family: 'MS Gothic', 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            display: inline-block;
+        }
+
         .mobile-mode #info {
             position: fixed;
             bottom: 0;
