@@ -43,6 +43,11 @@ function shootBullet() {
 
 // 敵生成
 function spawnEnemy() {
+    // 同時に出現する敵の数を制限（「波」のサイズを制限）
+    // 画面上部(y < 50)にいる敵が2体以上なら、生成をスキップ
+    const freshEnemies = GS.entities.enemies.filter(e => e.y < 50).length;
+    if (freshEnemies >= 2) return;
+
     const settings = levelSettings[GS.level.current];
     const nenbutsuRate = settings.nenbutsuRate ?? 0.3;
     const isNenbutsu = Math.random() < nenbutsuRate;
@@ -313,7 +318,16 @@ function update(timeScale) {
 
         // 弾との衝突判定
         for (let j = entities.bullets.length - 1; j >= 0; j--) {
-            if (checkCollision(entities.bullets[j], entities.enemies[i])) {
+            // 当たり判定を大きくする（弾を当てやすくする）
+            const hitBuffer = 20;
+            const enemyRect = {
+                x: entities.enemies[i].x - hitBuffer / 2,
+                y: entities.enemies[i].y - hitBuffer / 2,
+                width: entities.enemies[i].width + hitBuffer,
+                height: entities.enemies[i].height + hitBuffer
+            };
+
+            if (checkCollision(entities.bullets[j], enemyRect)) {
                 createParticles(entities.enemies[i].getCenterX(),
                     entities.enemies[i].getCenterY(),
                     entities.enemies[i].color);
