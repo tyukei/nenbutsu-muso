@@ -3,18 +3,41 @@
 // ==========================================
 
 const Renderer = {
+    stars: [],
+
+    /**
+     * 星の初期化
+     */
+    initStars() {
+        this.stars = [];
+        for (let i = 0; i < 100; i++) {
+            this.stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                alpha: Math.random()
+            });
+        }
+    },
+
     /**
      * 背景の星を描画
      */
     drawStars() {
-        if (GS.play.frame % 5 === 0) {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-            for (let i = 0; i < 2; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                ctx.fillRect(x, y, 2, 2);
-            }
+        if (this.stars.length === 0) {
+            this.initStars();
         }
+
+        ctx.save();
+        for (const star of this.stars) {
+            // 星の瞬き
+            if (Math.random() < 0.05) {
+                star.alpha = Math.random();
+            }
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+            ctx.fillRect(star.x, star.y, star.size, star.size);
+        }
+        ctx.restore();
     },
 
     /**
@@ -373,8 +396,8 @@ const Renderer = {
     draw(timestamp) {
         const now = timestamp || performance.now();
 
-        // 背景クリア
-        ctx.fillStyle = 'rgba(15, 12, 41, 0.2)';
+        // 背景クリア（トレイルを消すために不透明度1で塗りつぶし）
+        ctx.fillStyle = 'rgb(15, 12, 41)'; // rgba(..., 1)と同じ
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         this.drawStars();
