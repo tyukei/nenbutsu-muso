@@ -39,6 +39,7 @@ versionDisplay.textContent = `v${version}`;
 // 初期化実行
 initSettings();
 GS.loadTotalKudoku(); // 累計功徳をロード
+Renderer.preCacheEnemies(); // 煩悩画像を事前キャッシュ
 
 // キャンバスリサイズ処理
 function resizeCanvas() {
