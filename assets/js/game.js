@@ -243,10 +243,14 @@ function update(timeScale) {
 
     // 敵の生成
     const settings = levelSettings[level.current];
-    const currentSpawnRate = Math.max(level.spawnRate - Math.floor(play.score / 10), settings.isInfinite ? 10 : 15);
+    const maxEnemies = settings.maxEnemies || 15;
 
-    if (play.frame % Math.floor(currentSpawnRate) === 0 && (settings.isInfinite || play.score < level.targetScore)) {
-        spawnEnemy();
+    if (entities.enemies.length < maxEnemies) {
+        const currentSpawnRate = Math.max(level.spawnRate - Math.floor(play.score / 10), settings.isInfinite ? 10 : 15);
+
+        if (play.frame % Math.floor(currentSpawnRate) === 0 && (settings.isInfinite || play.score < level.targetScore)) {
+            spawnEnemy();
+        }
     }
 
     // 敵の更新
@@ -276,11 +280,14 @@ function update(timeScale) {
         }
 
         // プレイヤーとの衝突判定（六波羅蜜に触れたら功徳回復）
+        // 当たり判定を少し小さくして「避けやすく」する（ストレス軽減）
+        const hitMarginX = 5;
+        const hitMarginY = 5;
         const playerRect = {
-            x: player.x - player.width / 2,
-            y: player.y - 30,
-            width: player.width,
-            height: 50
+            x: player.x - player.width / 2 + hitMarginX,
+            y: player.y - 30 + hitMarginY,
+            width: player.width - (hitMarginX * 2),
+            height: 50 - (hitMarginY * 2)
         };
         if (entities.enemies[i].isNenbutsu && checkCollision(entities.enemies[i], playerRect)) {
             createParticles(entities.enemies[i].getCenterX(),

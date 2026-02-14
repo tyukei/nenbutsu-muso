@@ -86,7 +86,8 @@ const levelSettings = {
         speedIncrease: 0.04,
         nenbutsuRate: 0.5,
         isInfinite: false,
-        initialSpirit: 3
+        initialSpirit: 3,
+        maxEnemies: 8
     },
     normal: {
         name: '仏性Lev2',
@@ -95,7 +96,8 @@ const levelSettings = {
         spawnRate: 25,
         speedIncrease: 0.06,
         isInfinite: false,
-        initialSpirit: 4
+        initialSpirit: 4,
+        maxEnemies: 10
     },
     hard: {
         name: '仏性Lev3',
@@ -104,7 +106,8 @@ const levelSettings = {
         spawnRate: 20,
         speedIncrease: 0.08,
         isInfinite: false,
-        initialSpirit: 5
+        initialSpirit: 5,
+        maxEnemies: 15
     },
     demon: {
         name: 'Lev悪魔',
@@ -114,7 +117,8 @@ const levelSettings = {
         speedIncrease: 0.12,
         nenbutsuRate: 0.3,
         isInfinite: false,
-        initialSpirit: 5
+        initialSpirit: 5,
+        maxEnemies: 25
     }
 };
 
