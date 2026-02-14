@@ -256,9 +256,29 @@ const Renderer = {
     },
 
     /**
-     * 六波羅蜜成就バナーを描画
+     * 六波羅蜜成就・煩悩即菩提バナーを描画
      */
     drawBanner(now) {
+        // 煩悩即菩提バナー
+        if (now < GS.effects.bonnouSokuBodaiBannerUntil) {
+            const remain = GS.effects.bonnouSokuBodaiBannerUntil - now;
+            const fadeIn = Math.min(1, (3000 - remain) / 300);
+            const fadeOut = Math.min(1, remain / 500);
+            const alpha = Math.min(fadeIn, fadeOut);
+
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowBlur = 25;
+            ctx.shadowColor = `rgba(255, 64, 129, ${alpha.toFixed(3)})`;
+            ctx.fillStyle = `rgba(255, 200, 220, ${alpha.toFixed(3)})`;
+            ctx.font = 'bold 48px "MS Mincho", serif';
+            ctx.fillText('煩悩即菩提', canvas.width / 2, canvas.height * 0.4);
+            ctx.restore();
+            return; // 優先表示
+        }
+
+        // 六波羅蜜バナー
         if (now < GS.effects.ropparamitsuBannerUntil) {
             const remain = GS.effects.ropparamitsuBannerUntil - now;
             const fadeIn = Math.min(1, (1100 - remain) / 180);
@@ -273,6 +293,29 @@ const Renderer = {
             ctx.fillStyle = `rgba(255, 236, 166, ${alpha.toFixed(3)})`;
             ctx.font = 'bold 44px sans-serif';
             ctx.fillText('六波羅蜜成就', canvas.width / 2, canvas.height * 0.34);
+            ctx.restore();
+        }
+    },
+
+    /**
+     * 「Zを押して」プロンプトを描画
+     */
+    drawPrompt(now) {
+        if (document.body.classList.contains('mobile-mode')) return;
+
+        // 必殺技発動可能な場合かつ、必殺技演出中でない場合
+        if (GS.play.kudoku >= MAX_KUDOKU && now >= GS.effects.bonnouSokuBodaiBannerUntil) {
+            const blink = (Math.sin(now * 0.01) + 1) / 2; // 0.0~1.0
+            const alpha = 0.5 + blink * 0.5; // 0.5~1.0
+
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = `rgba(255, 64, 129, ${alpha.toFixed(3)})`;
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+            ctx.font = 'bold 20px sans-serif';
+            ctx.fillText('Zを押して必殺技', canvas.width / 2, canvas.height - 100);
             ctx.restore();
         }
     },
@@ -295,5 +338,6 @@ const Renderer = {
         this.drawHeartBar(now);
         this.drawCombo();
         this.drawBanner(now);
+        this.drawPrompt(now);
     }
 };

@@ -46,6 +46,7 @@ const GS = {
         heartPurifyUntil: 0,
         heartStains: [],
         ropparamitsuBannerUntil: 0,
+        bonnouSokuBodaiBannerUntil: 0,
     },
 
     // タイトルイントロ状態
@@ -111,6 +112,7 @@ const GS = {
         this.effects.heartPurifyUntil = 0;
         this.effects.heartStains = [];
         this.effects.ropparamitsuBannerUntil = 0;
+        this.effects.bonnouSokuBodaiBannerUntil = 0;
 
         // エンティティ
         this.entities.bullets.length = 0;

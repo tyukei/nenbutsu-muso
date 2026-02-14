@@ -83,6 +83,9 @@ function activateSpecialAttack() {
 
     const { play, entities } = GS;
 
+    // バナー表示トリガー (3秒)
+    GS.effects.bonnouSokuBodaiBannerUntil = performance.now() + 3000;
+
     let defeatedCount = 0;
     const enemies = entities.enemies;
     const pool = GS.pools.enemies;
