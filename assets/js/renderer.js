@@ -112,22 +112,49 @@ const Renderer = {
 
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        const fontSize = 16;
-        // Shadow分を含めてサイズ確保
-        const size = fontSize * 2;
-        canvas.width = size * text.length + 20;
-        canvas.height = size + 20;
+        const fontSize = 28; // 視認性向上のため少し大きく
+        const strokeWidth = 4;
 
-        // 一度だけ描画
-        ctx.shadowBlur = 0; // テキスト自体は影なしで描画（軽量化）
-        ctx.fillStyle = '#fff';
-        ctx.font = `bold ${fontSize}px sans-serif`;
+        ctx.font = `bold ${fontSize}px "Noto Sans JP", sans-serif`;
+        const metrics = ctx.measureText(text);
+
+        // 余白を含めたサイズ
+        const padding = 10;
+        canvas.width = Math.ceil(metrics.width + strokeWidth * 2 + padding);
+        canvas.height = Math.ceil(fontSize + strokeWidth * 2 + padding);
+
+        // 描画設定
+        ctx.font = `bold ${fontSize}px "Noto Sans JP", sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+
+        // 1. 縁取り (視認性向上のため暗い色で)
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.lineWidth = strokeWidth;
+        ctx.lineJoin = 'round';
+        ctx.strokeText(text, cx, cy);
+
+        // 2. メイン文字
+        ctx.fillStyle = color;
+        ctx.fillText(text, cx, cy);
 
         this.textCache[key] = canvas;
         return canvas;
+    },
+
+    /**
+     * 煩悩リストを事前にキャッシュ（初回スポーン時のプチフリーズ防止）
+     */
+    preCacheEnemies() {
+        const colors = ['#FF4081', '#FFD700', '#00E676', '#2979FF', '#FF9100'];
+        // 最も一般的な組み合わせをいくつか先に作る
+        bonnouList.slice(0, 10).forEach(text => {
+            colors.forEach(color => this.getTextImage(text, color));
+        });
+        ROPPARAMITSU_LIST.forEach(text => this.getTextImage(text, '#FFD700'));
     },
 
     /**
@@ -147,22 +174,6 @@ const Renderer = {
         for (let i = 0; i < len; i++) {
             const enemy = enemies[i];
 
-            // 1. 敵の本体（単純な図形）
-            ctx.fillStyle = enemy.color;
-            ctx.shadowBlur = 0; // 毎フレームのShadowBlurは重いのでオフ（または控えめに）
-
-            ctx.beginPath();
-            if (enemy.isNenbutsu) {
-                // 円形
-                ctx.arc(enemy.getCenterX(), enemy.getCenterY(), enemy.width / 2, 0, Math.PI * 2);
-            } else {
-                // 逆三角形
-                ctx.moveTo(enemy.x, enemy.y);
-                ctx.lineTo(enemy.x + enemy.width, enemy.y);
-                ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
-                ctx.closePath();
-            }
-            ctx.fill();
 
             // 2. テキスト（キャッシュ済み画像を使用）
             const textImg = this.getTextImage(enemy.text, enemy.color);
