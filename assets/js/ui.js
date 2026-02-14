@@ -187,13 +187,14 @@ function renderIntroMainText(typedText) {
 }
 
 function alignIntroMessageToInstruction() {
-    // 中央寄せ（CSSで制御するため、座標計算は不要）
-    titleIntroMessage.style.left = '0';
-    titleIntroMessage.style.right = '0';
-    titleIntroMessage.style.margin = '0 auto';
-    titleIntroMessage.style.top = '40%';
-    titleIntroMessage.style.width = '100%';
-    titleIntroMessage.style.maxWidth = '100%';
+    const instruction = titleMainContent.querySelector('.instruction');
+    if (!instruction) return;
+    const screenRect = titleScreen.getBoundingClientRect();
+    const instructionRect = instruction.getBoundingClientRect();
+    titleIntroMessage.style.left = `${instructionRect.left - screenRect.left}px`;
+    titleIntroMessage.style.top = `${instructionRect.top - screenRect.top}px`;
+    titleIntroMessage.style.width = `${instructionRect.width}px`;
+    titleIntroMessage.style.maxWidth = `${instructionRect.width}px`;
 }
 
 function finishTitleIntro() {
