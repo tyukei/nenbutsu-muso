@@ -12,6 +12,7 @@ const GS = {
         spirit: 3,
         maxSpirit: 3,
         kudoku: 0,
+        totalKudoku: 0, // 累計功徳
         combo: 0,
         maxCombo: 0,
         frame: 0,
@@ -123,5 +124,21 @@ const GS = {
         this.input.touchLeft = false;
         this.input.touchRight = false;
         this.input.touchSpecial = false;
+        this.input.touchSpecial = false;
+    },
+
+    /**
+     * 累計功徳をロード
+     */
+    loadTotalKudoku() {
+        const saved = localStorage.getItem('nenbunTotalKudoku');
+        this.play.totalKudoku = saved ? parseInt(saved, 10) : 0;
+    },
+
+    /**
+     * 累計功徳をセーブ
+     */
+    saveTotalKudoku() {
+        localStorage.setItem('nenbunTotalKudoku', this.play.totalKudoku);
     }
 };

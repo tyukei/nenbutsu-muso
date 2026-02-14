@@ -170,8 +170,8 @@ function gameOver(win) {
                             <div class="stat-value">${play.maxCombo}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">獲得功徳</div>
-                            <div class="stat-value">${play.kudoku}</div>
+                            <div class="stat-label">累計功徳</div>
+                            <div class="stat-value">${play.totalKudoku}</div>
                         </div>
                     </div>`;
     } else {
@@ -196,8 +196,8 @@ function gameOver(win) {
                             <div class="stat-value">${play.maxCombo}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">獲得功徳</div>
-                            <div class="stat-value">${play.kudoku}</div>
+                            <div class="stat-label">累計功徳</div>
+                            <div class="stat-value">${play.totalKudoku}</div>
                         </div>
                     </div>`;
     }
@@ -307,6 +307,11 @@ function update(timeScale) {
 
             const prevKudoku = play.kudoku;
             play.kudoku = Math.min(play.kudoku + 1, MAX_KUDOKU);
+
+            // 累計功徳を加算して保存
+            play.totalKudoku++;
+            GS.saveTotalKudoku();
+
             if (prevKudoku < MAX_KUDOKU && play.kudoku === MAX_KUDOKU) {
                 triggerRoppaBanner();
             }
