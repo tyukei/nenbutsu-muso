@@ -43,6 +43,11 @@ function shootBullet() {
 
 // 敵生成
 function spawnEnemy() {
+    // 同時に出現する敵の数を制限（「波」のサイズを制限）
+    // 画面上部(y < 50)にいる敵が2体以上なら、生成をスキップ
+    const freshEnemies = GS.entities.enemies.filter(e => e.y < 50).length;
+    if (freshEnemies >= 2) return;
+
     const settings = levelSettings[GS.level.current];
     const nenbutsuRate = settings.nenbutsuRate ?? 0.3;
     const isNenbutsu = Math.random() < nenbutsuRate;
@@ -82,6 +87,9 @@ function activateSpecialAttack() {
     if (GS.play.kudoku < MAX_KUDOKU || GS.screen !== 'playing') return;
 
     const { play, entities } = GS;
+
+    // バナー表示トリガー (3秒)
+    GS.effects.bonnouSokuBodaiBannerUntil = performance.now() + 3000;
 
     let defeatedCount = 0;
     const enemies = entities.enemies;
@@ -162,8 +170,8 @@ function gameOver(win) {
                             <div class="stat-value">${play.maxCombo}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">獲得功徳</div>
-                            <div class="stat-value">${play.kudoku}</div>
+                            <div class="stat-label">累計功徳</div>
+                            <div class="stat-value">${play.totalKudoku}</div>
                         </div>
                     </div>`;
     } else {
@@ -188,8 +196,8 @@ function gameOver(win) {
                             <div class="stat-value">${play.maxCombo}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">獲得功徳</div>
-                            <div class="stat-value">${play.kudoku}</div>
+                            <div class="stat-label">累計功徳</div>
+                            <div class="stat-value">${play.totalKudoku}</div>
                         </div>
                     </div>`;
     }
@@ -243,10 +251,14 @@ function update(timeScale) {
 
     // 敵の生成
     const settings = levelSettings[level.current];
-    const currentSpawnRate = Math.max(level.spawnRate - Math.floor(play.score / 10), settings.isInfinite ? 10 : 15);
+    const maxEnemies = settings.maxEnemies || 15;
 
-    if (play.frame % Math.floor(currentSpawnRate) === 0 && (settings.isInfinite || play.score < level.targetScore)) {
-        spawnEnemy();
+    if (entities.enemies.length < maxEnemies) {
+        const currentSpawnRate = Math.max(level.spawnRate - Math.floor(play.score / 10), settings.isInfinite ? 10 : 15);
+
+        if (play.frame % Math.floor(currentSpawnRate) === 0 && (settings.isInfinite || play.score < level.targetScore)) {
+            spawnEnemy();
+        }
     }
 
     // 敵の更新
@@ -276,11 +288,14 @@ function update(timeScale) {
         }
 
         // プレイヤーとの衝突判定（六波羅蜜に触れたら功徳回復）
+        // 当たり判定を少し小さくして「避けやすく」する（ストレス軽減）
+        const hitMarginX = 5;
+        const hitMarginY = 5;
         const playerRect = {
-            x: player.x - player.width / 2,
-            y: player.y - 30,
-            width: player.width,
-            height: 50
+            x: player.x - player.width / 2 + hitMarginX,
+            y: player.y - 30 + hitMarginY,
+            width: player.width - (hitMarginX * 2),
+            height: 50 - (hitMarginY * 2)
         };
         if (entities.enemies[i].isNenbutsu && checkCollision(entities.enemies[i], playerRect)) {
             createParticles(entities.enemies[i].getCenterX(),
@@ -292,6 +307,11 @@ function update(timeScale) {
 
             const prevKudoku = play.kudoku;
             play.kudoku = Math.min(play.kudoku + 1, MAX_KUDOKU);
+
+            // 累計功徳を加算して保存
+            play.totalKudoku++;
+            GS.saveTotalKudoku();
+
             if (prevKudoku < MAX_KUDOKU && play.kudoku === MAX_KUDOKU) {
                 triggerRoppaBanner();
             }
@@ -303,7 +323,16 @@ function update(timeScale) {
 
         // 弾との衝突判定
         for (let j = entities.bullets.length - 1; j >= 0; j--) {
-            if (checkCollision(entities.bullets[j], entities.enemies[i])) {
+            // 当たり判定を大きくする（弾を当てやすくする）
+            const hitBuffer = 20;
+            const enemyRect = {
+                x: entities.enemies[i].x - hitBuffer / 2,
+                y: entities.enemies[i].y - hitBuffer / 2,
+                width: entities.enemies[i].width + hitBuffer,
+                height: entities.enemies[i].height + hitBuffer
+            };
+
+            if (checkCollision(entities.bullets[j], enemyRect)) {
                 createParticles(entities.enemies[i].getCenterX(),
                     entities.enemies[i].getCenterY(),
                     entities.enemies[i].color);

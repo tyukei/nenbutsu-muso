@@ -304,6 +304,43 @@
             margin-bottom: 30px;
         }
 
+        .pc-controls-guide {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #d4af37;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .mobile-mode .pc-controls-guide {
+            display: none;
+        }
+
+        .blink-emphasis {
+            color: #ff4081;
+            animation: blinkText 1.2s infinite;
+        }
+
+        @keyframes blinkText {
+
+            0%,
+            100% {
+                opacity: 1;
+                text-shadow: 0 0 5px rgba(255, 64, 129, 0.5);
+            }
+
+            50% {
+                opacity: 0.4;
+                text-shadow: none;
+            }
+        }
+
         /* Title Intro */
         #titleScreen {
             overflow: hidden;
