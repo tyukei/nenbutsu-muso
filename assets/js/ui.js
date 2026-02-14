@@ -57,7 +57,7 @@ function triggerRoppaBanner() {
     GS.effects.ropparamitsuBannerUntil = performance.now() + 1100;
 }
 
-// ランキングデータ
+// 修行の軌跡データ
 function loadRankings() {
     const saved = localStorage.getItem('nenbunRankings');
     return saved ? JSON.parse(saved) : [];
@@ -345,8 +345,8 @@ function shareToTwitter() {
 
     shareText += `撃破数: ${play.score}/${targetDisplay}\n`;
     shareText += `最大連鎖: ${play.maxCombo}\n`;
-    shareText += `\n#煩悩シューティング #般若心経EDM\n`;
-    shareText += `\nhttps://tyukei.github.io/nenbutsu-muso/`;
+    shareText += `\n#煩悩シューティング #般若心経EDM\n#神社仏閣オンライン\n`;
+    shareText += `\nhttps://bonno-taisan.jinjabukkaku.online/`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
     window.open(twitterUrl, '_blank', 'width=550,height=420');
 }
