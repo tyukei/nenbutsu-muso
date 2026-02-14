@@ -1063,21 +1063,7 @@
 
 
 
-        /* Version Display */
-        #version-display {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 10px;
-            color: rgba(212, 175, 55, 0.6);
-            font-family: 'Courier New', monospace;
-        }
-
-        .mobile-mode #version-display {
-            font-size: 8px;
-            bottom: 5px;
-            right: 5px;
-        }
+        /* Version Display moved to title-info-row */
 
         .mode-toggle {
             margin-top: 15px;
@@ -1457,9 +1443,8 @@
 
         #version-display {
             font-size: 12px;
-            color: #888;
+            color: #d4af37;
             font-family: 'MS Gothic', 'Courier New', monospace;
-            /* Remove absolute positioning if it was there, or adjust margins */
             margin-top: 5px;
             margin-bottom: 15px;
         }
