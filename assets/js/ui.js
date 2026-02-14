@@ -57,7 +57,7 @@ function triggerRoppaBanner() {
     GS.effects.ropparamitsuBannerUntil = performance.now() + 1100;
 }
 
-// ランキングデータ
+// 修行の軌跡データ
 function loadRankings() {
     const saved = localStorage.getItem('nenbunRankings');
     return saved ? JSON.parse(saved) : [];

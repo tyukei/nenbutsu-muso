@@ -51,7 +51,7 @@
 *   **Renderer**: `renderer.js` が Canvas 描画を一手に引き受ける。
 
 ### 5. データ永続化
-*   **ランキング**: `localStorage` (`nenbunRankings`)。
+*   **修行の軌跡**: `localStorage` (`nenbunRankings`)。
 *   **設定**: `localStorage` (`nenbunSettings`)。
 *   **レベル解放**: `localStorage` (`nenbunClearedLevels`)。
 
