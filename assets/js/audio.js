@@ -10,7 +10,11 @@ const sounds = {
     hit_bounas: new Audio('sounds/hit_bounas.mp3'),
     damage: new Audio('sounds/damage.mp3'),
     gameover: new Audio('sounds/gameover.mp3'),
-    clear: new Audio('sounds/clear.mp3')
+    clear: new Audio('sounds/clear.mp3'),
+    level1: new Audio('sounds/mika/level1.mp4'),
+    level2: new Audio('sounds/mika/level2.mp4'),
+    level3: new Audio('sounds/mika/level3.mp4'),
+    level4: new Audio('sounds/mika/level4.mp4')
 };
 
 // BGMの設定

@@ -15,20 +15,20 @@ shareBtn.addEventListener('click', shareToTwitter);
 
 // レベル選択ボタン
 document.getElementById('levelEasy').addEventListener('click', () => {
-    playSound('hit');
-    startGame('easy');
+    playSound('level1');
+    startLevelTransition('easy');
 });
 document.getElementById('levelNormal').addEventListener('click', () => {
-    playSound('hit');
-    startGame('normal');
+    playSound('level2');
+    startLevelTransition('normal');
 });
 document.getElementById('levelHard').addEventListener('click', () => {
-    playSound('hit');
-    startGame('hard');
+    playSound('level3');
+    startLevelTransition('hard');
 });
 document.getElementById('levelDemon').addEventListener('click', () => {
-    playSound('hit');
-    startGame('demon');
+    playSound('level4');
+    startLevelTransition('demon');
 });
 document.getElementById('backFromLevelBtn').addEventListener('click', showTitle);
 
