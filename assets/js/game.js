@@ -379,7 +379,12 @@ function gameLoop(timestamp) {
     GS.time.lastTime = timestamp;
 
     let timeScale = deltaTime / STEP;
-    if (timeScale > 4) timeScale = 4;
+    // 60FPS付近の微妙なブレを補正してカクつき(微小な座標ズレ)を防ぐ
+    if (timeScale > 0.85 && timeScale < 1.15) {
+        timeScale = 1.0;
+    } else if (timeScale > 4) {
+        timeScale = 4;
+    }
 
     update(timeScale);
     Renderer.draw(timestamp);
