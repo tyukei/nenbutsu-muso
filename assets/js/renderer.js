@@ -119,7 +119,7 @@ const Renderer = {
 
     /**
      * テキストの画像キャッシュ
-     * key: `text_color`
+     * key: `text`
      * value: HTMLCanvasElement
      */
     textCache: {},
@@ -127,8 +127,8 @@ const Renderer = {
     /**
      * テキスト画像を生成または取得
      */
-    getTextImage(text, color) {
-        const key = `${text}_${color}`;
+    getTextImage(text) {
+        const key = text;
         if (this.textCache[key]) {
             return this.textCache[key];
         }
@@ -172,12 +172,9 @@ const Renderer = {
      * 煩悩リストを事前にキャッシュ（初回スポーン時のプチフリーズ防止）
      */
     preCacheEnemies() {
-        const colors = ['#FF4081', '#FFD700', '#00E676', '#2979FF', '#FF9100'];
-        // 最も一般的な組み合わせをいくつか先に作る
-        bonnouList.slice(0, 10).forEach(text => {
-            colors.forEach(color => this.getTextImage(text, color));
-        });
-        ROPPARAMITSU_LIST.forEach(text => this.getTextImage(text, '#FFD700'));
+        // 全てのテキストを一度だけ事前生成してキャッシュさせる
+        bonnouList.forEach(text => this.getTextImage(text));
+        ROPPARAMITSU_LIST.forEach(text => this.getTextImage(text));
     },
 
     /**
@@ -215,7 +212,7 @@ const Renderer = {
             ctx.fill();
 
             // 2. テキスト（キャッシュ済み画像を使用）
-            const textImg = this.getTextImage(enemy.text, enemy.color);
+            const textImg = this.getTextImage(enemy.text);
             // 画像の中心を描画位置に合わせる
             ctx.drawImage(textImg,
                 enemy.getCenterX() - textImg.width / 2,
