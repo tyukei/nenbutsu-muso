@@ -35,7 +35,7 @@ const Renderer = {
                 star.alpha = Math.random();
             }
             ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-            ctx.fillRect(star.x, star.y, star.size, star.size);
+            ctx.fillRect(Math.round(star.x), Math.round(star.y), Math.round(star.size), Math.round(star.size));
         }
         ctx.restore();
     },
@@ -45,7 +45,7 @@ const Renderer = {
      */
     drawPlayer() {
         ctx.save();
-        ctx.translate(player.x, player.y);
+        ctx.translate(Math.round(player.x), Math.round(player.y));
 
         if (monkImage.complete && monkImage.naturalWidth !== 0) {
             const imgSize = 108;
@@ -89,7 +89,7 @@ const Renderer = {
             for (let i = 0; i < len; i++) {
                 const bullet = bullets[i];
                 // 中心に描画
-                ctx.drawImage(bulletImage, bullet.x - size / 2, bullet.y - size / 2, size, size);
+                ctx.drawImage(bulletImage, Math.round(bullet.x - size / 2), Math.round(bullet.y - size / 2), size, size);
             }
         } else {
             // フォールバック描画
@@ -100,7 +100,7 @@ const Renderer = {
             for (let i = 0; i < len; i++) {
                 const bullet = bullets[i];
                 ctx.beginPath();
-                ctx.ellipse(bullet.x, bullet.y, bullet.width / 2, bullet.height / 2, 0, 0, Math.PI * 2);
+                ctx.ellipse(Math.round(bullet.x), Math.round(bullet.y), bullet.width / 2, bullet.height / 2, 0, 0, Math.PI * 2);
                 ctx.fill();
             }
 
@@ -110,7 +110,7 @@ const Renderer = {
             ctx.font = 'bold 14px sans-serif';
             ctx.textAlign = 'center';
             for (let i = 0; i < len; i++) {
-                ctx.fillText('卍', bullets[i].x, bullets[i].y + 5);
+                ctx.fillText('卍', Math.round(bullets[i].x), Math.round(bullets[i].y) + 5);
             }
         }
 
@@ -193,6 +193,12 @@ const Renderer = {
 
         for (let i = 0; i < len; i++) {
             const enemy = enemies[i];
+            const cx = Math.round(enemy.getCenterX());
+            const cy = Math.round(enemy.getCenterY());
+            const ex = Math.round(enemy.x);
+            const ey = Math.round(enemy.y);
+            const ew = Math.round(enemy.width);
+            const eh = Math.round(enemy.height);
 
             // 1. 敵の本体（単純な図形）
             ctx.fillStyle = enemy.color;
@@ -201,12 +207,12 @@ const Renderer = {
             ctx.beginPath();
             if (enemy.isNenbutsu) {
                 // 円形
-                ctx.arc(enemy.getCenterX(), enemy.getCenterY(), enemy.width / 2, 0, Math.PI * 2);
+                ctx.arc(cx, cy, ew / 2, 0, Math.PI * 2);
             } else {
                 // 逆三角形
-                ctx.moveTo(enemy.x, enemy.y);
-                ctx.lineTo(enemy.x + enemy.width, enemy.y);
-                ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
+                ctx.moveTo(ex, ey);
+                ctx.lineTo(ex + ew, ey);
+                ctx.lineTo(ex + ew / 2, ey + eh);
                 ctx.closePath();
             }
             ctx.fill();
@@ -215,8 +221,8 @@ const Renderer = {
             const textImg = this.getTextImage(enemy.text);
             // 画像の中心を描画位置に合わせる
             ctx.drawImage(textImg,
-                enemy.getCenterX() - textImg.width / 2,
-                enemy.getCenterY() - textImg.height / 2
+                Math.round(cx - textImg.width / 2),
+                Math.round(cy - textImg.height / 2)
             );
         }
 
@@ -236,7 +242,7 @@ const Renderer = {
             ctx.fillStyle = particle.color;
             ctx.globalAlpha = particle.life / 40;
             ctx.beginPath();
-            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.arc(Math.round(particle.x), Math.round(particle.y), Math.round(particle.size), 0, Math.PI * 2);
             ctx.fill();
         }
         ctx.globalAlpha = 1;
