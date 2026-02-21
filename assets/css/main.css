@@ -14,8 +14,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: 'Shippori Mincho', 'Noto Serif JP', 'Yu Mincho', 'MS Mincho', serif;
-            color: #ececec;
+            font-family: 'MS Gothic', 'Courier New', monospace;
+            color: #fff;
             overflow: hidden;
             touch-action: none;
         }
@@ -30,9 +30,9 @@
         }
 
         canvas {
-            border: 1px solid #bfa15f;
+            border: 3px solid #d4af37;
             background: linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            box-shadow: 0 0 10px rgba(191, 161, 95, 0.2);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
             display: block;
             margin: 0 auto;
             width: 100%;
@@ -136,13 +136,12 @@
         }
 
         h1 {
-            color: #bfa15f;
+            color: #d4af37;
             font-size: 40px;
-            font-weight: 500;
             margin-top: 0;
             margin-bottom: 5px;
-            text-shadow: 0 0 8px rgba(191, 161, 95, 0.4);
-            letter-spacing: 0.1em;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 1);
+            animation: glow 2s ease-in-out infinite;
         }
 
         #levelScreen h1 {
@@ -166,13 +165,11 @@
         }
 
         h2 {
-            color: #bfa15f;
+            color: #ff9800;
             font-size: 20px;
-            font-weight: 400;
             margin-top: 0;
             margin-bottom: 20px;
-            text-shadow: 0 0 5px rgba(191, 161, 95, 0.3);
-            letter-spacing: 0.05em;
+            text-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
         }
 
         .mobile-mode h2 {
@@ -181,30 +178,29 @@
         }
 
         button {
-            background: rgba(191, 161, 95, 0.08);
-            border: 1px solid #bfa15f;
-            color: #bfa15f;
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2e 100%);
+            border: none;
+            color: #1a1a2e;
             padding: 12px 40px;
             font-size: 16px;
-            font-family: 'Shippori Mincho', 'Noto Serif JP', 'Yu Mincho', serif;
-            letter-spacing: 0.1em;
+            font-weight: bold;
             cursor: pointer;
-            border-radius: 2px;
+            border-radius: 5px;
             margin: 8px;
-            transition: all 0.3s ease;
-            box-shadow: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
             min-height: 45px;
             min-width: 200px;
         }
 
         button:hover {
-            background: rgba(191, 161, 95, 0.2);
-            box-shadow: 0 0 8px rgba(191, 161, 95, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(212, 175, 55, 0.6);
         }
 
         button:active {
-            background: rgba(191, 161, 95, 0.3);
-            transform: scale(0.98);
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(212, 175, 55, 0.4);
         }
 
         .title-buttons {
@@ -238,22 +234,22 @@
         }
 
         .instruction {
-            background: rgba(191, 161, 95, 0.05);
-            border: 1px solid #bfa15f;
-            border-radius: 2px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #d4af37;
+            border-radius: 10px;
             padding: 15px;
             margin: 15px 0;
             max-width: 400px;
         }
 
         .instruction p {
-            color: #bfa15f;
+            color: #ffd700;
         }
 
         #rankingList {
-            background: rgba(10, 10, 12, 0.8);
-            border: 1px solid #bfa15f;
-            border-radius: 2px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #d4af37;
+            border-radius: 10px;
             padding: 20px;
             margin: 20px 0;
             max-width: 500px;
@@ -265,20 +261,20 @@
             align-items: center;
             padding: 12px 15px;
             margin: 8px 0;
-            background: rgba(191, 161, 95, 0.05);
-            border-radius: 2px;
-            border-left: 3px solid #bfa15f;
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+            border-radius: 5px;
+            border-left: 4px solid #d4af37;
             text-align: left;
         }
 
         .rank-item.top3 {
-            background: rgba(191, 161, 95, 0.15);
-            border-left: 3px solid #dcb56a;
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.3), rgba(212, 175, 55, 0.1));
+            border-left: 4px solid #ffd700;
         }
 
         .rank-number {
-            color: #bfa15f;
-            font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+            color: #d4af37;
+            font-weight: bold;
             font-size: 20px;
             min-width: 50px;
             flex-shrink: 0;
@@ -629,29 +625,27 @@
             min-height: 100px;
             justify-content: center;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 1px solid #bfa15f;
-            border-radius: 2px;
-            color: #ececec;
-            box-shadow: none;
-            transition: background 0.3s ease;
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
             margin: 0;
             min-width: 0;
             width: 100%;
         }
 
         .level-btn:hover {
-            transform: none;
-            background: rgba(191, 161, 95, 0.15);
-            box-shadow: none;
-            border-color: #bfa15f;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+            border-color: #ffd700;
         }
 
         .level-name {
             font-size: 20px;
             margin-bottom: 5px;
-            color: #bfa15f;
-            font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
-            letter-spacing: 0.05em;
+            color: #d4af37;
+            font-weight: bold;
         }
 
         .level-desc {
@@ -683,18 +677,17 @@
             grid-column: 2;
             grid-row: 2;
             background: linear-gradient(135deg, #2c0e37 0%, #1a0520 100%);
-            border-color: #e64a19;
-            box-shadow: none;
+            border-color: #9c27b0;
+            animation: demonPulse 2s ease-in-out infinite;
         }
 
         #levelDemon .level-name {
-            color: #e64a19;
+            color: #e040fb;
         }
 
         #levelDemon:hover {
-            background: rgba(230, 74, 25, 0.15);
-            box-shadow: none;
-            border-color: #ff5722;
+            box-shadow: 0 0 20px rgba(156, 39, 176, 0.6);
+            border-color: #e040fb;
         }
 
 
@@ -731,23 +724,22 @@
 
         .password-container {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 1px solid #bfa15f;
-            border-radius: 2px;
+            border: 3px solid #d4af37;
+            border-radius: 15px;
             padding: 30px;
             max-width: 400px;
             width: 90%;
-            box-shadow: 0 0 10px rgba(191, 161, 95, 0.2);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.6);
         }
 
         .password-container h2 {
-            color: #bfa15f;
+            color: #d4af37;
             margin-bottom: 20px;
             text-align: center;
-            font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
         }
 
         .password-container p {
-            color: #bfa15f;
+            color: #ffd700;
             margin-bottom: 15px;
             text-align: center;
             font-size: 14px;
@@ -839,22 +831,20 @@
 
         .settings-container {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 1px solid #bfa15f;
-            border-radius: 2px;
+            border: 3px solid #d4af37;
+            border-radius: 15px;
             padding: 30px;
             max-width: 450px;
             width: 90%;
-            box-shadow: 0 0 10px rgba(191, 161, 95, 0.2);
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
             text-align: center;
         }
 
         .settings-container h2 {
             font-size: 28px;
             margin-bottom: 30px;
-            border-bottom: 1px solid rgba(191, 161, 95, 0.3);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
             padding-bottom: 15px;
-            color: #bfa15f;
-            font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
         }
 
         .setting-group {
@@ -976,23 +966,22 @@
             position: absolute;
             width: 80px;
             height: 80px;
-            background: rgba(10, 10, 12, 0.8);
-            border: 1px solid #bfa15f;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.6), rgba(212, 175, 55, 0.3));
+            border: 3px solid rgba(212, 175, 55, 0.8);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 30px;
-            color: #bfa15f;
-            text-shadow: none;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
             pointer-events: auto;
             transition: all 0.1s;
             user-select: none;
-            font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
         }
 
         .control-btn:active {
-            background: rgba(191, 161, 95, 0.2);
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.9), rgba(212, 175, 55, 0.5));
             transform: scale(0.95);
         }
 
@@ -1012,13 +1001,12 @@
             width: 100px;
             height: 100px;
             font-size: 20px;
-            background: rgba(230, 74, 25, 0.1);
-            border-color: #e64a19;
-            color: #e64a19;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.7), rgba(255, 107, 0, 0.4));
+            border-color: rgba(255, 107, 0, 0.9);
         }
 
         #shootBtn:active {
-            background: rgba(230, 74, 25, 0.3);
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.95), rgba(255, 107, 0, 0.6));
         }
 
         /* Special Attack Button */
@@ -1028,16 +1016,14 @@
             width: 100px;
             height: 100px;
             font-size: 16px;
-            background: rgba(128, 128, 128, 0.1);
-            border-color: rgba(128, 128, 128, 0.5);
-            color: rgba(128, 128, 128, 0.8);
+            background: radial-gradient(circle, rgba(128, 128, 128, 0.5), rgba(128, 128, 128, 0.3));
+            border-color: rgba(128, 128, 128, 0.8);
         }
 
         #specialBtn.ready {
-            background: rgba(230, 74, 25, 0.2);
-            border-color: #e64a19;
-            color: #e64a19;
-            animation: specialPulse 1.5s ease-in-out infinite;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.5));
+            border-color: rgba(255, 0, 0, 1);
+            animation: specialPulse 1s ease-in-out infinite;
         }
 
         #specialBtn.disabled {
@@ -1046,18 +1032,18 @@
         }
 
         #specialBtn:active {
-            background: rgba(230, 74, 25, 0.4);
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.95), rgba(255, 0, 0, 0.7));
         }
 
         @keyframes specialPulse {
 
             0%,
             100% {
-                box-shadow: 0 0 5px rgba(230, 74, 25, 0.2);
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
             }
 
             50% {
-                box-shadow: 0 0 15px rgba(230, 74, 25, 0.6);
+                box-shadow: 0 0 30px rgba(255, 0, 0, 1);
             }
         }
 
@@ -1349,25 +1335,24 @@
 
         .modal-container {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 1px solid #bfa15f;
-            border-radius: 2px;
+            border: 3px solid #d4af37;
+            border-radius: 15px;
             padding: 30px;
             max-width: 600px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
             text-align: center;
-            color: #ececec;
-            box-shadow: 0 0 10px rgba(191, 161, 95, 0.2);
+            color: #fff;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
         }
 
         .modal-title {
-            color: #bfa15f;
+            color: #d4af37;
             font-size: 28px;
             margin-bottom: 20px;
-            border-bottom: 1px solid rgba(191, 161, 95, 0.3);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
             padding-bottom: 10px;
-            font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
         }
 
         .tos-content {
@@ -1437,14 +1422,12 @@
         }
 
         .menu-btn {
-            background: rgba(191, 161, 95, 0.05);
-            border: 1px solid #bfa15f;
-            color: #bfa15f;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid #d4af37;
+            color: #fff;
             padding: 12px;
             font-size: 16px;
-            font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
-            letter-spacing: 0.1em;
-            border-radius: 2px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
             width: 100%;
@@ -1452,8 +1435,9 @@
         }
 
         .menu-btn:hover {
-            background: rgba(191, 161, 95, 0.15);
-            color: #bfa15f;
+            background: #d4af37;
+            color: #1a1a2e;
+            font-weight: bold;
         }
 
         .title-info-row {
@@ -1558,10 +1542,9 @@
             padding: 0;
             font-size: 12px;
             border-radius: 50%;
-            background: rgba(10, 10, 12, 0.9);
-            box-shadow: none;
-            border: 1px solid #e64a19;
-            color: #e64a19;
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8f00 100%);
+            box-shadow: 0 0 10px rgba(255, 111, 0, 0.5);
+            border: 2px solid #ffd700;
         }
 
         .mobile-mode #specialBtn {
@@ -1575,8 +1558,7 @@
             padding: 0;
             font-size: 10px;
             border-radius: 50%;
-            background: rgba(10, 10, 12, 0.9);
-            box-shadow: none;
-            border: 1px solid #4a148c;
-            color: #4a148c;
+            background: linear-gradient(135deg, #2c0e37 0%, #4a148c 100%);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+            border: 2px solid #e040fb;
         }
