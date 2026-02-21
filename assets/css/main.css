@@ -1111,7 +1111,7 @@
         /* モバイルステータス表示 */
         .mobile-status {
             position: fixed;
-            bottom: 10px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -1127,9 +1127,9 @@
 
         .status-item {
             display: flex;
-            flex-direction: column;
+            flex-direction: column !important;
             align-items: center;
-            gap: 2px;
+            gap: 3px;
         }
 
         .status-label {
@@ -1155,15 +1155,15 @@
         }
 
         .mobile-mode .joystick-container {
-            width: 100px;
-            height: 100px;
-            bottom: 25px;
-            left: 25px;
+            width: 90px;
+            height: 90px;
+            bottom: 100px;
+            left: 15px;
         }
 
         .mobile-mode .joystick-inner {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
         }
 
         .mobile-mode .control-btn {
@@ -1173,19 +1173,19 @@
         }
 
         .mobile-mode #shootBtn {
-            width: 75px;
-            height: 75px;
+            width: 90px;
+            height: 90px;
             font-size: 14px;
-            bottom: 25px;
-            right: 25px;
+            bottom: 100px;
+            right: 15px;
         }
 
         .mobile-mode #specialBtn {
-            width: 75px;
-            height: 75px;
+            width: 90px;
+            height: 90px;
             font-size: 11px;
-            bottom: 110px;
-            right: 25px;
+            bottom: 200px;
+            right: 15px;
         }
 
 
