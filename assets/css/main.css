@@ -1014,6 +1014,45 @@
             opacity: 0.2;
         }
 
+        /* ジョイスティックコンテナ */
+        .joystick-container {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            width: 120px;
+            height: 120px;
+            pointer-events: auto;
+        }
+
+        .joystick-outer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.1));
+            border: 3px solid rgba(212, 175, 55, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .joystick-inner {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.9), rgba(212, 175, 55, 0.6));
+            border: 3px solid rgba(212, 175, 55, 1);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+            transition: all 0.1s ease-out;
+            pointer-events: none;
+        }
+
+        .joystick-inner.active {
+            background: radial-gradient(circle, rgba(255, 215, 0, 1), rgba(212, 175, 55, 0.8));
+            box-shadow: 0 0 25px rgba(255, 215, 0, 1);
+        }
+
         .control-btn {
             position: absolute;
             width: 80px;
@@ -1037,22 +1076,12 @@
             transform: scale(0.95);
         }
 
-        #leftBtn {
-            bottom: 40px;
-            left: 30px;
-        }
-
-        #rightBtn {
-            bottom: 40px;
-            left: 130px;
-        }
-
         #shootBtn {
-            bottom: 40px;
+            bottom: 30px;
             right: 30px;
-            width: 100px;
-            height: 100px;
-            font-size: 20px;
+            width: 90px;
+            height: 90px;
+            font-size: 16px;
             background: radial-gradient(circle, rgba(255, 107, 0, 0.7), rgba(255, 107, 0, 0.4));
             border-color: rgba(255, 107, 0, 0.9);
         }
@@ -1063,11 +1092,11 @@
 
         /* Special Attack Button */
         #specialBtn {
-            bottom: 150px;
+            bottom: 130px;
             right: 30px;
-            width: 100px;
-            height: 100px;
-            font-size: 16px;
+            width: 90px;
+            height: 90px;
+            font-size: 13px;
             background: radial-gradient(circle, rgba(128, 128, 128, 0.5), rgba(128, 128, 128, 0.3));
             border-color: rgba(128, 128, 128, 0.8);
         }
@@ -1099,9 +1128,61 @@
             }
         }
 
+        /* モバイルステータス表示 */
+        .mobile-status {
+            position: fixed;
+            bottom: 240px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            border-radius: 20px;
+            padding: 8px 15px;
+            z-index: 115;
+            pointer-events: none;
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .status-label {
+            font-size: 10px;
+            color: #d4af37;
+            white-space: nowrap;
+        }
+
+        .status-value {
+            font-size: 14px;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
         /* Hide virtual controls on PC unless mobile mode is active */
         body:not(.mobile-mode) #virtualControls {
             display: none !important;
+        }
+
+        body:not(.mobile-mode) .mobile-status {
+            display: none !important;
+        }
+
+        .mobile-mode .joystick-container {
+            width: 100px;
+            height: 100px;
+            bottom: 25px;
+            left: 25px;
+        }
+
+        .mobile-mode .joystick-inner {
+            width: 40px;
+            height: 40px;
         }
 
         .mobile-mode .control-btn {
@@ -1110,12 +1191,20 @@
             font-size: 24px;
         }
 
-        .mobile-mode #leftBtn {
-            display: none !important;
+        .mobile-mode #shootBtn {
+            width: 75px;
+            height: 75px;
+            font-size: 14px;
+            bottom: 25px;
+            right: 25px;
         }
 
-        .mobile-mode #rightBtn {
-            display: none !important;
+        .mobile-mode #specialBtn {
+            width: 75px;
+            height: 75px;
+            font-size: 11px;
+            bottom: 110px;
+            right: 25px;
         }
 
 
