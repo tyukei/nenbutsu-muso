@@ -802,7 +802,7 @@ function fetchAndDisplayVisitorCount() {
     const namespace = 'bonno-taisan-game';
     const key = 'visits';
     const url = `https://api.counterapi.dev/v1/${namespace}/${key}/up`;
-    const infoUrl = `https://api.counterapi.dev/v1/${namespace}/${key}`; // 取得のみのURL
+    const infoUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/`; // 取得のみのURL（末尾のスラッシュが必須）
 
     // セッション内で既にカウントアップしたか確認
     const hasCountedInSession = sessionStorage.getItem('nenbunVisitorCounted');
@@ -817,8 +817,11 @@ function fetchAndDisplayVisitorCount() {
             return response.json();
         })
         .then(data => {
-            // counterapi.dev は { "count": 123 } を返す
-            GS.ui.visitorCount = data.count;
+            // counterapi.dev は `/up` 時は `{"id":...,"name":"visits","count":195,...}` のような構成で返す
+            // もしくは、ただの `{"count":123}` を返す可能性があるため、適切に取得する。
+            const currentCount = data.count !== undefined ? data.count : (data.value !== undefined ? data.value : 0);
+
+            GS.ui.visitorCount = currentCount;
             visitorCountDisplay.textContent = `あなたは ${GS.ui.visitorCount} 人目の修行者です`;
             visitorCountDisplay.classList.remove('hidden');
 
