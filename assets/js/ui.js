@@ -59,8 +59,12 @@ function triggerRoppaBanner() {
 
 // 修行の軌跡データ
 function loadRankings() {
-    const saved = localStorage.getItem('nenbunRankings');
-    return saved ? JSON.parse(saved) : [];
+    try {
+        const saved = localStorage.getItem('nenbunRankings');
+        return saved ? JSON.parse(atob(saved)) : [];
+    } catch (e) {
+        return [];
+    }
 }
 
 function saveRanking(scoreVal, comboVal) {
@@ -76,7 +80,7 @@ function saveRanking(scoreVal, comboVal) {
     });
     rankings.sort((a, b) => b.score - a.score);
     rankings.splice(10);
-    localStorage.setItem('nenbunRankings', JSON.stringify(rankings));
+    localStorage.setItem('nenbunRankings', btoa(JSON.stringify(rankings)));
 }
 
 function displayRankings() {
@@ -110,15 +114,19 @@ function displayRankings() {
 
 // レベル進行システム
 function loadClearedLevels() {
-    const saved = localStorage.getItem('nenbunClearedLevels');
-    return saved ? JSON.parse(saved) : [];
+    try {
+        const saved = localStorage.getItem('nenbunClearedLevels');
+        return saved ? JSON.parse(atob(saved)) : [];
+    } catch (e) {
+        return [];
+    }
 }
 
 function saveClearedLevel(level) {
     const cleared = loadClearedLevels();
     if (!cleared.includes(level)) {
         cleared.push(level);
-        localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+        localStorage.setItem('nenbunClearedLevels', btoa(JSON.stringify(cleared)));
     }
 }
 
