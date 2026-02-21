@@ -477,7 +477,7 @@ function checkPassword() {
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
-        localStorage.setItem('nenbunClearedLevels', btoa(JSON.stringify(cleared)));
+        localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = '✓ 仏性Lev2を解放しました！';
         unlocked = true;
     } else if (hashed === -1116238379) { // nenbutsu-mashimashi2
@@ -487,7 +487,7 @@ function checkPassword() {
         if (!cleared.includes('normal')) {
             cleared.push('normal');
         }
-        localStorage.setItem('nenbunClearedLevels', btoa(JSON.stringify(cleared)));
+        localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = '✓ 仏性Lev3を解放しました！';
         unlocked = true;
     } else if (hashed === -1116238378) { // nenbutsu-mashimashi3
@@ -500,7 +500,7 @@ function checkPassword() {
         if (!cleared.includes('hard')) {
             cleared.push('hard');
         }
-        localStorage.setItem('nenbunClearedLevels', btoa(JSON.stringify(cleared)));
+        localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = '✓ Lev悪魔を解放しました！';
         unlocked = true;
     }
