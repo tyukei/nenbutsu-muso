@@ -88,35 +88,55 @@ function activateSpecialAttack() {
 
     const { play, entities } = GS;
 
-    // バナー表示トリガー (3秒)
-    GS.effects.bonnouSokuBodaiBannerUntil = performance.now() + 3000;
-
-    let defeatedCount = 0;
-    const enemies = entities.enemies;
-    const pool = GS.pools.enemies;
-
-    for (const enemy of enemies) {
-        createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
-        if (!enemy.isNenbutsu) {
-            defeatedCount++;
-        }
-        pool.push(enemy); // プールに戻す
-    }
-    enemies.length = 0;
-
-    play.score += defeatedCount;
-    play.combo += defeatedCount;
-    if (play.combo > play.maxCombo) play.maxCombo = play.combo;
-
     play.kudoku = 0;
     updateUI();
 
-    playSound('hit');
-    flashScreen();
+    playSound('rokuharamitsu');
 
-    if (play.score >= GS.level.targetScore) {
-        gameOver(true);
+    // BGMの音量を0にする
+    if (sounds.bgm) {
+        sounds.bgm.volume = 0;
     }
+
+    const now = performance.now();
+    play.specialActiveUntil = now + 3000;
+    play.specialStartTime = now;
+
+    // バナー表示トリガー (3秒)
+    GS.effects.bonnouSokuBodaiBannerUntil = now + 3000;
+
+    // 画面上の敵のうち、煩悩（!isNenbutsu）を一気に破壊
+    const targets = entities.enemies.filter(e => !e.isNenbutsu);
+
+    for (const enemy of targets) {
+        // 派手にするため、通常のパーティクルと白い閃光パーティクルを重ねる
+        createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
+        // 少し遅延を入れてさらにパーティクルを発生
+        setTimeout(() => createParticles(enemy.getCenterX(), enemy.getCenterY(), '#ffffff'), 150);
+
+        play.score++;
+        play.combo++;
+        if (play.combo > play.maxCombo) play.maxCombo = play.combo;
+
+        const idx = entities.enemies.indexOf(enemy);
+        if (idx !== -1) {
+            entities.enemies.splice(idx, 1);
+        }
+        GS.pools.enemies.push(enemy);
+    }
+
+    // 一気に倒した煩悩があればボーナス音を鳴らす
+    if (targets.length > 0) {
+        playSound('hit_bounas');
+    }
+
+    // specialEnemies リストは空にしておく（updateでのシーケンシャル処理を無効化）
+    play.specialEnemies = [];
+
+    updateUI();
+    flashScreen();
+    // 画面を揺らして物理的なインパクトを追加
+    shakeScreen();
 }
 
 // ゲームオーバー
@@ -136,6 +156,9 @@ function gameOver(win) {
         playSound('gameover');
         shakeScreen();
     }
+
+    play.totalPlays++;
+    GS.savePersistentStats();
 
     saveRanking(play.score, play.maxCombo);
 
@@ -170,8 +193,8 @@ function gameOver(win) {
                             <div class="stat-value">${play.maxCombo}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">累計功徳</div>
-                            <div class="stat-value">${play.totalKudoku}</div>
+                            <div class="stat-label">獲得功徳</div>
+                            <div class="stat-value">${play.sessionKudoku}</div>
                         </div>
                     </div>`;
     } else {
@@ -196,8 +219,8 @@ function gameOver(win) {
                             <div class="stat-value">${play.maxCombo}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">累計功徳</div>
-                            <div class="stat-value">${play.totalKudoku}</div>
+                            <div class="stat-label">獲得功徳</div>
+                            <div class="stat-value">${play.sessionKudoku}</div>
                         </div>
                     </div>`;
     }
@@ -211,15 +234,7 @@ function update(timeScale) {
     if (GS.screen !== 'playing') return;
 
     const { play, input, entities, level, effects } = GS;
-
-    // オートハイド判定 (無効化)
-    // if (!virtualControls.classList.contains('hidden')) {
-    //     if (Date.now() - input.lastInputTime > HIDE_DELAY) {
-    //         if (!virtualControls.classList.contains('inactive')) {
-    //             virtualControls.classList.add('inactive');
-    //         }
-    //     }
-    // }
+    const now = performance.now();
 
     play.frame++;
 
@@ -232,7 +247,7 @@ function update(timeScale) {
         }
     }
 
-    // プレイヤー移動
+    // プレイヤー移動は必殺技中も許可
     if ((input.keys['ArrowLeft'] || input.touchLeft) && player.x > player.width / 2) {
         player.x -= player.speed * timeScale;
     }
@@ -240,12 +255,42 @@ function update(timeScale) {
         player.x += player.speed * timeScale;
     }
 
-    // 弾の更新
+    // 弾の更新は必殺技中も許可
     for (let i = entities.bullets.length - 1; i >= 0; i--) {
         entities.bullets[i].update(timeScale);
         if (entities.bullets[i].isOffScreen()) {
             GS.pools.bullets.push(entities.bullets[i]);
             entities.bullets.splice(i, 1);
+        }
+    }
+
+    // 必殺技演出中は時が止まり、パーティクルの更新のみ行う
+    if (play.specialActiveUntil > now) {
+        for (let i = entities.particles.length - 1; i >= 0; i--) {
+            entities.particles[i].update(timeScale);
+            if (entities.particles[i].isDead()) {
+                GS.pools.particles.push(entities.particles[i]);
+                entities.particles.splice(i, 1);
+            }
+        }
+        return;
+    } else {
+        // 特別演出が終わったらBGMの音量を戻す
+        if (sounds.bgm && sounds.bgm.volume < 0.5) {
+            let volumeSetting = 0.5;
+            try {
+                const settings = JSON.parse(localStorage.getItem('nenbunSettings'));
+                if (settings && settings.bgm !== undefined) {
+                    volumeSetting = settings.bgm;
+                }
+            } catch (e) { }
+            sounds.bgm.volume = volumeSetting;
+        }
+
+        // 必殺技での一掃によるクリア判定は、演出後のここで行う
+        if (play.score >= level.targetScore) {
+            gameOver(true);
+            return;
         }
     }
 
@@ -308,9 +353,10 @@ function update(timeScale) {
             const prevKudoku = play.kudoku;
             play.kudoku = Math.min(play.kudoku + 1, MAX_KUDOKU);
 
-            // 累計功徳を加算して保存
+            // 累計功徳と今回の功徳を加算して保存
             play.totalKudoku++;
-            GS.saveTotalKudoku();
+            play.sessionKudoku++;
+            GS.savePersistentStats();
 
             if (prevKudoku < MAX_KUDOKU && play.kudoku === MAX_KUDOKU) {
                 triggerRoppaBanner();

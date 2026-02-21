@@ -3,7 +3,10 @@
 // ==========================================
 
 // ボタンイベントリスナー登録
-startBtn.addEventListener('click', showLevelSelect);
+startBtn.addEventListener('click', () => {
+    playSound('start');
+    startTitleTransition();
+});
 restartBtn.addEventListener('click', showLevelSelect);
 rankingBtn.addEventListener('click', showRanking);
 backToTitleBtn.addEventListener('click', showTitle);
@@ -15,20 +18,20 @@ shareBtn.addEventListener('click', shareToTwitter);
 
 // レベル選択ボタン
 document.getElementById('levelEasy').addEventListener('click', () => {
-    playSound('hit');
-    startGame('easy');
+    playSound('level1');
+    startLevelTransition('easy');
 });
 document.getElementById('levelNormal').addEventListener('click', () => {
-    playSound('hit');
-    startGame('normal');
+    playSound('level2');
+    startLevelTransition('normal');
 });
 document.getElementById('levelHard').addEventListener('click', () => {
-    playSound('hit');
-    startGame('hard');
+    playSound('level3');
+    startLevelTransition('hard');
 });
 document.getElementById('levelDemon').addEventListener('click', () => {
-    playSound('hit');
-    startGame('demon');
+    playSound('level4');
+    startLevelTransition('demon');
 });
 document.getElementById('backFromLevelBtn').addEventListener('click', showTitle);
 
@@ -38,7 +41,7 @@ versionDisplay.textContent = `v${version}`;
 
 // 初期化実行
 initSettings();
-GS.loadTotalKudoku(); // 累計功徳をロード
+GS.loadPersistentStats(); // 累計データをロード
 Renderer.preCacheEnemies(); // 煩悩画像を事前キャッシュ
 fetchAndDisplayVisitorCount(); // 訪問者数を取得・表示
 

@@ -57,10 +57,22 @@ function triggerRoppaBanner() {
     GS.effects.ropparamitsuBannerUntil = performance.now() + 1100;
 }
 
+// Base64エンコード・デコード（マルチバイト対応）
+function encodeBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+}
+function decodeBase64(str) {
+    return decodeURIComponent(escape(atob(str)));
+}
+
 // 修行の軌跡データ
 function loadRankings() {
-    const saved = localStorage.getItem('nenbunRankings');
-    return saved ? JSON.parse(saved) : [];
+    try {
+        const saved = localStorage.getItem('nenbunRankings');
+        return saved ? JSON.parse(decodeBase64(saved)) : [];
+    } catch (e) {
+        return [];
+    }
 }
 
 function saveRanking(scoreVal, comboVal) {
@@ -76,7 +88,7 @@ function saveRanking(scoreVal, comboVal) {
     });
     rankings.sort((a, b) => b.score - a.score);
     rankings.splice(10);
-    localStorage.setItem('nenbunRankings', JSON.stringify(rankings));
+    localStorage.setItem('nenbunRankings', encodeBase64(JSON.stringify(rankings)));
 }
 
 function displayRankings() {
@@ -90,30 +102,83 @@ function displayRankings() {
     let html = '';
     rankings.forEach((rank, index) => {
         const isTop3 = index < 3;
-        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
-        const levelLabel = rank.levelName || '中級';
+        const levelLabel = escapeHtml(String(rank.levelName || '中級'));
+        const score = escapeHtml(String(rank.score));
+        const combo = escapeHtml(String(rank.combo));
+        const date = escapeHtml(String(rank.date));
         html += `
                     <div class="rank-item ${isTop3 ? 'top3' : ''}">
-                        <span class="rank-number">${medal} ${index + 1}位</span>
-                        <span class="rank-score">[${levelLabel}] ${rank.score}体撃破 (連鎖×${rank.combo})</span>
-                        <span class="rank-date">${rank.date}</span>
+                        <span class="rank-number">${index + 1}位</span>
+                        <span class="rank-score">
+                            [${levelLabel}] ${score}体撃破<br>
+                            <span style="font-size: 0.85em; opacity: 0.8;">(最大連鎖×${combo})</span>
+                        </span>
+                        <span class="rank-date">${date}</span>
                     </div>
                 `;
     });
     rankingList.innerHTML = html;
 }
 
+// 累計データの計算と表示
+function displayCumulativeStats() {
+    const cumulativeStats = document.getElementById('cumulativeStats');
+    if (!cumulativeStats) return;
+
+    // 累計撃破数の計算
+    const rankings = loadRankings();
+    const totalDestroyed = rankings.reduce((sum, rank) => sum + parseInt(rank.score || 0, 10), 0);
+
+    // 累計功徳の計算 (全レベルの合計 + 旧フォーマット分)
+    let totalKudoku = 0;
+
+    // 旧フォーマットの分
+    const oldKudoku = localStorage.getItem('nenbunTotalKudoku');
+    if (oldKudoku) totalKudoku += parseInt(oldKudoku, 10);
+
+    // 累計プレイ回数の計算 (全レベルの合計)
+    let totalPlays = 0;
+
+    // 各レベルの分
+    ['easy', 'normal', 'hard', 'demon'].forEach(level => {
+        const levelKudoku = localStorage.getItem('nenbunTotalKudoku_' + level);
+        if (levelKudoku) totalKudoku += parseInt(levelKudoku, 10);
+
+        const levelPlays = localStorage.getItem('nenbunTotalPlays_' + level);
+        if (levelPlays) totalPlays += parseInt(levelPlays, 10);
+    });
+
+    cumulativeStats.innerHTML = `
+        <div class="cumulative-stat">
+            <div class="cumulative-stat-label">プレイ回数</div>
+            <div class="cumulative-stat-value">${totalPlays}</div>
+        </div>
+        <div class="cumulative-stat">
+            <div class="cumulative-stat-label">累計撃破数</div>
+            <div class="cumulative-stat-value">${totalDestroyed}</div>
+        </div>
+        <div class="cumulative-stat">
+            <div class="cumulative-stat-label">累計功徳</div>
+            <div class="cumulative-stat-value">${totalKudoku}</div>
+        </div>
+    `;
+}
+
 // レベル進行システム
 function loadClearedLevels() {
-    const saved = localStorage.getItem('nenbunClearedLevels');
-    return saved ? JSON.parse(saved) : [];
+    try {
+        const saved = localStorage.getItem('nenbunClearedLevels');
+        return saved ? JSON.parse(decodeBase64(saved)) : [];
+    } catch (e) {
+        return [];
+    }
 }
 
 function saveClearedLevel(level) {
     const cleared = loadClearedLevels();
     if (!cleared.includes(level)) {
         cleared.push(level);
-        localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+        localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
     }
 }
 
@@ -257,6 +322,69 @@ function startTitleIntro() {
     }, 110);
 }
 
+// 画面遷移フェード
+function startLevelTransition(level) {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = '#000';
+    overlay.style.zIndex = '9999';
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 0.5s ease-in-out';
+    overlay.style.pointerEvents = 'all'; // 画面操作をブロック
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.style.opacity = '1';
+    }, 50);
+
+    setTimeout(() => {
+        startGame(level);
+
+        overlay.style.opacity = '0';
+        // クリックブロックを解除
+        overlay.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+            if (overlay.parentNode) overlay.remove();
+        }, 500);
+    }, 3000); // 3秒ほど暗転
+}
+
+// タイトルからレベル選択への遷移フェード
+function startTitleTransition() {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = '#000';
+    overlay.style.zIndex = '9999';
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 0.5s ease-in-out';
+    overlay.style.pointerEvents = 'all';
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.style.opacity = '1';
+    }, 50);
+
+    setTimeout(() => {
+        showLevelSelect();
+
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+            if (overlay.parentNode) overlay.remove();
+        }, 500);
+    }, 2000); // 2秒暗転
+}
+
 // 画面遷移
 function showTitle() {
     GS.screen = 'title';
@@ -323,6 +451,7 @@ function showRanking() {
     GS.screen = 'ranking';
     titleScreen.classList.add('hidden');
     rankingScreen.classList.remove('hidden');
+    displayCumulativeStats();
     displayRankings();
 }
 
@@ -370,30 +499,43 @@ passwordInput.addEventListener('keypress', (e) => {
     }
 });
 
+// 簡単な文字列ハッシュ関数
+function simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
+
 function checkPassword() {
     const password = passwordInput.value.trim();
     const cleared = loadClearedLevels();
     let unlocked = false;
     let message = '';
 
-    if (password === 'nenbutsu-mashimashi1') {
+    const hashed = simpleHash(password);
+
+    if (hashed === -1116238380) { // nenbutsu-mashimashi1
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
-        localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+        localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = '✓ 仏性Lev2を解放しました！';
         unlocked = true;
-    } else if (password === 'nenbutsu-mashimashi2') {
+    } else if (hashed === -1116238379) { // nenbutsu-mashimashi2
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
         if (!cleared.includes('normal')) {
             cleared.push('normal');
         }
-        localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+        localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = '✓ 仏性Lev3を解放しました！';
         unlocked = true;
-    } else if (password === 'nenbutsu-mashimashi3') {
+    } else if (hashed === -1116238378) { // nenbutsu-mashimashi3
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
@@ -403,7 +545,7 @@ function checkPassword() {
         if (!cleared.includes('hard')) {
             cleared.push('hard');
         }
-        localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+        localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = '✓ Lev悪魔を解放しました！';
         unlocked = true;
     }
@@ -710,14 +852,16 @@ function fetchAndDisplayVisitorCount() {
         return;
     }
 
-    // APIサービスの切り替え (CountAPI -> CounterAPI)
-    // https://counterapi.dev/
-    // namespaceとkeyを指定してカウントアップ
     const namespace = 'bonno-taisan-game';
     const key = 'visits';
     const url = `https://api.counterapi.dev/v1/${namespace}/${key}/up`;
+    const infoUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/`; // 取得のみのURL（末尾のスラッシュが必須）
 
-    fetch(url)
+    // セッション内で既にカウントアップしたか確認
+    const hasCountedInSession = sessionStorage.getItem('nenbunVisitorCounted');
+    const fetchUrl = hasCountedInSession ? infoUrl : url;
+
+    fetch(fetchUrl)
         .then(response => {
             if (!response.ok) {
                 // 初回アクセス等でキーがない場合などを考慮
@@ -726,10 +870,17 @@ function fetchAndDisplayVisitorCount() {
             return response.json();
         })
         .then(data => {
-            // counterapi.dev は { "count": 123 } を返す
-            GS.ui.visitorCount = data.count;
+            // counterapi.dev は `/up` 時は `{"id":...,"name":"visits","count":195,...}` のような構成で返す
+            // もしくは、ただの `{"count":123}` を返す可能性があるため、適切に取得する。
+            const currentCount = data.count !== undefined ? data.count : (data.value !== undefined ? data.value : 0);
+
+            GS.ui.visitorCount = currentCount;
             visitorCountDisplay.textContent = `あなたは ${GS.ui.visitorCount} 人目の修行者です`;
             visitorCountDisplay.classList.remove('hidden');
+
+            if (!hasCountedInSession) {
+                sessionStorage.setItem('nenbunVisitorCounted', 'true');
+            }
         })
         .catch(error => {
             console.error('Visitor count fetch failed:', error);

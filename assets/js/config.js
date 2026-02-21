@@ -81,40 +81,40 @@ const levelSettings = {
     easy: {
         name: '仏性Lev1',
         targetScore: 36,
-        baseSpeed: 0.8,
+        baseSpeed: 1.5,
         spawnRate: 34,
-        speedIncrease: 0.03,
-        nenbutsuRate: 0.5,
+        speedIncrease: 0.02,
+        nenbutsuRate: 0.3,
         isInfinite: false,
         initialSpirit: 3,
-        maxEnemies: 5
+        maxEnemies: 8
     },
     normal: {
         name: '仏性Lev2',
         targetScore: 72,
-        baseSpeed: 1.2,
+        baseSpeed: 1.5,
         spawnRate: 25,
         speedIncrease: 0.05,
         isInfinite: false,
         initialSpirit: 4,
-        maxEnemies: 8
+        maxEnemies: 10
     },
     hard: {
         name: '仏性Lev3',
         targetScore: 108,
-        baseSpeed: 1.5,
+        baseSpeed: 1.8,
         spawnRate: 20,
-        speedIncrease: 0.07,
+        speedIncrease: 0.06,
         isInfinite: false,
         initialSpirit: 5,
-        maxEnemies: 10
+        maxEnemies: 15
     },
     demon: {
         name: 'Lev悪魔',
         targetScore: 324,
         baseSpeed: 1.0,
         spawnRate: 15,
-        speedIncrease: 0.10,
+        speedIncrease: 0.05,
         nenbutsuRate: 0.3,
         isInfinite: false,
         initialSpirit: 5,

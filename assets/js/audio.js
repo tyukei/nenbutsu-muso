@@ -9,8 +9,14 @@ const sounds = {
     hit: new Audio('sounds/hit.mp3'),
     hit_bounas: new Audio('sounds/hit_bounas.mp3'),
     damage: new Audio('sounds/damage.mp3'),
-    gameover: new Audio('sounds/gameover.mp3'),
-    clear: new Audio('sounds/clear.mp3')
+    gameover: new Audio('sounds/mika/gemover.mp4'),
+    clear: new Audio('sounds/mika/clear.mp4'),
+    start: new Audio('sounds/mika/start.mp4'),
+    rokuharamitsu: new Audio('sounds/mika/rokuharamitsu.mp4'),
+    level1: new Audio('sounds/mika/level1.mp4'),
+    level2: new Audio('sounds/mika/level2.mp4'),
+    level3: new Audio('sounds/mika/level3.mp4'),
+    level4: new Audio('sounds/mika/level4.mp4')
 };
 
 // BGMの設定
@@ -27,6 +33,12 @@ sounds.clear.volume = 0.6;
 // 音声再生のヘルパー関数
 function playSound(soundName) {
     if (sounds[soundName]) {
+        // 必殺技発動中(3秒間)は、rokuharamitsu 以外の音を鳴らさない
+        if (typeof GS !== 'undefined' && GS.play && GS.play.specialActiveUntil > performance.now() && soundName !== 'rokuharamitsu') {
+            return;
+        }
+
+        sounds[soundName].muted = false;
         sounds[soundName].currentTime = 0;
         sounds[soundName].play().catch(e => console.log('Audio play failed:', e));
     }
@@ -45,16 +57,27 @@ function unlockAudio() {
     if (audioUnlocked) return;
 
     // 全ての音声を無音で一瞬再生してアンロック
-    Object.values(sounds).forEach(audio => {
+    Object.keys(sounds).forEach(key => {
+        const audio = sounds[key];
+
+        // 既に再生中の音声（startSoundなど）を止めないようにする
+        if (!audio.paused) return;
+
         audio.muted = true;
-        audio.play().then(() => {
-            audio.pause();
-            audio.currentTime = 0;
-            audio.muted = false;
-        }).catch(e => {
-            console.log('Audio unlock failed:', e);
-            audio.muted = false;
-        });
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                // playSound()等でミュートが解除された・あるいは再生が意図的に開始された場合はpauseしない
+                if (audio.muted) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.muted = false;
+                }
+            }).catch(e => {
+                // console.log('Audio unlock failed:', e);
+                audio.muted = false;
+            });
+        }
     });
 
     audioUnlocked = true;

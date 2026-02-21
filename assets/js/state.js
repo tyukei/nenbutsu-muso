@@ -13,10 +13,14 @@ const GS = {
         maxSpirit: 3,
         kudoku: 0,
         totalKudoku: 0, // 累計功徳
+        totalPlays: 0, // 累計プレイ回数
+        sessionKudoku: 0, // 1プレイでの獲得功徳
         combo: 0,
         maxCombo: 0,
         frame: 0,
         lastBonnou: '',
+        specialActiveUntil: 0,
+        specialEnemies: []
     },
 
     // 入力状態
@@ -103,10 +107,13 @@ const GS = {
         this.play.spirit = s.initialSpirit;
         this.play.maxSpirit = s.initialSpirit;
         this.play.kudoku = 0;
+        this.play.sessionKudoku = 0;
         this.play.combo = 0;
         this.play.maxCombo = 0;
         this.play.frame = 0;
         this.play.lastBonnou = '';
+        this.play.specialActiveUntil = 0;
+        this.play.specialEnemies = [];
 
         // エフェクト
         this.effects.heartFlashUntil = 0;
@@ -125,21 +132,35 @@ const GS = {
         this.input.touchLeft = false;
         this.input.touchRight = false;
         this.input.touchSpecial = false;
-        this.input.touchSpecial = false;
+
+        this.loadPersistentStats();
     },
 
     /**
-     * 累計功徳をロード
+     * 累計功徳とプレイ回数をロード
      */
-    loadTotalKudoku() {
-        const saved = localStorage.getItem('nenbunTotalKudoku');
-        this.play.totalKudoku = saved ? parseInt(saved, 10) : 0;
+    loadPersistentStats() {
+        const levelKey = this.level.current || 'normal';
+        const savedKudoku = localStorage.getItem('nenbunTotalKudoku_' + levelKey);
+        const savedPlays = localStorage.getItem('nenbunTotalPlays_' + levelKey);
+
+        // 旧データがある場合のフォールバック
+        if (!savedKudoku && localStorage.getItem('nenbunTotalKudoku')) {
+            this.play.totalKudoku = parseInt(localStorage.getItem('nenbunTotalKudoku'), 10) || 0;
+            localStorage.setItem('nenbunTotalKudoku_' + levelKey, this.play.totalKudoku);
+        } else {
+            this.play.totalKudoku = savedKudoku ? parseInt(savedKudoku, 10) : 0;
+        }
+
+        this.play.totalPlays = savedPlays ? parseInt(savedPlays, 10) : 0;
     },
 
     /**
-     * 累計功徳をセーブ
+     * 累計功徳とプレイ回数をセーブ
      */
-    saveTotalKudoku() {
-        localStorage.setItem('nenbunTotalKudoku', this.play.totalKudoku);
+    savePersistentStats() {
+        const levelKey = this.level.current || 'normal';
+        localStorage.setItem('nenbunTotalKudoku_' + levelKey, this.play.totalKudoku);
+        localStorage.setItem('nenbunTotalPlays_' + levelKey, this.play.totalPlays);
     }
 };
