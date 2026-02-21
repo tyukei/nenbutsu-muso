@@ -319,7 +319,7 @@ function startTitleTransition() {
         setTimeout(() => {
             if (overlay.parentNode) overlay.remove();
         }, 500);
-    }, 3000); // 3秒暗転
+    }, 2000); // 2秒暗転
 }
 
 // 画面遷移
