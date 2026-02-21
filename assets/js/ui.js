@@ -799,14 +799,16 @@ function fetchAndDisplayVisitorCount() {
         return;
     }
 
-    // APIサービスの切り替え (CountAPI -> CounterAPI)
-    // https://counterapi.dev/
-    // namespaceとkeyを指定してカウントアップ
     const namespace = 'bonno-taisan-game';
     const key = 'visits';
     const url = `https://api.counterapi.dev/v1/${namespace}/${key}/up`;
+    const infoUrl = `https://api.counterapi.dev/v1/${namespace}/${key}`; // 取得のみのURL
 
-    fetch(url)
+    // セッション内で既にカウントアップしたか確認
+    const hasCountedInSession = sessionStorage.getItem('nenbunVisitorCounted');
+    const fetchUrl = hasCountedInSession ? infoUrl : url;
+
+    fetch(fetchUrl)
         .then(response => {
             if (!response.ok) {
                 // 初回アクセス等でキーがない場合などを考慮
@@ -819,6 +821,10 @@ function fetchAndDisplayVisitorCount() {
             GS.ui.visitorCount = data.count;
             visitorCountDisplay.textContent = `あなたは ${GS.ui.visitorCount} 人目の修行者です`;
             visitorCountDisplay.classList.remove('hidden');
+
+            if (!hasCountedInSession) {
+                sessionStorage.setItem('nenbunVisitorCounted', 'true');
+            }
         })
         .catch(error => {
             console.error('Visitor count fetch failed:', error);
