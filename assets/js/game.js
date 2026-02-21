@@ -275,25 +275,39 @@ function update(timeScale) {
             }
         }
         return;
-    } else if (play.specialEnemies && play.specialEnemies.length > 0) {
-        // 万が一時間が過ぎても残っていたら一気に全部倒す
-        while (play.specialEnemies.length > 0) {
-            const enemy = play.specialEnemies.shift();
-            createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
-            if (!enemy.isNenbutsu) {
-                play.score++;
-                play.combo++;
-                if (play.combo > play.maxCombo) play.maxCombo = play.combo;
-            }
-            const idx = entities.enemies.indexOf(enemy);
-            if (idx !== -1) {
-                entities.enemies.splice(idx, 1);
-            }
-            GS.pools.enemies.push(enemy);
+    } else {
+        // 特別演出が終わったらBGMの音量を戻す (settingsからの取得が理想だが一旦0.5)
+        if (sounds.bgm && sounds.bgm.volume < 0.5) {
+            let volumeSetting = 0.5;
+            try {
+                const settings = JSON.parse(localStorage.getItem('nenbunSettings'));
+                if (settings && settings.bgm !== undefined) {
+                    volumeSetting = settings.bgm;
+                }
+            } catch (e) { }
+            sounds.bgm.volume = volumeSetting;
         }
-        updateUI();
-        if (play.score >= level.targetScore) {
-            gameOver(true);
+
+        if (play.specialEnemies && play.specialEnemies.length > 0) {
+            // 万が一時間が過ぎても残っていたら一気に全部倒す
+            while (play.specialEnemies.length > 0) {
+                const enemy = play.specialEnemies.shift();
+                createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
+                if (!enemy.isNenbutsu) {
+                    play.score++;
+                    play.combo++;
+                    if (play.combo > play.maxCombo) play.maxCombo = play.combo;
+                }
+                const idx = entities.enemies.indexOf(enemy);
+                if (idx !== -1) {
+                    entities.enemies.splice(idx, 1);
+                }
+                GS.pools.enemies.push(enemy);
+            }
+            updateUI();
+            if (play.score >= level.targetScore) {
+                gameOver(true);
+            }
         }
     }
 
