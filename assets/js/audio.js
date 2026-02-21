@@ -9,14 +9,14 @@ const sounds = {
     hit: new Audio('sounds/hit.mp3'),
     hit_bounas: new Audio('sounds/hit_bounas.mp3'),
     damage: new Audio('sounds/damage.mp3'),
-    gameover: new Audio('sounds/mika/gemover.mp4'),
-    clear: new Audio('sounds/mika/clear.mp4'),
-    start: new Audio('sounds/mika/start.mp4'),
-    rokuharamitsu: new Audio('sounds/mika/rokuharamitsu.mp4'),
-    level1: new Audio('sounds/mika/level1.mp4'),
-    level2: new Audio('sounds/mika/level2.mp4'),
-    level3: new Audio('sounds/mika/level3.mp4'),
-    level4: new Audio('sounds/mika/level4.mp4')
+    gameover: new Audio('sounds/mika/gemover.mp3'),
+    clear: new Audio('sounds/mika/clear.mp3'),
+    start: new Audio('sounds/mika/start.mp3'),
+    rokuharamitsu: new Audio('sounds/mika/rokuharamitsu.mp3'),
+    level1: new Audio('sounds/mika/level1.mp3'),
+    level2: new Audio('sounds/mika/level2.mp3'),
+    level3: new Audio('sounds/mika/level3.mp3'),
+    level4: new Audio('sounds/mika/level4.mp3')
 };
 
 // BGMの設定
