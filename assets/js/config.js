@@ -81,7 +81,7 @@ const levelSettings = {
     easy: {
         name: '仏性Lev1',
         targetScore: 36,
-        baseSpeed: 0.8,
+        baseSpeed: 1.0,
         spawnRate: 34,
         speedIncrease: 0.03,
         nenbutsuRate: 0.5,
@@ -92,7 +92,7 @@ const levelSettings = {
     normal: {
         name: '仏性Lev2',
         targetScore: 72,
-        baseSpeed: 1.2,
+        baseSpeed: 1.3,
         spawnRate: 25,
         speedIncrease: 0.05,
         isInfinite: false,

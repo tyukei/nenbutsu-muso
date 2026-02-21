@@ -105,12 +105,38 @@ function activateSpecialAttack() {
     // バナー表示トリガー (3秒)
     GS.effects.bonnouSokuBodaiBannerUntil = now + 3000;
 
-    // 画面上の敵のうち、煩悩（!isNenbutsu）のみY座標順（上から下）にソートして待機リストへ
-    play.specialEnemies = entities.enemies
-        .filter(e => !e.isNenbutsu)
-        .sort((a, b) => a.y - b.y);
+    // 画面上の敵のうち、煩悩（!isNenbutsu）を一気に破壊
+    const targets = entities.enemies.filter(e => !e.isNenbutsu);
 
+    for (const enemy of targets) {
+        // 派手にするため、通常のパーティクルと白い閃光パーティクルを重ねる
+        createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
+        // 少し遅延を入れてさらにパーティクルを発生
+        setTimeout(() => createParticles(enemy.getCenterX(), enemy.getCenterY(), '#ffffff'), 150);
+
+        play.score++;
+        play.combo++;
+        if (play.combo > play.maxCombo) play.maxCombo = play.combo;
+
+        const idx = entities.enemies.indexOf(enemy);
+        if (idx !== -1) {
+            entities.enemies.splice(idx, 1);
+        }
+        GS.pools.enemies.push(enemy);
+    }
+
+    // 一気に倒した煩悩があればボーナス音を鳴らす
+    if (targets.length > 0) {
+        playSound('hit_bounas');
+    }
+
+    // specialEnemies リストは空にしておく（updateでのシーケンシャル処理を無効化）
+    play.specialEnemies = [];
+
+    updateUI();
     flashScreen();
+    // 画面を揺らして物理的なインパクトを追加
+    shakeScreen();
 }
 
 // ゲームオーバー
@@ -235,40 +261,8 @@ function update(timeScale) {
         }
     }
 
-    // 必殺技演出中 (時を止める＆順次破壊)
+    // 必殺技演出中は時が止まり、パーティクルの更新のみ行う
     if (play.specialActiveUntil > now) {
-        const elapsed = now - play.specialStartTime;
-        const progress = elapsed / 3000; // 0.0 to 1.0
-
-        if (play.specialEnemies && play.specialEnemies.length > 0) {
-            const totalToDestroy = play.specialEnemies.length;
-            const targetDestroyed = Math.floor(progress * totalToDestroy);
-
-            while (play.specialEnemies.length > 0 && (totalToDestroy - play.specialEnemies.length) < targetDestroyed) {
-                const enemy = play.specialEnemies.shift(); // 上から取得
-
-                createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
-                if (!enemy.isNenbutsu) {
-                    play.score++;
-                    play.combo++;
-                    if (play.combo > play.maxCombo) play.maxCombo = play.combo;
-                    playSound('hit');
-                }
-
-                // entities.enemies から削除
-                const idx = entities.enemies.indexOf(enemy);
-                if (idx !== -1) {
-                    entities.enemies.splice(idx, 1);
-                }
-                GS.pools.enemies.push(enemy); // プールに戻す
-            }
-            updateUI();
-            if (play.score >= level.targetScore) {
-                gameOver(true);
-            }
-        }
-
-        // パーティクルの更新のみ行って敵の更新/発生をスキップ
         for (let i = entities.particles.length - 1; i >= 0; i--) {
             entities.particles[i].update(timeScale);
             if (entities.particles[i].isDead()) {
@@ -278,7 +272,7 @@ function update(timeScale) {
         }
         return;
     } else {
-        // 特別演出が終わったらBGMの音量を戻す (settingsからの取得が理想だが一旦0.5)
+        // 特別演出が終わったらBGMの音量を戻す
         if (sounds.bgm && sounds.bgm.volume < 0.5) {
             let volumeSetting = 0.5;
             try {
@@ -290,26 +284,10 @@ function update(timeScale) {
             sounds.bgm.volume = volumeSetting;
         }
 
-        if (play.specialEnemies && play.specialEnemies.length > 0) {
-            // 万が一時間が過ぎても残っていたら一気に全部倒す
-            while (play.specialEnemies.length > 0) {
-                const enemy = play.specialEnemies.shift();
-                createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
-                if (!enemy.isNenbutsu) {
-                    play.score++;
-                    play.combo++;
-                    if (play.combo > play.maxCombo) play.maxCombo = play.combo;
-                }
-                const idx = entities.enemies.indexOf(enemy);
-                if (idx !== -1) {
-                    entities.enemies.splice(idx, 1);
-                }
-                GS.pools.enemies.push(enemy);
-            }
-            updateUI();
-            if (play.score >= level.targetScore) {
-                gameOver(true);
-            }
+        // 必殺技での一掃によるクリア判定は、演出後のここで行う
+        if (play.score >= level.targetScore) {
+            gameOver(true);
+            return;
         }
     }
 
