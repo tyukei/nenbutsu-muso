@@ -99,11 +99,11 @@ function activateSpecialAttack() {
     }
 
     const now = performance.now();
-    play.specialActiveUntil = now + 3000;
+    play.specialActiveUntil = now + 1000;
     play.specialStartTime = now;
 
-    // バナー表示トリガー (3秒)
-    GS.effects.bonnouSokuBodaiBannerUntil = now + 3000;
+    // バナー表示トリガー (1秒)
+    GS.effects.bonnouSokuBodaiBannerUntil = now + 1000;
 
     // 画面上の敵のうち、煩悩（!isNenbutsu）を一気に破壊
     const targets = entities.enemies.filter(e => !e.isNenbutsu);
