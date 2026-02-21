@@ -105,8 +105,10 @@ function activateSpecialAttack() {
     // バナー表示トリガー (3秒)
     GS.effects.bonnouSokuBodaiBannerUntil = now + 3000;
 
-    // 画面上の敵をY座標順（上から下）にソートして待機リストへ
-    play.specialEnemies = [...entities.enemies].sort((a, b) => a.y - b.y);
+    // 画面上の敵のうち、煩悩（!isNenbutsu）のみY座標順（上から下）にソートして待機リストへ
+    play.specialEnemies = entities.enemies
+        .filter(e => !e.isNenbutsu)
+        .sort((a, b) => a.y - b.y);
 
     flashScreen();
 }
