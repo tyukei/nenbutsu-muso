@@ -90,12 +90,14 @@ function displayRankings() {
     let html = '';
     rankings.forEach((rank, index) => {
         const isTop3 = index < 3;
-        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
         const levelLabel = rank.levelName || '中級';
         html += `
                     <div class="rank-item ${isTop3 ? 'top3' : ''}">
-                        <span class="rank-number">${medal} ${index + 1}位</span>
-                        <span class="rank-score">[${levelLabel}] ${rank.score}体撃破 (連鎖×${rank.combo})</span>
+                        <span class="rank-number">${index + 1}位</span>
+                        <span class="rank-score">
+                            [${levelLabel}] ${rank.score}体撃破<br>
+                            <span style="font-size: 0.85em; opacity: 0.8;">(最大連鎖×${rank.combo})</span>
+                        </span>
                         <span class="rank-date">${rank.date}</span>
                     </div>
                 `;
