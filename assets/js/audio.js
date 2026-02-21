@@ -51,16 +51,27 @@ function unlockAudio() {
     if (audioUnlocked) return;
 
     // 全ての音声を無音で一瞬再生してアンロック
-    Object.values(sounds).forEach(audio => {
+    Object.keys(sounds).forEach(key => {
+        const audio = sounds[key];
+
+        // 既に再生中の音声（startSoundなど）を止めないようにする
+        if (!audio.paused && audio.currentTime > 0) return;
+
         audio.muted = true;
-        audio.play().then(() => {
-            audio.pause();
-            audio.currentTime = 0;
-            audio.muted = false;
-        }).catch(e => {
-            console.log('Audio unlock failed:', e);
-            audio.muted = false;
-        });
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                // playSound()等でミュートが解除された・あるいは再生が意図的に開始された場合はpauseしない
+                if (audio.muted) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.muted = false;
+                }
+            }).catch(e => {
+                // console.log('Audio unlock failed:', e);
+                audio.muted = false;
+            });
+        }
     });
 
     audioUnlocked = true;
