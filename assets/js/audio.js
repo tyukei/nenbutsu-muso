@@ -33,6 +33,7 @@ sounds.clear.volume = 0.6;
 // 音声再生のヘルパー関数
 function playSound(soundName) {
     if (sounds[soundName]) {
+        sounds[soundName].muted = false;
         sounds[soundName].currentTime = 0;
         sounds[soundName].play().catch(e => console.log('Audio play failed:', e));
     }
@@ -55,7 +56,7 @@ function unlockAudio() {
         const audio = sounds[key];
 
         // 既に再生中の音声（startSoundなど）を止めないようにする
-        if (!audio.paused && audio.currentTime > 0) return;
+        if (!audio.paused) return;
 
         audio.muted = true;
         const playPromise = audio.play();
