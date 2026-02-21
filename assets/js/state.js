@@ -13,6 +13,7 @@ const GS = {
         maxSpirit: 3,
         kudoku: 0,
         totalKudoku: 0, // 累計功徳
+        totalPlays: 0, // 累計プレイ回数
         sessionKudoku: 0, // 1プレイでの獲得功徳
         combo: 0,
         maxCombo: 0,
@@ -132,31 +133,34 @@ const GS = {
         this.input.touchRight = false;
         this.input.touchSpecial = false;
 
-        this.loadTotalKudoku();
+        this.loadPersistentStats();
     },
 
     /**
-     * 累計功徳をロード
+     * 累計功徳とプレイ回数をロード
      */
-    loadTotalKudoku() {
+    loadPersistentStats() {
         const levelKey = this.level.current || 'normal';
-        const saved = localStorage.getItem('nenbunTotalKudoku_' + levelKey);
+        const savedKudoku = localStorage.getItem('nenbunTotalKudoku_' + levelKey);
+        const savedPlays = localStorage.getItem('nenbunTotalPlays_' + levelKey);
 
-        // 旧データがある場合のフォールバック（最初の1回だけ引き継ぐのは複雑なので、単純に新規スタートでもよいが、旧データが存在するならそれを初期値とする）
-        if (!saved && localStorage.getItem('nenbunTotalKudoku')) {
+        // 旧データがある場合のフォールバック
+        if (!savedKudoku && localStorage.getItem('nenbunTotalKudoku')) {
             this.play.totalKudoku = parseInt(localStorage.getItem('nenbunTotalKudoku'), 10) || 0;
-            // 移行フラグとして保存しておく
             localStorage.setItem('nenbunTotalKudoku_' + levelKey, this.play.totalKudoku);
         } else {
-            this.play.totalKudoku = saved ? parseInt(saved, 10) : 0;
+            this.play.totalKudoku = savedKudoku ? parseInt(savedKudoku, 10) : 0;
         }
+
+        this.play.totalPlays = savedPlays ? parseInt(savedPlays, 10) : 0;
     },
 
     /**
-     * 累計功徳をセーブ
+     * 累計功徳とプレイ回数をセーブ
      */
-    saveTotalKudoku() {
+    savePersistentStats() {
         const levelKey = this.level.current || 'normal';
         localStorage.setItem('nenbunTotalKudoku_' + levelKey, this.play.totalKudoku);
+        localStorage.setItem('nenbunTotalPlays_' + levelKey, this.play.totalPlays);
     }
 };

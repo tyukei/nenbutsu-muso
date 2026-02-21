@@ -157,6 +157,9 @@ function gameOver(win) {
         shakeScreen();
     }
 
+    play.totalPlays++;
+    GS.savePersistentStats();
+
     saveRanking(play.score, play.maxCombo);
 
     const settings = levelSettings[level.current];
@@ -353,7 +356,7 @@ function update(timeScale) {
             // 累計功徳と今回の功徳を加算して保存
             play.totalKudoku++;
             play.sessionKudoku++;
-            GS.saveTotalKudoku();
+            GS.savePersistentStats();
 
             if (prevKudoku < MAX_KUDOKU && play.kudoku === MAX_KUDOKU) {
                 triggerRoppaBanner();

@@ -136,13 +136,23 @@ function displayCumulativeStats() {
     const oldKudoku = localStorage.getItem('nenbunTotalKudoku');
     if (oldKudoku) totalKudoku += parseInt(oldKudoku, 10);
 
+    // 累計プレイ回数の計算 (全レベルの合計)
+    let totalPlays = 0;
+
     // 各レベルの分
     ['easy', 'normal', 'hard', 'demon'].forEach(level => {
         const levelKudoku = localStorage.getItem('nenbunTotalKudoku_' + level);
         if (levelKudoku) totalKudoku += parseInt(levelKudoku, 10);
+
+        const levelPlays = localStorage.getItem('nenbunTotalPlays_' + level);
+        if (levelPlays) totalPlays += parseInt(levelPlays, 10);
     });
 
     cumulativeStats.innerHTML = `
+        <div class="cumulative-stat">
+            <div class="cumulative-stat-label">プレイ回数</div>
+            <div class="cumulative-stat-value">${totalPlays}</div>
+        </div>
         <div class="cumulative-stat">
             <div class="cumulative-stat-label">累計撃破数</div>
             <div class="cumulative-stat-value">${totalDestroyed}</div>

@@ -41,7 +41,7 @@ versionDisplay.textContent = `v${version}`;
 
 // 初期化実行
 initSettings();
-GS.loadTotalKudoku(); // 累計功徳をロード
+GS.loadPersistentStats(); // 累計データをロード
 Renderer.preCacheEnemies(); // 煩悩画像を事前キャッシュ
 fetchAndDisplayVisitorCount(); // 訪問者数を取得・表示
 
