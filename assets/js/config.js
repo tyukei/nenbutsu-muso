@@ -84,7 +84,7 @@ const levelSettings = {
         baseSpeed: 1.5,
         spawnRate: 34,
         speedIncrease: 0.02,
-        nenbutsuRate: 0.5,
+        nenbutsuRate: 0.3,
         isInfinite: false,
         initialSpirit: 3,
         maxEnemies: 8

@@ -13,6 +13,7 @@ const GS = {
         maxSpirit: 3,
         kudoku: 0,
         totalKudoku: 0, // 累計功徳
+        sessionKudoku: 0, // 1プレイでの獲得功徳
         combo: 0,
         maxCombo: 0,
         frame: 0,
@@ -105,6 +106,7 @@ const GS = {
         this.play.spirit = s.initialSpirit;
         this.play.maxSpirit = s.initialSpirit;
         this.play.kudoku = 0;
+        this.play.sessionKudoku = 0;
         this.play.combo = 0;
         this.play.maxCombo = 0;
         this.play.frame = 0;
