@@ -291,6 +291,37 @@ function startLevelTransition(level) {
     }, 3000); // 3秒ほど暗転
 }
 
+// タイトルからレベル選択への遷移フェード
+function startTitleTransition() {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = '#000';
+    overlay.style.zIndex = '9999';
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 0.5s ease-in-out';
+    overlay.style.pointerEvents = 'all';
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.style.opacity = '1';
+    }, 50);
+
+    setTimeout(() => {
+        showLevelSelect();
+
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+            if (overlay.parentNode) overlay.remove();
+        }, 500);
+    }, 3000); // 3秒暗転
+}
+
 // 画面遷移
 function showTitle() {
     GS.screen = 'title';

@@ -88,35 +88,22 @@ function activateSpecialAttack() {
 
     const { play, entities } = GS;
 
-    // バナー表示トリガー (3秒)
-    GS.effects.bonnouSokuBodaiBannerUntil = performance.now() + 3000;
-
-    let defeatedCount = 0;
-    const enemies = entities.enemies;
-    const pool = GS.pools.enemies;
-
-    for (const enemy of enemies) {
-        createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
-        if (!enemy.isNenbutsu) {
-            defeatedCount++;
-        }
-        pool.push(enemy); // プールに戻す
-    }
-    enemies.length = 0;
-
-    play.score += defeatedCount;
-    play.combo += defeatedCount;
-    if (play.combo > play.maxCombo) play.maxCombo = play.combo;
-
     play.kudoku = 0;
     updateUI();
 
-    playSound('hit');
-    flashScreen();
+    playSound('rokuharamitsu');
 
-    if (play.score >= GS.level.targetScore) {
-        gameOver(true);
-    }
+    const now = performance.now();
+    play.specialActiveUntil = now + 3000;
+    play.specialStartTime = now;
+
+    // バナー表示トリガー (3秒)
+    GS.effects.bonnouSokuBodaiBannerUntil = now + 3000;
+
+    // 画面上の敵をY座標順（上から下）にソートして待機リストへ
+    play.specialEnemies = [...entities.enemies].sort((a, b) => a.y - b.y);
+
+    flashScreen();
 }
 
 // ゲームオーバー
@@ -211,15 +198,7 @@ function update(timeScale) {
     if (GS.screen !== 'playing') return;
 
     const { play, input, entities, level, effects } = GS;
-
-    // オートハイド判定 (無効化)
-    // if (!virtualControls.classList.contains('hidden')) {
-    //     if (Date.now() - input.lastInputTime > HIDE_DELAY) {
-    //         if (!virtualControls.classList.contains('inactive')) {
-    //             virtualControls.classList.add('inactive');
-    //         }
-    //     }
-    // }
+    const now = performance.now();
 
     play.frame++;
 
@@ -232,7 +211,7 @@ function update(timeScale) {
         }
     }
 
-    // プレイヤー移動
+    // プレイヤー移動は必殺技中も許可
     if ((input.keys['ArrowLeft'] || input.touchLeft) && player.x > player.width / 2) {
         player.x -= player.speed * timeScale;
     }
@@ -240,12 +219,76 @@ function update(timeScale) {
         player.x += player.speed * timeScale;
     }
 
-    // 弾の更新
+    // 弾の更新は必殺技中も許可
     for (let i = entities.bullets.length - 1; i >= 0; i--) {
         entities.bullets[i].update(timeScale);
         if (entities.bullets[i].isOffScreen()) {
             GS.pools.bullets.push(entities.bullets[i]);
             entities.bullets.splice(i, 1);
+        }
+    }
+
+    // 必殺技演出中 (時を止める＆順次破壊)
+    if (play.specialActiveUntil > now) {
+        const elapsed = now - play.specialStartTime;
+        const progress = elapsed / 3000; // 0.0 to 1.0
+
+        if (play.specialEnemies && play.specialEnemies.length > 0) {
+            const totalToDestroy = play.specialEnemies.length;
+            const targetDestroyed = Math.floor(progress * totalToDestroy);
+
+            while (play.specialEnemies.length > 0 && (totalToDestroy - play.specialEnemies.length) < targetDestroyed) {
+                const enemy = play.specialEnemies.shift(); // 上から取得
+
+                createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
+                if (!enemy.isNenbutsu) {
+                    play.score++;
+                    play.combo++;
+                    if (play.combo > play.maxCombo) play.maxCombo = play.combo;
+                    playSound('hit');
+                }
+
+                // entities.enemies から削除
+                const idx = entities.enemies.indexOf(enemy);
+                if (idx !== -1) {
+                    entities.enemies.splice(idx, 1);
+                }
+                GS.pools.enemies.push(enemy); // プールに戻す
+            }
+            updateUI();
+            if (play.score >= level.targetScore) {
+                gameOver(true);
+            }
+        }
+
+        // パーティクルの更新のみ行って敵の更新/発生をスキップ
+        for (let i = entities.particles.length - 1; i >= 0; i--) {
+            entities.particles[i].update(timeScale);
+            if (entities.particles[i].isDead()) {
+                GS.pools.particles.push(entities.particles[i]);
+                entities.particles.splice(i, 1);
+            }
+        }
+        return;
+    } else if (play.specialEnemies && play.specialEnemies.length > 0) {
+        // 万が一時間が過ぎても残っていたら一気に全部倒す
+        while (play.specialEnemies.length > 0) {
+            const enemy = play.specialEnemies.shift();
+            createParticles(enemy.getCenterX(), enemy.getCenterY(), enemy.color);
+            if (!enemy.isNenbutsu) {
+                play.score++;
+                play.combo++;
+                if (play.combo > play.maxCombo) play.maxCombo = play.combo;
+            }
+            const idx = entities.enemies.indexOf(enemy);
+            if (idx !== -1) {
+                entities.enemies.splice(idx, 1);
+            }
+            GS.pools.enemies.push(enemy);
+        }
+        updateUI();
+        if (play.score >= level.targetScore) {
+            gameOver(true);
         }
     }
 

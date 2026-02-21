@@ -3,7 +3,10 @@
 // ==========================================
 
 // ボタンイベントリスナー登録
-startBtn.addEventListener('click', showLevelSelect);
+startBtn.addEventListener('click', () => {
+    playSound('start');
+    startTitleTransition();
+});
 restartBtn.addEventListener('click', showLevelSelect);
 rankingBtn.addEventListener('click', showRanking);
 backToTitleBtn.addEventListener('click', showTitle);

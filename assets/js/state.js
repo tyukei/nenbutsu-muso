@@ -17,6 +17,8 @@ const GS = {
         maxCombo: 0,
         frame: 0,
         lastBonnou: '',
+        specialActiveUntil: 0,
+        specialEnemies: []
     },
 
     // 入力状態
@@ -107,6 +109,8 @@ const GS = {
         this.play.maxCombo = 0;
         this.play.frame = 0;
         this.play.lastBonnou = '';
+        this.play.specialActiveUntil = 0;
+        this.play.specialEnemies = [];
 
         // エフェクト
         this.effects.heartFlashUntil = 0;
