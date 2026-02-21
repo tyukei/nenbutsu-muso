@@ -129,21 +129,32 @@ const GS = {
         this.input.touchLeft = false;
         this.input.touchRight = false;
         this.input.touchSpecial = false;
-        this.input.touchSpecial = false;
+
+        this.loadTotalKudoku();
     },
 
     /**
      * 累計功徳をロード
      */
     loadTotalKudoku() {
-        const saved = localStorage.getItem('nenbunTotalKudoku');
-        this.play.totalKudoku = saved ? parseInt(saved, 10) : 0;
+        const levelKey = this.level.current || 'normal';
+        const saved = localStorage.getItem('nenbunTotalKudoku_' + levelKey);
+
+        // 旧データがある場合のフォールバック（最初の1回だけ引き継ぐのは複雑なので、単純に新規スタートでもよいが、旧データが存在するならそれを初期値とする）
+        if (!saved && localStorage.getItem('nenbunTotalKudoku')) {
+            this.play.totalKudoku = parseInt(localStorage.getItem('nenbunTotalKudoku'), 10) || 0;
+            // 移行フラグとして保存しておく
+            localStorage.setItem('nenbunTotalKudoku_' + levelKey, this.play.totalKudoku);
+        } else {
+            this.play.totalKudoku = saved ? parseInt(saved, 10) : 0;
+        }
     },
 
     /**
      * 累計功徳をセーブ
      */
     saveTotalKudoku() {
-        localStorage.setItem('nenbunTotalKudoku', this.play.totalKudoku);
+        const levelKey = this.level.current || 'normal';
+        localStorage.setItem('nenbunTotalKudoku_' + levelKey, this.play.totalKudoku);
     }
 };

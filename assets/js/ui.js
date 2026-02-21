@@ -120,6 +120,40 @@ function displayRankings() {
     rankingList.innerHTML = html;
 }
 
+// 累計データの計算と表示
+function displayCumulativeStats() {
+    const cumulativeStats = document.getElementById('cumulativeStats');
+    if (!cumulativeStats) return;
+
+    // 累計撃破数の計算
+    const rankings = loadRankings();
+    const totalDestroyed = rankings.reduce((sum, rank) => sum + parseInt(rank.score || 0, 10), 0);
+
+    // 累計功徳の計算 (全レベルの合計 + 旧フォーマット分)
+    let totalKudoku = 0;
+
+    // 旧フォーマットの分
+    const oldKudoku = localStorage.getItem('nenbunTotalKudoku');
+    if (oldKudoku) totalKudoku += parseInt(oldKudoku, 10);
+
+    // 各レベルの分
+    ['easy', 'normal', 'hard', 'demon'].forEach(level => {
+        const levelKudoku = localStorage.getItem('nenbunTotalKudoku_' + level);
+        if (levelKudoku) totalKudoku += parseInt(levelKudoku, 10);
+    });
+
+    cumulativeStats.innerHTML = `
+        <div class="cumulative-stat">
+            <div class="cumulative-stat-label">累計撃破数</div>
+            <div class="cumulative-stat-value">${totalDestroyed}</div>
+        </div>
+        <div class="cumulative-stat">
+            <div class="cumulative-stat-label">累計功徳</div>
+            <div class="cumulative-stat-value">${totalKudoku}</div>
+        </div>
+    `;
+}
+
 // レベル進行システム
 function loadClearedLevels() {
     try {
@@ -407,6 +441,7 @@ function showRanking() {
     GS.screen = 'ranking';
     titleScreen.classList.add('hidden');
     rankingScreen.classList.remove('hidden');
+    displayCumulativeStats();
     displayRankings();
 }
 
