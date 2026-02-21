@@ -581,6 +581,15 @@ function updateUI() {
     comboDisplay.textContent = play.combo;
     levelDisplay.textContent = settings.name;
 
+    // モバイルステータスの更新
+    if (mobileScoreDisplay) mobileScoreDisplay.textContent = play.score;
+    if (mobileSpiritDisplay) mobileSpiritDisplay.textContent = play.spirit;
+    if (mobileKudokuDisplay) {
+        mobileKudokuDisplay.textContent = `${play.kudoku}/${MAX_KUDOKU}`;
+        mobileKudokuDisplay.style.color = play.kudoku >= MAX_KUDOKU ? '#ff0000' : '#fff';
+    }
+    if (mobileComboDisplay) mobileComboDisplay.textContent = play.combo;
+
     updateSpecialButton();
 }
 

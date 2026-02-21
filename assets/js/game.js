@@ -14,6 +14,7 @@ function startGame(level) {
     rankingScreen.classList.add('hidden');
     infoPanel.classList.remove('hidden');
     virtualControls.classList.remove('hidden');
+    if (mobileStatus) mobileStatus.classList.remove('hidden');
 
     bonnouMessageContainer.innerHTML = '';
 
@@ -147,6 +148,7 @@ function gameOver(win) {
     gameOverScreen.classList.remove('hidden');
     infoPanel.classList.add('hidden');
     virtualControls.classList.add('hidden');
+    if (mobileStatus) mobileStatus.classList.add('hidden');
 
     stopSound('bgm');
     if (win) {
