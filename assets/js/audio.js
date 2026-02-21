@@ -4,7 +4,7 @@
 
 // BGMと効果音
 const sounds = {
-    bgm: new Audio('sounds/bgm.wav'),
+    bgm: new Audio('sounds/bgm.mp3'),
     shoot: new Audio('sounds/shoot.mp3'),
     hit: new Audio('sounds/hit.mp3'),
     hit_bounas: new Audio('sounds/hit_bounas.mp3'),
