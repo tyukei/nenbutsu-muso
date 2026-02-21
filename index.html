@@ -230,10 +230,36 @@
 
             <!-- 仮想コントローラー（スマホ用） -->
             <div id="virtualControls" class="hidden">
-                <div id="leftBtn" class="control-btn">◀</div>
-                <div id="rightBtn" class="control-btn">▶</div>
+                <!-- 仮想ジョイスティック（左下） -->
+                <div id="joystickContainer" class="joystick-container">
+                    <div id="joystickOuter" class="joystick-outer">
+                        <div id="joystickInner" class="joystick-inner"></div>
+                    </div>
+                </div>
+
+                <!-- 右側のボタン -->
                 <div id="shootBtn" class="control-btn">読経発射</div>
                 <div id="specialBtn" class="control-btn disabled">煩悩即菩薩</div>
+            </div>
+
+            <!-- スマホモード用ステータス表示 -->
+            <div id="mobileStatus" class="mobile-status hidden">
+                <div class="status-item">
+                    <span class="status-label">徳</span>
+                    <span id="mobileScore" class="status-value">0</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">精神力</span>
+                    <span id="mobileSpirit" class="status-value">3</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">功徳</span>
+                    <span id="mobileKudoku" class="status-value">0/6</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">連鎖</span>
+                    <span id="mobileCombo" class="status-value">0</span>
+                </div>
             </div>
         </div>
 

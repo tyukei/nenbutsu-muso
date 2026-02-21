@@ -14,6 +14,7 @@ function startGame(level) {
     rankingScreen.classList.add('hidden');
     infoPanel.classList.remove('hidden');
     virtualControls.classList.remove('hidden');
+    if (mobileStatus) mobileStatus.classList.remove('hidden');
 
     bonnouMessageContainer.innerHTML = '';
 
@@ -99,11 +100,11 @@ function activateSpecialAttack() {
     }
 
     const now = performance.now();
-    play.specialActiveUntil = now + 3000;
+    play.specialActiveUntil = now + 1000;
     play.specialStartTime = now;
 
-    // バナー表示トリガー (3秒)
-    GS.effects.bonnouSokuBodaiBannerUntil = now + 3000;
+    // バナー表示トリガー (1秒)
+    GS.effects.bonnouSokuBodaiBannerUntil = now + 1000;
 
     // 画面上の敵のうち、煩悩（!isNenbutsu）を一気に破壊
     const targets = entities.enemies.filter(e => !e.isNenbutsu);
@@ -147,6 +148,7 @@ function gameOver(win) {
     gameOverScreen.classList.remove('hidden');
     infoPanel.classList.add('hidden');
     virtualControls.classList.add('hidden');
+    if (mobileStatus) mobileStatus.classList.add('hidden');
 
     stopSound('bgm');
     if (win) {

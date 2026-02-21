@@ -47,10 +47,15 @@ const slides = document.querySelectorAll('.carousel-slide');
 const dots = document.querySelectorAll('.dot');
 
 // 仮想コントローラーボタン
-const leftBtn = document.getElementById('leftBtn');
-const rightBtn = document.getElementById('rightBtn');
 const shootBtn = document.getElementById('shootBtn');
 const specialBtn = document.getElementById('specialBtn');
+
+// モバイルステータス表示
+const mobileStatus = document.getElementById('mobileStatus');
+const mobileScoreDisplay = document.getElementById('mobileScore');
+const mobileSpiritDisplay = document.getElementById('mobileSpirit');
+const mobileKudokuDisplay = document.getElementById('mobileKudoku');
+const mobileComboDisplay = document.getElementById('mobileCombo');
 
 // 煩悩メッセージ表示
 const bonnouMessageContainer = document.getElementById('bonnouMessageContainer');
