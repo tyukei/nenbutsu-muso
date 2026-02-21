@@ -446,30 +446,43 @@ passwordInput.addEventListener('keypress', (e) => {
     }
 });
 
+// 簡単な文字列ハッシュ関数
+function simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
+
 function checkPassword() {
     const password = passwordInput.value.trim();
     const cleared = loadClearedLevels();
     let unlocked = false;
     let message = '';
 
-    if (password === 'nenbutsu-mashimashi1') {
+    const hashed = simpleHash(password);
+
+    if (hashed === -1116238380) { // nenbutsu-mashimashi1
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
-        localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+        localStorage.setItem('nenbunClearedLevels', btoa(JSON.stringify(cleared)));
         message = '✓ 仏性Lev2を解放しました！';
         unlocked = true;
-    } else if (password === 'nenbutsu-mashimashi2') {
+    } else if (hashed === -1116238379) { // nenbutsu-mashimashi2
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
         if (!cleared.includes('normal')) {
             cleared.push('normal');
         }
-        localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+        localStorage.setItem('nenbunClearedLevels', btoa(JSON.stringify(cleared)));
         message = '✓ 仏性Lev3を解放しました！';
         unlocked = true;
-    } else if (password === 'nenbutsu-mashimashi3') {
+    } else if (hashed === -1116238378) { // nenbutsu-mashimashi3
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
@@ -479,7 +492,7 @@ function checkPassword() {
         if (!cleared.includes('hard')) {
             cleared.push('hard');
         }
-        localStorage.setItem('nenbunClearedLevels', JSON.stringify(cleared));
+        localStorage.setItem('nenbunClearedLevels', btoa(JSON.stringify(cleared)));
         message = '✓ Lev悪魔を解放しました！';
         unlocked = true;
     }
