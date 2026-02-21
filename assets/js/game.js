@@ -93,9 +93,9 @@ function activateSpecialAttack() {
 
     playSound('rokuharamitsu');
 
-    // BGMの音量を下げる
+    // BGMの音量を0にする
     if (sounds.bgm) {
-        sounds.bgm.volume = 0.1;
+        sounds.bgm.volume = 0;
     }
 
     const now = performance.now();

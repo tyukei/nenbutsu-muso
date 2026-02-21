@@ -33,6 +33,11 @@ sounds.clear.volume = 0.6;
 // 音声再生のヘルパー関数
 function playSound(soundName) {
     if (sounds[soundName]) {
+        // 必殺技発動中(3秒間)は、rokuharamitsu 以外の音を鳴らさない
+        if (typeof GS !== 'undefined' && GS.play && GS.play.specialActiveUntil > performance.now() && soundName !== 'rokuharamitsu') {
+            return;
+        }
+
         sounds[soundName].muted = false;
         sounds[soundName].currentTime = 0;
         sounds[soundName].play().catch(e => console.log('Audio play failed:', e));
