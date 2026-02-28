@@ -401,7 +401,7 @@ const translations = {
         'mobileKudoku': 'Kudoku',
         'mobileCombo': 'Combo',
         'mobileScore': 'Score',
-        'resultWin': 'Buddha nature has grown!',
+        'resultWin': 'Buddha nature has grown to $1!',
         'resultWinHard': 'Attained Moksha',
         'resultLose': 'Swallowed by afflictions',
         'resultTextWinSuffix': ' afflictions completely vanquished',
