@@ -65,6 +65,11 @@
                         <button id="startBtn" class="title-button">修行の開始</button>
                         <button id="rankingBtn" class="title-button">修行の軌跡</button>
                         <button id="menuBtn" class="title-button title-button-menu">修行の準備</button>
+
+                        <div class="title-buttons-bottom-row">
+                            <button id="buddhaMessageBtn" class="title-button title-button-half">ブッダ<br>メッセージ</button>
+                            <button id="langToggleBtn" class="title-button title-button-half">In English</button>
+                        </div>
                     </div>
 
                     <!-- Version moved to title-info-row -->
@@ -216,6 +221,42 @@
                 <div id="rankingList"></div>
 
                 <button id="backToTitleBtn">タイトルに戻る</button>
+            </div>
+
+            <!-- ブッダメッセージ一覧画面 -->
+            <div id="buddhaMessageScreen" class="screen hidden">
+                <h1>ブッダメッセージ</h1>
+
+                <div class="buddha-message-list">
+                    <button id="bmBtn1" class="buddha-message-btn locked" data-index="1">
+                        <span class="bm-title">Locked</span>
+                        <span class="bm-lock">仏性Lev1クリアで解放</span>
+                    </button>
+                    <button id="bmBtn2" class="buddha-message-btn locked" data-index="2">
+                        <span class="bm-title">Locked</span>
+                        <span class="bm-lock">仏性Lev2クリアで解放</span>
+                    </button>
+                    <button id="bmBtn3" class="buddha-message-btn locked" data-index="3">
+                        <span class="bm-title">Locked</span>
+                        <span class="bm-lock">仏性Lev3クリアで解放</span>
+                    </button>
+                    <button id="bmBtn4" class="buddha-message-btn locked" data-index="4">
+                        <span class="bm-title">Locked</span>
+                        <span class="bm-lock">Lev悪魔クリアで解放</span>
+                    </button>
+                </div>
+
+                <button id="backFromBuddhaMessageBtn">閉じる</button>
+            </div>
+
+            <!-- ブッダメッセージ詳細モーダル -->
+            <div id="buddhaMessageDetailModal" class="modal hidden">
+                <div class="modal-container buddha-detail-container">
+                    <h2 id="bmDetailTitle" class="bm-detail-title">タイトル</h2>
+                    <div id="bmDetailContentJa" class="bm-detail-content ja-content"></div>
+                    <div id="bmDetailContentEn" class="bm-detail-content en-content"></div>
+                    <button id="closeBmDetailBtn" class="menu-btn menu-close-btn">閉じる</button>
+                </div>
             </div>
 
             <canvas id="gameCanvas" width="480" height="640"></canvas>

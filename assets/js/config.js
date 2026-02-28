@@ -60,6 +60,17 @@ const mobileComboDisplay = document.getElementById('mobileCombo');
 // 煩悩メッセージ表示
 const bonnouMessageContainer = document.getElementById('bonnouMessageContainer');
 
+// ブッダメッセージ関連要素
+const buddhaMessageBtn = document.getElementById('buddhaMessageBtn');
+const buddhaMessageScreen = document.getElementById('buddhaMessageScreen');
+const backFromBuddhaMessageBtn = document.getElementById('backFromBuddhaMessageBtn');
+const buddhaMessageDetailModal = document.getElementById('buddhaMessageDetailModal');
+const closeBmDetailBtn = document.getElementById('closeBmDetailBtn');
+const bmDetailTitle = document.getElementById('bmDetailTitle');
+const bmDetailContentJa = document.getElementById('bmDetailContentJa');
+const bmDetailContentEn = document.getElementById('bmDetailContentEn');
+const langToggleBtn = document.getElementById('langToggleBtn');
+
 // 画像リソース
 const monkImage = new Image();
 monkImage.src = 'images/monk/monk_back.png';
@@ -136,8 +147,8 @@ const bonnouList = [
     '色欲', '声欲', '香欲', '味欲', '触欲'
 ];
 
-// 煩悩の説明と対処法
-const bonnouDescriptions = {
+// 煩悩の説明と対処法 (Japanese)
+const bonnouDescriptionsJa = {
     '貪': 'とん：むさぼり',
     '瞋': 'じん：怒り',
     '痴': 'ち：ものの道理がわからない',
@@ -167,6 +178,128 @@ const bonnouDescriptions = {
     '味欲': 'み：一切の食への欲望',
     '触欲': 'そく：男女の肌や服等への欲望'
 };
+
+// 煩悩の説明と対処法 (English)
+const bonnouDescriptionsEn = {
+    '貪': 'Greed',
+    '瞋': 'Aversion',
+    '痴': 'Unawareness of the true nature of things',
+    '慢': 'Pride',
+    '疑': 'Doubt',
+    '見': 'Wrong View',
+    '無明': 'Fundamental lack of knowledge',
+    '随眠': 'Subconscious afflictions',
+    '無慚': 'Shamelessness',
+    '無愧': 'Recklessness',
+    '嫉': 'Jealousy',
+    '慳': 'Miserliness',
+    '悪作': 'Regret',
+    '眠': 'Sleepiness (narrow view)',
+    '掉挙': 'Restlessness',
+    '惛沈': 'Sloth',
+    '忿': 'Quickness to anger',
+    '覆': 'Concealment of mistakes, untruthfulness',
+    '執着': 'Clinging',
+    '渇愛': 'Craving',
+    '妄想': 'Delusional thought divorced from reality',
+    '恐怖': 'Fear',
+    '懈怠': 'Laziness',
+    '色欲': 'Craving for form',
+    '声欲': 'Craving for sound',
+    '香欲': 'Craving for smell',
+    '味欲': 'Craving for taste',
+    '触欲': 'Craving for sense pleasures'
+};
+
+// UI・テキストの翻訳辞書
+const translations = {
+    'ja': {
+        'gameStart': '修行の開始',
+        'record': '修行の軌跡',
+        'setting': '修行の準備',
+        'buddhaMessage': 'ブッダ<br>メッセージ',
+        'langToggle': 'In English',
+        'stageSelect': '修行の道',
+        'buddhaNature1': '仏性Lev1',
+        'buddhaNature2': '仏性Lev2',
+        'buddhaNature3': '仏性Lev3',
+        'levelDemon': 'Lev悪魔',
+        'levelLock1': '仏性Lev1をクリアで解放',
+        'levelLock2': '仏性Lev2をクリアで解放',
+        'levelLock3': '仏性Lev3をクリアで解放',
+        'levelLockDemon': 'Lev悪魔クリアで解放',
+        'back': '戻る',
+        'close': '閉じる',
+        'toTitle': 'タイトルに戻る',
+        'share': '共有',
+        'restart': '再修行',
+        'title': 'タイトル',
+        'shoot': '読経発射',
+        'special': '煩悩即菩薩',
+        'locked': 'Locked'
+    },
+    'en': {
+        'gameStart': 'Game Start',
+        'record': 'Record',
+        'setting': 'Setting',
+        'buddhaMessage': 'Buddha<br>Message',
+        'langToggle': '日本語',
+        'stageSelect': 'Stage Select',
+        'buddhaNature1': 'Buddha nature Lev1',
+        'buddhaNature2': 'Buddha nature Lev2',
+        'buddhaNature3': 'Buddha nature Lev3',
+        'levelDemon': 'Lev Demon',
+        'levelLock1': 'Clear Buddha nature 1 to unlock',
+        'levelLock2': 'Clear Buddha nature 2 to unlock',
+        'levelLock3': 'Clear Buddha nature 3 to unlock',
+        'levelLockDemon': 'Clear Lev Demon to unlock',
+        'back': 'Back',
+        'close': 'Close',
+        'toTitle': 'Back to Title',
+        'share': 'Share',
+        'restart': 'Restart',
+        'title': 'Title',
+        'shoot': 'Chant',
+        'special': 'Transmute Afflictions',
+        'locked': 'Locked'
+    }
+};
+
+// ブッダメッセージ データ
+const buddhaMessagesData = [
+    {
+        id: 1,
+        levelRequirement: 'easy',
+        title: '中道（ちゅうどう）',
+        titleEn: 'The Middle Way',
+        contentJa: `苦楽の両極端を捨て、いま静かに正しい道に立て<br><br>快楽に流される道と、苦行で自分を痛めつける道、その両方を離れる教えです。「ほどほど」ではなく、どちらにも寄らず、八正道という“まっすぐな実践”に立つことが中道だと説かれます。「正しく見て、正しく考え、正しく生きる。」その積み重ねが、中道です。あなたは今、かたよりすぎていませんか。極端を離れたところに、静かな智慧があります。`,
+        contentEn: `Abandoning both extremes of pleasure and pain, stand quietly on the right path now.<br><br>It is the teaching to break away from both the path of seeking pleasure and the path of torturing oneself through asceticism. It is not about being "moderate," but about not leaning towards either side and standing on the "straight practice" called the Noble Eightfold Path. "See rightly, think rightly, live rightly." The accumulation of this is the Middle Way. Are you leaning too far to one side now? In a place away from extremes lies quiet wisdom.`
+    },
+    {
+        id: 2,
+        levelRequirement: 'normal',
+        title: '十二縁起（じゅうにえんぎ）',
+        titleEn: 'Twelve Links of Dependent Origination',
+        contentJa: `原因を遡ると、根本的な無知に辿り着く<br><br>十二縁起は、「苦しみは、条件がつながって起きる」と見る教えです。無明から老死まで、12の段階で流れを示します。大事なのは“運命”ではなく、「条件がそろうと起き、条件がほどけると弱まる」という見方です。あなたの苦しみも、原因によって生じています。つながりを見れば、解放の道も見えてきます。ぜひ原因を分解して考えていきましょう。`,
+        contentEn: `Tracing the causes back, we arrive at fundamental ignorance.<br><br>The Twelve Links of Dependent Origination is a teaching that views "suffering arises from a chain of conditions." It shows the flow in 12 stages, from ignorance to aging and death. The important thing is not "fate," but the view that "it happens when conditions are met, and it weakens when conditions are unraveled." Your suffering also arises from causes. If you look at the connections, you will see the path to liberation. Let's break down the causes and think about them.`
+    },
+    {
+        id: 3,
+        levelRequirement: 'hard',
+        title: '四諦（したい）',
+        titleEn: 'Four Noble Truths',
+        contentJa: `苦しみを、四諦でほどいていこう。<br><br>四諦は、苦・集（原因）・滅・道の四真理。苦しみの事実を順を追って考える方法です。「苦がある」→「原因がある」→「止められる」→「その道がある」という、四つの見取り図のような教えです。生きることには苦があり、その原因は渇愛にあり、それは滅することができ、その道もある。理由があるものには、終わりがあります。`,
+        contentEn: `Let's untangle suffering with the Four Noble Truths.<br><br>The Four Noble Truths are the four truths of suffering, origin (cause), cessation, and path. It is a method of thinking about the reality of suffering step by step. It is a teaching like a map of four steps: "There is suffering" → "There is a cause" → "It can be stopped" → "There is a path to it." Living involves suffering, its cause lies in craving, it can be extinguished, and there is a path to do so. What has a reason, has an end.`
+    },
+    {
+        id: 4,
+        levelRequirement: 'demon',
+        title: '八正道（はっしょうどう）',
+        titleEn: 'Noble Eightfold Path',
+        contentJa: `見方・言葉・行いを整え、八つの道で進もう。<br><br>苦しみを取り除く習慣です。心は、習慣によって整います。正しく見る、正しく思う、正しく語る、正しく行う、正しく生きる、正しく努める、正しく気づく、正しく集中する。この八つは、ばらばらの教えではありません。互いに支え合いながら、あなたを静かな自由へ導きます。`,
+        contentEn: `Organize your views, words, and actions, and proceed on the eight paths.<br><br>It is a habit to remove suffering. The mind is organized by habit. Right view, right resolve, right speech, right action, right livelihood, right effort, right mindfulness, right concentration. These eight are not separate teachings. While supporting each other, they will lead you to quiet freedom.`
+    }
+];
 
 // プレイヤー
 const player = {

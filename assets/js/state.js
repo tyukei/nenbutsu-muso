@@ -20,8 +20,11 @@ const GS = {
         frame: 0,
         lastBonnou: '',
         specialActiveUntil: 0,
-        specialEnemies: []
+        specialEnemies: [],
+        unlockedMessages: [] // ids of unlocked buddha messages
     },
+
+    lang: 'ja', // 'ja' or 'en'
 
     // 入力状態
     input: {
@@ -153,6 +156,16 @@ const GS = {
         }
 
         this.play.totalPlays = savedPlays ? parseInt(savedPlays, 10) : 0;
+
+        // Load unlocked Buddha messages
+        const savedMessages = localStorage.getItem('nenbunUnlockedMessages');
+        if (savedMessages) {
+            try {
+                this.play.unlockedMessages = JSON.parse(atob(savedMessages));
+            } catch (e) {
+                this.play.unlockedMessages = [];
+            }
+        }
     },
 
     /**
@@ -162,5 +175,8 @@ const GS = {
         const levelKey = this.level.current || 'normal';
         localStorage.setItem('nenbunTotalKudoku_' + levelKey, this.play.totalKudoku);
         localStorage.setItem('nenbunTotalPlays_' + levelKey, this.play.totalPlays);
+
+        // Save unlocked Buddha messages
+        localStorage.setItem('nenbunUnlockedMessages', btoa(JSON.stringify(this.play.unlockedMessages)));
     }
 };

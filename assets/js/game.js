@@ -159,6 +159,23 @@ function gameOver(win) {
         shakeScreen();
     }
 
+    // Unlock Buddha messages
+    let unlockedMsgId = null;
+    let unlockedMsgData = null;
+    if (win) {
+        let msgIdToUnlock = null;
+        if (level.current === 'easy') msgIdToUnlock = 1;
+        else if (level.current === 'normal') msgIdToUnlock = 2;
+        else if (level.current === 'hard') msgIdToUnlock = 3;
+        else if (level.current === 'demon') msgIdToUnlock = 4;
+
+        if (msgIdToUnlock && !play.unlockedMessages.includes(msgIdToUnlock)) {
+            play.unlockedMessages.push(msgIdToUnlock);
+            unlockedMsgId = msgIdToUnlock;
+            unlockedMsgData = buddhaMessagesData.find(m => m.id === msgIdToUnlock);
+        }
+    }
+
     play.totalPlays++;
     GS.savePersistentStats();
 
@@ -199,6 +216,34 @@ function gameOver(win) {
                             <div class="stat-value">${play.sessionKudoku}</div>
                         </div>
                     </div>`;
+
+        if (unlockedMsgId && unlockedMsgData) {
+            document.getElementById('currentScore').innerHTML += `
+                <div style="margin-top: 15px; padding: 10px; background: rgba(212, 175, 55, 0.2); border: 1px solid #d4af37; border-radius: 5px; text-align: center;">
+                    <span style="color: #ffd700; font-weight: bold; font-size: 16px;">✨ 新しいブッダメッセージが届きました ✨</span><br>
+                    <span style="font-size: 14px;">「${unlockedMsgData.title}」</span>
+                </div>
+            `;
+
+            // Show overlay temporarily
+            const overlay = document.createElement('div');
+            overlay.className = 'bm-unlock-overlay';
+            overlay.innerHTML = `<div class="bm-unlock-text">✨ ブッダメッセージ が入りました ✨</div>`;
+            document.body.appendChild(overlay);
+
+            // Trigger animation
+            setTimeout(() => {
+                overlay.classList.add('show');
+            }, 100);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                overlay.classList.remove('show');
+                setTimeout(() => {
+                    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                }, 500);
+            }, 3000);
+        }
     } else {
         document.getElementById('resultTitle').textContent = '煩悩に呑まれた';
         if (settings.isInfinite) {
