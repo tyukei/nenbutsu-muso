@@ -361,8 +361,18 @@ const Renderer = {
             ctx.shadowBlur = 25;
             ctx.shadowColor = `rgba(255, 64, 129, ${alpha.toFixed(3)})`;
             ctx.fillStyle = `rgba(255, 200, 220, ${alpha.toFixed(3)})`;
-            ctx.font = 'bold 48px "MS Mincho", serif';
-            ctx.fillText('煩悩即菩提', canvas.width / 2, canvas.height * 0.4);
+
+            const t = translations[GS.lang] || translations['ja'];
+            const text = t.bonnouSokuBodai || '煩悩即菩提';
+
+            // Adjust font size for English (it's usually longer)
+            if (GS.lang === 'en') {
+                ctx.font = 'bold 32px "MS Mincho", serif';
+            } else {
+                ctx.font = 'bold 48px "MS Mincho", serif';
+            }
+
+            ctx.fillText(text, canvas.width / 2, canvas.height * 0.4);
             ctx.restore();
             return; // 優先表示
         }
@@ -380,8 +390,17 @@ const Renderer = {
             ctx.shadowBlur = 18;
             ctx.shadowColor = `rgba(255, 215, 90, ${alpha.toFixed(3)})`;
             ctx.fillStyle = `rgba(255, 236, 166, ${alpha.toFixed(3)})`;
-            ctx.font = 'bold 44px sans-serif';
-            ctx.fillText('六波羅蜜成就', canvas.width / 2, canvas.height * 0.34);
+
+            const t = translations[GS.lang] || translations['ja'];
+            const text = t.ropparamitsu || '六波羅蜜成就';
+
+            if (GS.lang === 'en') {
+                ctx.font = 'bold 28px sans-serif';
+            } else {
+                ctx.font = 'bold 44px sans-serif';
+            }
+
+            ctx.fillText(text, canvas.width / 2, canvas.height * 0.34);
             ctx.restore();
         }
     },
@@ -397,6 +416,9 @@ const Renderer = {
             const blink = (Math.sin(now * 0.01) + 1) / 2; // 0.0~1.0
             const alpha = 0.5 + blink * 0.5; // 0.5~1.0
 
+            const t = translations[GS.lang] || translations['ja'];
+            const text = t.pressZ || 'Zを押して必殺技';
+
             ctx.save();
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
@@ -404,7 +426,7 @@ const Renderer = {
             ctx.shadowColor = `rgba(255, 64, 129, ${alpha.toFixed(3)})`;
             ctx.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
             ctx.font = 'bold 20px sans-serif';
-            ctx.fillText('Zを押して必殺技', canvas.width / 2, canvas.height - 100);
+            ctx.fillText(text, canvas.width / 2, canvas.height - 100);
             ctx.restore();
         }
     },

@@ -33,7 +33,7 @@
                         <p id="titleIntroMessageTextMain" class="intro-message-main"></p>
                         <p id="titleIntroMessageTextSub" class="intro-message-sub"></p>
                     </div>
-                    <div class="intro-skip-hint">タップでスキップ</div>
+                    <div class="intro-skip-hint" data-i18n="tapToSkip">タップでスキップ</div>
                 </div>
                 <div id="titlePersistentPray">
                     <img class="persistent-happy" src="images/monk/monk_happy.png" alt="happy monk">
@@ -52,11 +52,11 @@
                     </div>
 
                     <div class="instruction">
-                        <p class="title-main-copy">
+                        <p class="title-main-copy" data-i18n-html="introMain">
                             降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……<br>
                             迷わず撃て！悟りはその先にある。
                         </p>
-                        <p class="title-sub-copy">
+                        <p class="title-sub-copy" data-i18n="introSub">
                             究極の徳（ハイスコア）を目指せ！
                         </p>
                     </div>
@@ -65,6 +65,8 @@
                         <button id="startBtn" class="title-button">修行の開始</button>
                         <button id="rankingBtn" class="title-button">修行の軌跡</button>
                         <button id="menuBtn" class="title-button title-button-menu">修行の準備</button>
+                        <button id="buddhaMessageBtn" class="title-button">ブッダメッセージ</button>
+                        <button id="langToggleBtn" class="title-button">In English</button>
                     </div>
 
                     <!-- Version moved to title-info-row -->
@@ -73,27 +75,27 @@
 
             <!-- レベル選択画面 -->
             <div id="levelScreen" class="screen hidden">
-                <h1>修行の道</h1>
-                <h2>難易度を選べ</h2>
+                <h1 data-i18n="stageSelect">修行の道</h1>
+                <h2 data-i18n="selectDifficulty">難易度を選べ</h2>
 
                 <div class="level-buttons">
                     <button id="levelEasy" class="level-btn">
-                        <span class="level-name">仏性Lev1</span>
-                        <span class="level-desc">煩悩36体 / ゆっくり</span>
+                        <span class="level-name" data-i18n="buddhaNature1">仏性Lev1</span>
+                        <span class="level-desc" data-i18n="descEasy">煩悩36体 / ゆっくり</span>
                     </button>
                     <button id="levelNormal" class="level-btn">
-                        <span class="level-name">仏性Lev2</span>
-                        <span class="level-desc">煩悩72体 / 普通</span>
-                        <span class="level-lock">仏性Lev1をクリアで解放</span>
+                        <span class="level-name" data-i18n="buddhaNature2">仏性Lev2</span>
+                        <span class="level-desc" data-i18n="descNormal">煩悩72体 / 普通</span>
+                        <span class="level-lock" data-i18n="levelLock1">仏性Lev1をクリアで解放</span>
                     </button>
                     <button id="levelHard" class="level-btn">
-                        <span class="level-name">仏性Lev3</span>
-                        <span class="level-desc">煩悩108体 / 高速</span>
-                        <span class="level-lock">仏性Lev2をクリアで解放</span>
+                        <span class="level-name" data-i18n="buddhaNature3">仏性Lev3</span>
+                        <span class="level-desc" data-i18n="descHard">煩悩108体 / 高速</span>
+                        <span class="level-lock" data-i18n="levelLock2">仏性Lev2をクリアで解放</span>
                     </button>
                     <button id="levelDemon" class="level-btn hidden">
-                        <span class="level-name">Lev悪魔</span>
-                        <span class="level-desc">煩悩324体 / 加速地獄</span>
+                        <span class="level-name" data-i18n="levelDemon">Lev悪魔</span>
+                        <span class="level-desc" data-i18n="descDemon">煩悩324体 / 加速地獄</span>
                     </button>
                 </div>
 
@@ -104,15 +106,16 @@
             <!-- パスワード入力モーダル -->
             <div id="passwordModal" class="screen hidden">
                 <div class="password-container">
-                    <h2>レベル解放</h2>
+                    <h2 data-i18n="unlockLevel">レベル解放</h2>
                     <p>
-                        パスワードを入力してレベルを解放<br>
-                        <span class="password-hint">※各レベルに対応するパスワードがあります</span>
+                        <span data-i18n="passwordDesc">パスワードを入力してレベルを解放</span><br>
+                        <span class="password-hint" data-i18n="passwordHint">※各レベルに対応するパスワードがあります</span>
                     </p>
-                    <input type="password" id="passwordInput" placeholder="パスワードを入力" maxlength="20">
+                    <input type="password" id="passwordInput" data-i18n-placeholder="passwordPlaceholder"
+                        placeholder="パスワードを入力" maxlength="20">
                     <div class="password-buttons">
-                        <button id="passwordSubmitBtn">確認</button>
-                        <button id="passwordCancelBtn">キャンセル</button>
+                        <button id="passwordSubmitBtn" data-i18n="confirm">確認</button>
+                        <button id="passwordCancelBtn" data-i18n="cancel">キャンセル</button>
                     </div>
                     <div id="passwordMessage"></div>
                 </div>
@@ -134,50 +137,66 @@
             <!-- 初期設定モーダル -->
             <div id="settingsModal" class="hidden">
                 <div class="settings-container">
-                    <h2>環境設定</h2>
+                    <h2 data-i18n="settingsTitle">環境設定</h2>
 
                     <div class="setting-group">
-                        <span class="setting-label">音声設定</span>
+                        <span class="setting-label" data-i18n="soundSetting">音声設定</span>
                         <div class="toggle-options">
-                            <button class="toggle-btn active" data-group="sound" data-value="on">ON (BGMあり)</button>
-                            <button class="toggle-btn" data-group="sound" data-value="off">OFF (無音)</button>
+                            <button class="toggle-btn active" data-group="sound" data-value="on" data-i18n="soundOn">ON
+                                (BGMあり)</button>
+                            <button class="toggle-btn" data-group="sound" data-value="off" data-i18n="soundOff">OFF
+                                (無音)</button>
                         </div>
-                        <div class="settings-desc">※「ON」の場合、開始時に音声が再生されます</div>
+                        <div class="settings-desc" data-i18n="soundDesc">※「ON」の場合、開始時に音声が再生されます</div>
                     </div>
 
                     <div class="setting-group">
-                        <span class="setting-label">操作モード</span>
+                        <span class="setting-label" data-i18n="controlMode">操作モード</span>
                         <div class="toggle-options">
-                            <button class="toggle-btn" data-group="mode" data-value="pc">PC (キーボード)</button>
-                            <button class="toggle-btn" data-group="mode" data-value="mobile">スマホ (タップ)</button>
+                            <button class="toggle-btn" data-group="mode" data-value="pc" data-i18n="controlPc">PC
+                                (キーボード)</button>
+                            <button class="toggle-btn" data-group="mode" data-value="mobile"
+                                data-i18n="controlMobile">スマホ (タップ)</button>
                         </div>
-                        <div class="settings-desc">※デフォルトはPCです</div>
+                        <div class="settings-desc" data-i18n="controlDesc">※デフォルトはPCです</div>
                     </div>
 
-                    <button id="settingsSubmitBtn">決定</button>
+                    <button id="settingsSubmitBtn" data-i18n="submit">決定</button>
                 </div>
             </div>
 
             <!-- 利用規約モーダル -->
             <div id="tosModal" class="modal hidden">
                 <div class="modal-container">
-                    <h2 class="modal-title">利用規約</h2>
+                    <h2 class="modal-title" data-i18n="tosTitle">利用規約</h2>
                     <div class="tos-content">
-                        <p><strong>第1条（目的）</strong></p>
-                        <p>本規約は、当ゲーム「煩悩シューティング」の利用に関する条件を定めるものです。</p>
+                        <p><strong data-i18n="tosArticle1">第1条（目的）</strong></p>
+                        <p data-i18n="tosContent1">本規約は、当ゲーム「煩悩シューティング」の利用に関する条件を定めるものです。</p>
                         <br>
-                        <p><strong>第2条（免責）</strong></p>
-                        <p>本ゲームの利用により生じた損害について、開発者は一切の責任を負いません。</p>
+                        <p><strong data-i18n="tosArticle2">第2条（免責）</strong></p>
+                        <p data-i18n="tosContent2">本ゲームの利用により生じた損害について、開発者は一切の責任を負いません。</p>
                         <br>
-                        <p><strong>第3条（禁止事項）</strong></p>
-                        <p>公序良俗に反する行為、不正アクセス、その他開発者が不適切と判断する行為を禁止します。</p>
+                        <p><strong data-i18n="tosArticle3">第3条（禁止事項）</strong></p>
+                        <p data-i18n="tosContent3">公序良俗に反する行為、不正アクセス、その他開発者が不適切と判断する行為を禁止します。</p>
                         <br>
-                        <p><strong>第4条（変更）</strong></p>
-                        <p>本規約は予告なく変更される場合があります。</p>
+                        <p><strong data-i18n="tosArticle4">第4条（データの保存）</strong></p>
+                        <p data-i18n="tosContent4">
+                            本ゲームのプレイデータ（スコア、設定など）は、ご利用のブラウザ（ローカルストレージ）に保存されます。ブラウザの履歴やキャッシュを削除した場合、データが消失する可能性があります。また、データの復元や別端末への引き継ぎはできません。
+                        </p>
                         <br>
-                        <p>ゲームをお楽しみいただく前に、上記内容をご確認ください。</p>
+                        <p><strong data-i18n="tosArticle5">第5条（著作権等）</strong></p>
+                        <p data-i18n="tosContent5">
+                            本ゲームを構成するプログラム、画像、音声等の著作権その他の知的財産権は、開発者または正当な権利を有する第三者に帰属します。無断転載・再配布を禁じます。</p>
+                        <br>
+                        <p><strong data-i18n="tosArticle6">第6条（SNSシェア）</strong></p>
+                        <p data-i18n="tosContent6">シェア機能を利用した投稿内容や、SNS上でのトラブルについて開発者は一切の責任を負いません。</p>
+                        <br>
+                        <p><strong data-i18n="tosArticle7">第7条（変更）</strong></p>
+                        <p data-i18n="tosContent7">本規約は予告なく変更される場合があります。</p>
+                        <br>
+                        <p data-i18n="tosFooter">ゲームをお楽しみいただく前に、上記内容をご確認ください。</p>
                     </div>
-                    <button id="tosAgreeBtn">同意する</button>
+                    <button id="tosAgreeBtn" data-i18n="tosAgree">同意する</button>
                 </div>
             </div>
 
@@ -185,11 +204,16 @@
             <div id="tutorialModal" class="modal hidden">
                 <div class="modal-container">
                     <div class="carousel-container">
-                        <img src="images/tutorial/slide1.png" class="carousel-slide active" alt="基本操作">
-                        <img src="images/tutorial/slide2.png" class="carousel-slide" alt="煩悩を撃て">
-                        <img src="images/tutorial/slide3.png" class="carousel-slide" alt="六波羅蜜を集めよ">
-                        <img src="images/tutorial/slide4.png" class="carousel-slide" alt="六波羅蜜を集めよ">
-                        <img src="images/tutorial/slide5.png" class="carousel-slide" alt="六波羅蜜を集めよ">
+                        <img src="images/tutorial/slide1.png" class="carousel-slide active"
+                            data-i18n-alt="tutorialBasic" alt="基本操作">
+                        <img src="images/tutorial/slide2.png" class="carousel-slide" data-i18n-alt="tutorialShoot"
+                            alt="煩悩を撃て">
+                        <img src="images/tutorial/slide3.png" class="carousel-slide" data-i18n-alt="tutorialCollect"
+                            alt="六波羅蜜を集めよ">
+                        <img src="images/tutorial/slide4.png" class="carousel-slide" data-i18n-alt="tutorialCollect"
+                            alt="六波羅蜜を集めよ">
+                        <img src="images/tutorial/slide5.png" class="carousel-slide" data-i18n-alt="tutorialCollect"
+                            alt="六波羅蜜を集めよ">
                     </div>
 
                     <div class="carousel-dots">
@@ -201,16 +225,16 @@
                     </div>
 
                     <div class="carousel-controls">
-                        <button id="prevSlideBtn" class="carousel-nav-btn">前へ</button>
-                        <button id="nextSlideBtn" class="carousel-nav-btn">次へ</button>
+                        <button id="prevSlideBtn" class="carousel-nav-btn" data-i18n="prev">前へ</button>
+                        <button id="nextSlideBtn" class="carousel-nav-btn" data-i18n="next">次へ</button>
                     </div>
                 </div>
             </div>
 
             <!-- 修行の軌跡画面 -->
             <div id="rankingScreen" class="screen hidden">
-                <h1>修行の軌跡</h1>
-                <h2>己の過去と向き合う</h2>
+                <h1 data-i18n="record">修行の軌跡</h1>
+                <h2 data-i18n="pastRecord">己の過去と向き合う</h2>
 
                 <div id="cumulativeStats" class="cumulative-stats-container"></div>
                 <div id="rankingList"></div>
@@ -218,36 +242,99 @@
                 <button id="backToTitleBtn">タイトルに戻る</button>
             </div>
 
+            <!-- ブッダメッセージ一覧画面 -->
+            <div id="buddhaMessageScreen" class="screen hidden">
+                <h1>ブッダメッセージ</h1>
+
+                <div class="buddha-message-list">
+                    <button id="bmBtn1" class="buddha-message-btn locked" data-index="1">
+                        <span class="bm-title" data-i18n="locked">Locked</span>
+                        <span class="bm-lock" data-i18n="levelLock1">仏性Lev1クリアで解放</span>
+                    </button>
+                    <button id="bmBtn2" class="buddha-message-btn locked" data-index="2">
+                        <span class="bm-title" data-i18n="locked">Locked</span>
+                        <span class="bm-lock" data-i18n="levelLock2">仏性Lev2クリアで解放</span>
+                    </button>
+                    <button id="bmBtn3" class="buddha-message-btn locked" data-index="3">
+                        <span class="bm-title" data-i18n="locked">Locked</span>
+                        <span class="bm-lock" data-i18n="levelLock3">仏性Lev3クリアで解放</span>
+                    </button>
+                    <button id="bmBtn4" class="buddha-message-btn locked" data-index="4">
+                        <span class="bm-title" data-i18n="locked">Locked</span>
+                        <span class="bm-lock" data-i18n="levelLockDemon">Lev悪魔クリアで解放</span>
+                    </button>
+                </div>
+
+                <button id="backFromBuddhaMessageBtn">閉じる</button>
+            </div>
+
+            <!-- ブッダメッセージ詳細モーダル -->
+            <div id="buddhaMessageDetailModal" class="modal hidden">
+                <div class="modal-container buddha-detail-container">
+                    <h2 id="bmDetailTitle" class="bm-detail-title">タイトル</h2>
+                    <div id="bmDetailContentJa" class="bm-detail-content ja-content"></div>
+                    <div id="bmDetailContentEn" class="bm-detail-content en-content"></div>
+                    <button id="closeBmDetailBtn" class="menu-btn menu-close-btn">閉じる</button>
+                </div>
+            </div>
+
             <canvas id="gameCanvas" width="480" height="640"></canvas>
 
             <div id="info" class="hidden">
-                <div><span id="levelDisplay"></span> | 煩悩シューティング: <span id="score">0</span> / <span
-                        id="targetScore">108</span>
+                <div><span id="levelDisplay"></span> | <span data-i18n="hudTitle">煩悩シューティング:</span> <span
+                        id="score">0</span> / <span id="targetScore">108</span>
                 </div>
-                <div>精神力: <span id="spirit">3</span> | 功徳: <span id="kudoku" class="info-kudoku">0</span>/6 | 連鎖数: <span
-                        id="combo">0</span></div>
+                <div><span data-i18n="hudSpirit">精神力:</span> <span id="spirit">3</span> | <span
+                        data-i18n="hudKudoku">功徳:</span> <span id="kudoku" class="info-kudoku">0</span>/6 | <span
+                        data-i18n="hudCombo">連鎖数:</span> <span id="combo">0</span></div>
             </div>
 
             <!-- 仮想コントローラー（スマホ用） -->
             <div id="virtualControls" class="hidden">
-                <div id="leftBtn" class="control-btn">◀</div>
-                <div id="rightBtn" class="control-btn">▶</div>
+                <!-- 仮想ジョイスティック（左下） -->
+                <div id="joystickContainer" class="joystick-container">
+                    <div id="joystickOuter" class="joystick-outer">
+                        <div id="joystickInner" class="joystick-inner"></div>
+                    </div>
+                </div>
+
+                <!-- 右側のボタン -->
                 <div id="shootBtn" class="control-btn">読経発射</div>
                 <div id="specialBtn" class="control-btn disabled">煩悩即菩薩</div>
+            </div>
+
+            <!-- スマホモード用ステータス表示 -->
+            <div id="mobileStatus" class="mobile-status hidden">
+                <div class="status-item">
+                    <span class="status-label" data-i18n="mobileScore">徳</span>
+                    <span id="mobileScore" class="status-value">0</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label" data-i18n="mobileSpirit">精神力</span>
+                    <span id="mobileSpirit" class="status-value">3</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label" data-i18n="mobileKudoku">功徳</span>
+                    <span id="mobileKudoku" class="status-value">0/6</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label" data-i18n="mobileCombo">連鎖</span>
+                    <span id="mobileCombo" class="status-value">0</span>
+                </div>
             </div>
         </div>
 
         <!-- メニューモーダル -->
         <div id="menuModal" class="modal hidden">
             <div class="modal-container menu-modal-compact">
-                <h2 class="menu-modal-title">メニュー</h2>
+                <h2 class="menu-modal-title" data-i18n="menu">メニュー</h2>
                 <div class="menu-modal-actions">
-                    <button id="menuSettingsBtn" class="menu-btn">設定</button>
-                    <button id="menuTosBtn" class="menu-btn">利用規約</button>
-                    <button id="menuTutorialBtn" class="menu-btn">修行の心得</button>
-                    <button id="menuDeveloperBtn" class="menu-btn">開発者モード</button>
+                    <button id="menuSettingsBtn" class="menu-btn" data-i18n="menuSettings">設定</button>
+                    <button id="menuTosBtn" class="menu-btn" data-i18n="menuTos">利用規約</button>
+                    <button id="menuTutorialBtn" class="menu-btn" data-i18n="menuTutorial">修行の心得</button>
+                    <button id="menuDeveloperBtn" class="menu-btn" data-i18n="menuDeveloper">開発者モード</button>
 
-                    <button id="closeMenuBtn" class="menu-btn menu-close-btn">閉じる</button>
+                    <button id="closeMenuBtn" class="menu-btn menu-close-btn" data-i18n="close">閉じる</button>
                 </div>
             </div>
         </div>

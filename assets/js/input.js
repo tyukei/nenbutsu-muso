@@ -46,41 +46,98 @@ document.addEventListener('keydown', () => {
     }
 });
 
-// 仮想コントローラーのイベント
-// 左ボタン
-leftBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    GS.input.touchLeft = true;
-});
-leftBtn.addEventListener('touchend', (e) => {
-    e.preventDefault();
-    GS.input.touchLeft = false;
-});
-leftBtn.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    GS.input.touchLeft = true;
-});
-leftBtn.addEventListener('mouseup', (e) => {
-    e.preventDefault();
-    GS.input.touchLeft = false;
-});
+// 仮想ジョイスティックのイベント
+const joystickOuter = document.getElementById('joystickOuter');
+const joystickInner = document.getElementById('joystickInner');
 
-// 右ボタン
-rightBtn.addEventListener('touchstart', (e) => {
+let joystickActive = false;
+let joystickTouchId = null;
+let joystickCenterX = 0;
+let joystickCenterY = 0;
+const joystickMaxDistance = 35; // ジョイスティックの最大移動距離
+
+function initJoystick() {
+    const rect = joystickOuter.getBoundingClientRect();
+    joystickCenterX = rect.left + rect.width / 2;
+    joystickCenterY = rect.top + rect.height / 2;
+}
+
+function handleJoystickStart(e) {
+    if (GS.screen !== 'playing') return;
+
     e.preventDefault();
-    GS.input.touchRight = true;
-});
-rightBtn.addEventListener('touchend', (e) => {
+    const touch = e.touches ? e.touches[0] : e;
+
+    joystickActive = true;
+    joystickTouchId = e.touches ? touch.identifier : 'mouse';
+    joystickInner.classList.add('active');
+
+    initJoystick();
+    handleJoystickMove(e);
+}
+
+function handleJoystickMove(e) {
+    if (!joystickActive) return;
+
     e.preventDefault();
+    const touch = e.touches ? e.touches[0] : e;
+
+    const deltaX = touch.clientX - joystickCenterX;
+    const deltaY = touch.clientY - joystickCenterY;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    let moveX = deltaX;
+    let moveY = deltaY;
+
+    if (distance > joystickMaxDistance) {
+        moveX = (deltaX / distance) * joystickMaxDistance;
+        moveY = (deltaY / distance) * joystickMaxDistance;
+    }
+
+    joystickInner.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+    // プレイヤーの移動
+    const normalizedX = moveX / joystickMaxDistance;
+
+    if (Math.abs(normalizedX) > 0.2) {
+        GS.input.touchLeft = normalizedX < 0;
+        GS.input.touchRight = normalizedX > 0;
+    } else {
+        GS.input.touchLeft = false;
+        GS.input.touchRight = false;
+    }
+}
+
+function handleJoystickEnd(e) {
+    if (!joystickActive) return;
+
+    e.preventDefault();
+    joystickActive = false;
+    joystickTouchId = null;
+    joystickInner.classList.remove('active');
+    joystickInner.style.transform = 'translate(0, 0)';
+
+    GS.input.touchLeft = false;
     GS.input.touchRight = false;
+}
+
+// タッチイベント
+joystickOuter.addEventListener('touchstart', handleJoystickStart, { passive: false });
+joystickOuter.addEventListener('touchmove', handleJoystickMove, { passive: false });
+joystickOuter.addEventListener('touchend', handleJoystickEnd, { passive: false });
+joystickOuter.addEventListener('touchcancel', handleJoystickEnd, { passive: false });
+
+// マウスイベント（デバッグ用）
+joystickOuter.addEventListener('mousedown', handleJoystickStart);
+document.addEventListener('mousemove', (e) => {
+    if (joystickActive && joystickTouchId === 'mouse') {
+        handleJoystickMove(e);
+    }
 });
-rightBtn.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    GS.input.touchRight = true;
-});
-rightBtn.addEventListener('mouseup', (e) => {
-    e.preventDefault();
-    GS.input.touchRight = false;
+document.addEventListener('mouseup', (e) => {
+    if (joystickActive && joystickTouchId === 'mouse') {
+        handleJoystickEnd(e);
+    }
 });
 
 // 念仏ボタン
@@ -122,7 +179,7 @@ specialBtn.addEventListener('mousedown', (e) => {
     }
 });
 
-// スワイプ操作の実装
+// スワイプ操作の実装（ジョイスティックがない場合のみ有効）
 window.addEventListener('touchstart', (e) => {
     if (GS.input.dragTouchId !== null) return;
     if (GS.screen !== 'playing') return;
@@ -132,11 +189,17 @@ window.addEventListener('touchstart', (e) => {
         const target = touch.target;
 
         if (target.closest('.control-btn') ||
+            target.closest('.joystick-container') ||
             target.closest('.title-button') ||
             target.closest('.level-btn') ||
             target.closest('.modal') ||
             target.closest('#settingsModal')) {
             continue;
+        }
+
+        // モバイルモードではスワイプを無効化（ジョイスティックを使用）
+        if (document.body.classList.contains('mobile-mode')) {
+            return;
         }
 
         GS.input.dragTouchId = touch.identifier;

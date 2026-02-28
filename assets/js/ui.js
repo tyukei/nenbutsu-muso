@@ -4,13 +4,24 @@
 
 // 煩悩メッセージ表示
 function showBonnouMessage(bonnouText) {
-    const description = bonnouDescriptions[bonnouText] || '心を乱す煩悩';
+    const isEn = GS.lang === 'en';
+    const textToDisplay = isEn ? (bonnouDescriptionsEn[bonnouText] || bonnouText) : bonnouText;
+    const description = isEn ? '' : (bonnouDescriptionsJa[bonnouText] || '心を乱す煩悩');
+
     const messageItem = document.createElement('div');
     messageItem.className = 'bonnou-message-item';
-    messageItem.innerHTML = `
-                <div class="bonnou-title">「${bonnouText}」</div>
-                <div class="bonnou-desc">${description}</div>
-            `;
+
+    if (isEn) {
+        messageItem.innerHTML = `
+            <div class="bonnou-title font-en">"${bonnouText}"</div>
+            <div class="bonnou-desc">${textToDisplay}</div>
+        `;
+    } else {
+        messageItem.innerHTML = `
+            <div class="bonnou-title">「${textToDisplay}」</div>
+            <div class="bonnou-desc">${description}</div>
+        `;
+    }
 
     bonnouMessageContainer.insertBefore(messageItem, bonnouMessageContainer.firstChild);
 
@@ -94,8 +105,10 @@ function saveRanking(scoreVal, comboVal) {
 function displayRankings() {
     const rankings = loadRankings();
 
+    const t = translations[GS.lang] || translations['ja'];
+
     if (rankings.length === 0) {
-        rankingList.innerHTML = '<p class="ranking-empty">まだ記録がありません</p>';
+        rankingList.innerHTML = `<p class="ranking-empty">${t.noRecord}</p>`;
         return;
     }
 
@@ -106,18 +119,20 @@ function displayRankings() {
         const score = escapeHtml(String(rank.score));
         const combo = escapeHtml(String(rank.combo));
         const date = escapeHtml(String(rank.date));
+        const rankText = GS.lang === 'en' ? `Rank ${index + 1}` : `${index + 1}${t.rankSuffix}`;
         html += `
                     <div class="rank-item ${isTop3 ? 'top3' : ''}">
-                        <span class="rank-number">${index + 1}位</span>
+                        <span class="rank-number">${rankText}</span>
                         <span class="rank-score">
-                            [${levelLabel}] ${score}体撃破<br>
-                            <span style="font-size: 0.85em; opacity: 0.8;">(最大連鎖×${combo})</span>
+                            [<span data-i18n="buddhaNature${rank.level === 'easy' ? '1' : rank.level === 'normal' ? '2' : rank.level === 'hard' ? '3' : 'Demon'}">${levelLabel}</span>] ${score}${t.destroyedSuffix}<br>
+                            <span style="font-size: 0.85em; opacity: 0.8;">${t.maxComboPrefix}${combo})</span>
                         </span>
                         <span class="rank-date">${date}</span>
                     </div>
                 `;
     });
     rankingList.innerHTML = html;
+    updateLanguageUI(); // Update newly created elements
 }
 
 // 累計データの計算と表示
@@ -150,15 +165,15 @@ function displayCumulativeStats() {
 
     cumulativeStats.innerHTML = `
         <div class="cumulative-stat">
-            <div class="cumulative-stat-label">プレイ回数</div>
+            <div class="cumulative-stat-label" data-i18n="playCount">${t.playCount || 'プレイ回数'}</div>
             <div class="cumulative-stat-value">${totalPlays}</div>
         </div>
         <div class="cumulative-stat">
-            <div class="cumulative-stat-label">累計撃破数</div>
+            <div class="cumulative-stat-label" data-i18n="totalDestroyed">${t.totalDestroyed || '累計撃破数'}</div>
             <div class="cumulative-stat-value">${totalDestroyed}</div>
         </div>
         <div class="cumulative-stat">
-            <div class="cumulative-stat-label">累計功徳</div>
+            <div class="cumulative-stat-label" data-i18n="totalKudoku">${t.totalKudoku || '累計功徳'}</div>
             <div class="cumulative-stat-value">${totalKudoku}</div>
         </div>
     `;
@@ -227,8 +242,12 @@ function escapeHtml(text) {
 }
 
 function renderIntroMainText(typedText) {
-    const redStart = TITLE_INTRO_PHRASE_MAIN.indexOf(INTRO_RED_WORD);
-    const redEnd = redStart + INTRO_RED_WORD.length;
+    const t = translations[GS.lang] || translations['ja'];
+    const introMainRaw = t.introMainRaw || TITLE_INTRO_PHRASE_MAIN;
+    const introRedWord = t.introRedWord || INTRO_RED_WORD;
+
+    const redStart = introMainRaw.indexOf(introRedWord);
+    const redEnd = redStart + introRedWord.length;
 
     if (redStart < 0) {
         titleIntroMessageTextMain.innerHTML = escapeHtml(typedText);
@@ -240,9 +259,9 @@ function renderIntroMainText(typedText) {
         html = escapeHtml(typedText);
     } else {
         html += escapeHtml(typedText.slice(0, redStart));
-        const redTypedLength = Math.min(typedText.length - redStart, INTRO_RED_WORD.length);
+        const redTypedLength = Math.min(typedText.length - redStart, introRedWord.length);
         if (redTypedLength > 0) {
-            html += `<span class="text-bonnou-red">${escapeHtml(INTRO_RED_WORD.slice(0, redTypedLength))}</span>`;
+            html += `<span class="text-bonnou-red">${escapeHtml(introRedWord.slice(0, redTypedLength))}</span>`;
         }
         if (typedText.length > redEnd) {
             html += escapeHtml(typedText.slice(redEnd));
@@ -267,12 +286,16 @@ function finishTitleIntro() {
     GS.intro.running = false;
     GS.intro.played = true;
 
+    const t = translations[GS.lang] || translations['ja'];
+    const introMainRaw = t.introMainRaw || TITLE_INTRO_PHRASE_MAIN;
+    const introSub = t.introSub || TITLE_INTRO_PHRASE_SUB;
+
     introMonkHappy.classList.add('intro-active');
     introMonkSad.classList.add('intro-active');
     introMonkPray.classList.add('intro-active');
     titleIntroMessage.classList.add('intro-active');
-    renderIntroMainText(TITLE_INTRO_PHRASE_MAIN);
-    titleIntroMessageTextSub.textContent = TITLE_INTRO_PHRASE_SUB;
+    renderIntroMainText(introMainRaw);
+    titleIntroMessageTextSub.textContent = introSub;
     titlePersistentPray.classList.remove('hidden');
     titlePersistentPray.classList.add('visible');
     titleMainContent.classList.add('intro-visible');
@@ -296,18 +319,22 @@ function startTitleIntro() {
     alignIntroMessageToInstruction();
     titleIntroMessage.classList.add('intro-active');
 
+    const t = translations[GS.lang] || translations['ja'];
+    const introMainRaw = t.introMainRaw || TITLE_INTRO_PHRASE_MAIN;
+    const introSub = t.introSub || TITLE_INTRO_PHRASE_SUB;
+
     let charIndex = 0;
-    const fullText = `${TITLE_INTRO_PHRASE_MAIN}\n${TITLE_INTRO_PHRASE_SUB}`;
-    const threshold = TITLE_INTRO_PHRASE_MAIN.length;
+    const fullText = `${introMainRaw}\n${introSub}`;
+    const threshold = introMainRaw.length;
     GS.intro.typingTimer = setInterval(() => {
         if (!GS.intro.running) return;
         charIndex += 1;
         if (charIndex <= threshold) {
-            renderIntroMainText(TITLE_INTRO_PHRASE_MAIN.slice(0, charIndex));
+            renderIntroMainText(introMainRaw.slice(0, charIndex));
             titleIntroMessageTextSub.textContent = '';
         } else {
-            renderIntroMainText(TITLE_INTRO_PHRASE_MAIN);
-            titleIntroMessageTextSub.textContent = TITLE_INTRO_PHRASE_SUB.slice(0, charIndex - threshold - 1);
+            renderIntroMainText(introMainRaw);
+            titleIntroMessageTextSub.textContent = introSub.slice(0, charIndex - threshold - 1);
         }
         if (charIndex >= fullText.length) {
             clearInterval(GS.intro.typingTimer);
@@ -392,6 +419,8 @@ function showTitle() {
     levelScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
     rankingScreen.classList.add('hidden');
+    buddhaMessageScreen.classList.add('hidden'); // Fix for close button not working
+    buddhaMessageDetailModal.classList.add('hidden'); // Safeguard
     infoPanel.classList.add('hidden');
     virtualControls.classList.add('hidden');
     bonnouMessageContainer.innerHTML = '';
@@ -415,6 +444,7 @@ function showLevelSelect() {
     levelScreen.classList.remove('hidden');
     gameOverScreen.classList.add('hidden');
     rankingScreen.classList.add('hidden');
+    buddhaMessageScreen.classList.add('hidden');
     bonnouMessageContainer.innerHTML = '';
 
     // レベルのロック状態を更新
@@ -447,6 +477,159 @@ function showLevelSelect() {
     }
 }
 
+// ブッダメッセージ画面
+function showBuddhaMessageScreen() {
+    GS.screen = 'buddhamessage';
+    titleScreen.classList.add('hidden');
+    buddhaMessageScreen.classList.remove('hidden');
+
+    // ロック状態の更新
+    for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`bmBtn${i}`);
+        const bmData = buddhaMessagesData.find(m => m.id === i);
+        if (GS.play.unlockedMessages.includes(i)) {
+            btn.classList.remove('locked');
+            btn.querySelector('.bm-title').textContent = GS.lang === 'en' ? bmData.titleEn : bmData.title;
+            btn.querySelector('.bm-title').removeAttribute('data-i18n');
+            const lockEl = btn.querySelector('.bm-lock');
+            if (lockEl) lockEl.style.display = 'none';
+        } else {
+            btn.classList.add('locked');
+            btn.querySelector('.bm-title').textContent = translations[GS.lang].locked;
+            btn.querySelector('.bm-title').setAttribute('data-i18n', 'locked');
+            const lockEl = btn.querySelector('.bm-lock');
+            if (lockEl) lockEl.style.display = 'block';
+        }
+    }
+}
+
+function showBuddhaMessageDetail(id) {
+    const data = buddhaMessagesData.find(m => m.id === id);
+    if (!data) return;
+
+    bmDetailTitle.innerHTML = GS.lang === 'en' ? data.titleEn : data.title;
+
+    if (GS.lang === 'en') {
+        bmDetailContentJa.style.display = 'none';
+        bmDetailContentEn.style.display = 'block';
+        bmDetailContentEn.innerHTML = data.contentEn;
+        // remove the dashed top border when there's no Japanese text above it
+        bmDetailContentEn.style.borderTop = 'none';
+        bmDetailContentEn.style.marginTop = '0';
+        bmDetailContentEn.style.paddingTop = '0';
+    } else {
+        bmDetailContentJa.style.display = 'block';
+        bmDetailContentEn.style.display = 'none';
+        bmDetailContentJa.innerHTML = data.contentJa;
+        // Keep these clean
+        bmDetailContentEn.innerHTML = '';
+    }
+
+    buddhaMessageDetailModal.classList.remove('hidden');
+
+    // Read aloud if we want to add TTS later
+}
+
+// ブッダメッセージ画面イベント
+buddhaMessageBtn.addEventListener('click', showBuddhaMessageScreen);
+backFromBuddhaMessageBtn.addEventListener('click', showTitle);
+
+for (let i = 1; i <= 4; i++) {
+    document.getElementById(`bmBtn${i}`).addEventListener('click', () => {
+        if (!document.getElementById(`bmBtn${i}`).classList.contains('locked')) {
+            showBuddhaMessageDetail(i);
+        }
+    });
+}
+
+closeBmDetailBtn.addEventListener('click', () => {
+    buddhaMessageDetailModal.classList.add('hidden');
+});
+
+// 言語切り替えロジック
+function updateLanguageUI() {
+    const t = translations[GS.lang];
+
+    // Helper to carefully set data-i18n text
+    const setTranslation = (id, key, isHtml = false) => {
+        const el = document.getElementById(id);
+        if (el && t[key]) {
+            if (isHtml) el.innerHTML = t[key];
+            else el.textContent = t[key];
+        }
+    };
+
+    // Update defined elements
+    setTranslation('startBtn', 'gameStart');
+    setTranslation('rankingBtn', 'record');
+    setTranslation('menuBtn', 'setting');
+    setTranslation('buddhaMessageBtn', 'buddhaMessage', true);
+    setTranslation('langToggleBtn', 'langToggle');
+
+    setTranslation('levelScreen h1', 'stageSelect');
+    setTranslation('backFromLevelBtn', 'back');
+    setTranslation('backToTitleBtn', 'toTitle');
+    setTranslation('restartBtn', 'restart');
+    setTranslation('toTitleBtn', 'title');
+    setTranslation('shareBtn', 'share');
+    setTranslation('closeBmDetailBtn', 'close');
+    setTranslation('backFromBuddhaMessageBtn', 'close');
+    setTranslation('shootBtn', 'shoot');
+    setTranslation('specialBtn', 'special');
+
+    // Handle dynamically populated lists if they have data-i18n attributes
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) {
+            el.textContent = t[key];
+        }
+    });
+
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (t[key]) {
+            el.innerHTML = t[key];
+        }
+    });
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) {
+            el.placeholder = t[key];
+        }
+    });
+
+    document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+        const key = el.getAttribute('data-i18n-alt');
+        if (t[key]) {
+            el.alt = t[key];
+        }
+    });
+
+    document.querySelectorAll('.carousel-slide').forEach((img, index) => {
+        const slideNumber = index + 1;
+        if (GS.lang === 'en') {
+            img.src = `images/tutorial-en/slide${slideNumber}.png`;
+        } else {
+            img.src = `images/tutorial/slide${slideNumber}.png`;
+        }
+    });
+
+    // Toggle font class for English
+    if (GS.lang === 'en') {
+        document.body.classList.add('lang-en');
+    } else {
+        document.body.classList.remove('lang-en');
+    }
+}
+
+langToggleBtn.addEventListener('click', () => {
+    GS.lang = GS.lang === 'ja' ? 'en' : 'ja';
+    localStorage.setItem('nenbunLanguage', GS.lang);
+    updateLanguageUI();
+    showTitle(); // Refresh screen
+});
+
 function showRanking() {
     GS.screen = 'ranking';
     titleScreen.classList.add('hidden');
@@ -463,17 +646,19 @@ function shareToTwitter() {
     const targetDisplay = settings.isInfinite ? '∞' : level.targetScore;
     const isWin = play.score >= level.targetScore && !settings.isInfinite;
 
-    let shareText = `煩悩シューティング\n`;
-    shareText += `【${levelName}】\n`;
+    const t = translations[GS.lang] || translations['ja'];
+
+    let shareText = t.shareTitle || `煩悩シューティング\n`;
+    shareText += (t.shareLevel || `【$1】\n`).replace('$1', levelName);
 
     if (isWin) {
-        shareText += `✨仏性が育ちました！✨\n`;
+        shareText += (t.shareWin || `✨仏性が育ちました！✨\n`);
     } else {
-        shareText += `煩悩に呑まれた...\n`;
+        shareText += (t.shareLose || `煩悩に呑まれた...\n`);
     }
 
-    shareText += `撃破数: ${play.score}/${targetDisplay}\n`;
-    shareText += `最大連鎖: ${play.maxCombo}\n`;
+    shareText += (t.shareScore || `撃破数: $1/$2\n`).replace('$1', play.score).replace('$2', targetDisplay);
+    shareText += (t.shareCombo || `最大連鎖: $1\n`).replace('$1', play.maxCombo);
     shareText += `\n#煩悩シューティング #般若心経EDM\n#神社仏閣オンライン\n`;
     shareText += `\nhttps://bonno-taisan.jinjabukkaku.online/`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
@@ -518,35 +703,27 @@ function checkPassword() {
 
     const hashed = simpleHash(password);
 
+    const t = translations[GS.lang] || translations['ja'];
+
     if (hashed === -1116238380) { // nenbutsu-mashimashi1
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
-        message = '✓ 仏性Lev2を解放しました！';
+        message = t.unlockSuccess1 || '✓ 仏性Lev2を解放しました！';
         unlocked = true;
     } else if (hashed === -1116238379) { // nenbutsu-mashimashi2
-        if (!cleared.includes('easy')) {
-            cleared.push('easy');
-        }
-        if (!cleared.includes('normal')) {
-            cleared.push('normal');
-        }
+        if (!cleared.includes('easy')) cleared.push('easy');
+        if (!cleared.includes('normal')) cleared.push('normal');
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
-        message = '✓ 仏性Lev3を解放しました！';
+        message = t.unlockSuccess2 || '✓ 仏性Lev3を解放しました！';
         unlocked = true;
     } else if (hashed === -1116238378) { // nenbutsu-mashimashi3
-        if (!cleared.includes('easy')) {
-            cleared.push('easy');
-        }
-        if (!cleared.includes('normal')) {
-            cleared.push('normal');
-        }
-        if (!cleared.includes('hard')) {
-            cleared.push('hard');
-        }
+        if (!cleared.includes('easy')) cleared.push('easy');
+        if (!cleared.includes('normal')) cleared.push('normal');
+        if (!cleared.includes('hard')) cleared.push('hard');
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
-        message = '✓ Lev悪魔を解放しました！';
+        message = t.unlockSuccessDemon || '✓ Lev悪魔を解放しました！';
         unlocked = true;
     }
 
@@ -559,7 +736,7 @@ function checkPassword() {
             showLevelSelect();
         }, 1500);
     } else {
-        passwordMessage.textContent = '✗ パスワードが違います';
+        passwordMessage.textContent = t.passwordWrong || '✗ パスワードが違います';
         passwordMessage.className = 'error';
         passwordInput.value = '';
         passwordInput.focus();
@@ -580,6 +757,15 @@ function updateUI() {
 
     comboDisplay.textContent = play.combo;
     levelDisplay.textContent = settings.name;
+
+    // モバイルステータスの更新
+    if (mobileScoreDisplay) mobileScoreDisplay.textContent = play.score;
+    if (mobileSpiritDisplay) mobileSpiritDisplay.textContent = play.spirit;
+    if (mobileKudokuDisplay) {
+        mobileKudokuDisplay.textContent = `${play.kudoku}/${MAX_KUDOKU}`;
+        mobileKudokuDisplay.style.color = play.kudoku >= MAX_KUDOKU ? '#ff0000' : '#fff';
+    }
+    if (mobileComboDisplay) mobileComboDisplay.textContent = play.combo;
 
     updateSpecialButton();
 }
@@ -654,6 +840,11 @@ function loadTempSettingsFromStorage() {
             mode: 'pc'
         };
     }
+
+    const savedLang = localStorage.getItem('nenbunLanguage');
+    if (savedLang) {
+        GS.lang = savedLang;
+    }
 }
 
 function initSettings() {
@@ -664,10 +855,13 @@ function initSettings() {
         settingsModal.classList.remove('hidden');
         updateToggleButtons();
     } else {
+        loadTempSettingsFromStorage(); // Also loads language
         const settings = JSON.parse(savedSettings);
         applySettings(settings);
         showTitle();
     }
+
+    updateLanguageUI();
 }
 
 function applySettings(settings) {
@@ -809,10 +1003,11 @@ function updateSlides() {
     prevSlideBtn.disabled = GS.ui.currentSlide === 0;
     prevSlideBtn.style.opacity = GS.ui.currentSlide === 0 ? 0.3 : 1;
 
+    const t = translations[GS.lang] || translations['ja'];
     if (GS.ui.currentSlide === slides.length - 1) {
-        nextSlideBtn.textContent = '閉じる';
+        nextSlideBtn.textContent = t.close || '閉じる';
     } else {
-        nextSlideBtn.textContent = '次へ';
+        nextSlideBtn.textContent = t.next || '次へ';
     }
 }
 
@@ -844,10 +1039,12 @@ dots.forEach((dot, index) => {
 // 訪問者数取得 (CountAPI)
 function fetchAndDisplayVisitorCount() {
     const visitorCountDisplay = document.getElementById('visitorCountDisplay');
+    const t = translations[GS.lang] || translations['ja'];
 
     // 既に取得済みの場合は表示のみ更新
     if (GS.ui.visitorCount !== null) {
-        visitorCountDisplay.textContent = `あなたは ${GS.ui.visitorCount} 人目の修行者です`;
+        const visitorText = t.visitorCount || 'あなたは $1 人目の修行者です';
+        visitorCountDisplay.textContent = visitorText.replace('$1', GS.ui.visitorCount);
         visitorCountDisplay.classList.remove('hidden');
         return;
     }
@@ -875,7 +1072,8 @@ function fetchAndDisplayVisitorCount() {
             const currentCount = data.count !== undefined ? data.count : (data.value !== undefined ? data.value : 0);
 
             GS.ui.visitorCount = currentCount;
-            visitorCountDisplay.textContent = `あなたは ${GS.ui.visitorCount} 人目の修行者です`;
+            const visitorText = t.visitorCount || 'あなたは $1 人目の修行者です';
+            visitorCountDisplay.textContent = visitorText.replace('$1', GS.ui.visitorCount);
             visitorCountDisplay.classList.remove('hidden');
 
             if (!hasCountedInSession) {
