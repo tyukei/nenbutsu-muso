@@ -606,6 +606,15 @@ function updateLanguageUI() {
         }
     });
 
+    document.querySelectorAll('.carousel-slide').forEach((img, index) => {
+        const slideNumber = index + 1;
+        if (GS.lang === 'en') {
+            img.src = `images/tutorial-en/slide${slideNumber}.png`;
+        } else {
+            img.src = `images/tutorial/slide${slideNumber}.png`;
+        }
+    });
+
     // Toggle font class for English
     if (GS.lang === 'en') {
         document.body.classList.add('lang-en');
