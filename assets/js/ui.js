@@ -102,8 +102,10 @@ function saveRanking(scoreVal, comboVal) {
 function displayRankings() {
     const rankings = loadRankings();
 
+    const t = translations[GS.lang] || translations['ja'];
+
     if (rankings.length === 0) {
-        rankingList.innerHTML = '<p class="ranking-empty">まだ記録がありません</p>';
+        rankingList.innerHTML = `<p class="ranking-empty">${t.noRecord}</p>`;
         return;
     }
 
@@ -114,12 +116,13 @@ function displayRankings() {
         const score = escapeHtml(String(rank.score));
         const combo = escapeHtml(String(rank.combo));
         const date = escapeHtml(String(rank.date));
+        const rankText = GS.lang === 'en' ? `Rank ${index + 1}` : `${index + 1}${t.rankSuffix}`;
         html += `
                     <div class="rank-item ${isTop3 ? 'top3' : ''}">
-                        <span class="rank-number">${index + 1}位</span>
+                        <span class="rank-number">${rankText}</span>
                         <span class="rank-score">
-                            [<span data-i18n="buddhaNature${rank.level === 'easy' ? '1' : rank.level === 'normal' ? '2' : rank.level === 'hard' ? '3' : 'Demon'}">${levelLabel}</span>] ${score}体撃破<br>
-                            <span style="font-size: 0.85em; opacity: 0.8;">(最大連鎖×${combo})</span>
+                            [<span data-i18n="buddhaNature${rank.level === 'easy' ? '1' : rank.level === 'normal' ? '2' : rank.level === 'hard' ? '3' : 'Demon'}">${levelLabel}</span>] ${score}${t.destroyedSuffix}<br>
+                            <span style="font-size: 0.85em; opacity: 0.8;">${t.maxComboPrefix}${combo})</span>
                         </span>
                         <span class="rank-date">${date}</span>
                     </div>
@@ -159,15 +162,15 @@ function displayCumulativeStats() {
 
     cumulativeStats.innerHTML = `
         <div class="cumulative-stat">
-            <div class="cumulative-stat-label">プレイ回数</div>
+            <div class="cumulative-stat-label" data-i18n="playCount">${t.playCount || 'プレイ回数'}</div>
             <div class="cumulative-stat-value">${totalPlays}</div>
         </div>
         <div class="cumulative-stat">
-            <div class="cumulative-stat-label">累計撃破数</div>
+            <div class="cumulative-stat-label" data-i18n="totalDestroyed">${t.totalDestroyed || '累計撃破数'}</div>
             <div class="cumulative-stat-value">${totalDestroyed}</div>
         </div>
         <div class="cumulative-stat">
-            <div class="cumulative-stat-label">累計功徳</div>
+            <div class="cumulative-stat-label" data-i18n="totalKudoku">${t.totalKudoku || '累計功徳'}</div>
             <div class="cumulative-stat-value">${totalKudoku}</div>
         </div>
     `;
@@ -471,13 +474,16 @@ function showBuddhaMessageScreen() {
         const bmData = buddhaMessagesData.find(m => m.id === i);
         if (GS.play.unlockedMessages.includes(i)) {
             btn.classList.remove('locked');
-            btn.querySelector('.bm-title').textContent = bmData.title;
-            // Clear lock text
-            btn.querySelector('.bm-lock').textContent = '';
+            btn.querySelector('.bm-title').textContent = GS.lang === 'en' ? bmData.titleEn : bmData.title;
+            btn.querySelector('.bm-title').removeAttribute('data-i18n');
+            const lockEl = btn.querySelector('.bm-lock');
+            if (lockEl) lockEl.style.display = 'none';
         } else {
             btn.classList.add('locked');
-            btn.querySelector('.bm-title').textContent = GS.lang === 'en' ? translations.en.locked : translations.ja.locked;
+            btn.querySelector('.bm-title').textContent = translations[GS.lang].locked;
             btn.querySelector('.bm-title').setAttribute('data-i18n', 'locked');
+            const lockEl = btn.querySelector('.bm-lock');
+            if (lockEl) lockEl.style.display = 'block';
         }
     }
 }
@@ -486,9 +492,23 @@ function showBuddhaMessageDetail(id) {
     const data = buddhaMessagesData.find(m => m.id === id);
     if (!data) return;
 
-    bmDetailTitle.innerHTML = data.title;
-    bmDetailContentJa.innerHTML = data.contentJa;
-    bmDetailContentEn.innerHTML = data.contentEn;
+    bmDetailTitle.innerHTML = GS.lang === 'en' ? data.titleEn : data.title;
+
+    if (GS.lang === 'en') {
+        bmDetailContentJa.style.display = 'none';
+        bmDetailContentEn.style.display = 'block';
+        bmDetailContentEn.innerHTML = data.contentEn;
+        // remove the dashed top border when there's no Japanese text above it
+        bmDetailContentEn.style.borderTop = 'none';
+        bmDetailContentEn.style.marginTop = '0';
+        bmDetailContentEn.style.paddingTop = '0';
+    } else {
+        bmDetailContentJa.style.display = 'block';
+        bmDetailContentEn.style.display = 'none';
+        bmDetailContentJa.innerHTML = data.contentJa;
+        // Keep these clean
+        bmDetailContentEn.innerHTML = '';
+    }
 
     buddhaMessageDetailModal.classList.remove('hidden');
 
@@ -547,6 +567,27 @@ function updateLanguageUI() {
         const key = el.getAttribute('data-i18n');
         if (t[key]) {
             el.textContent = t[key];
+        }
+    });
+
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (t[key]) {
+            el.innerHTML = t[key];
+        }
+    });
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) {
+            el.placeholder = t[key];
+        }
+    });
+
+    document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+        const key = el.getAttribute('data-i18n-alt');
+        if (t[key]) {
+            el.alt = t[key];
         }
     });
 
@@ -636,35 +677,27 @@ function checkPassword() {
 
     const hashed = simpleHash(password);
 
+    const t = translations[GS.lang] || translations['ja'];
+
     if (hashed === -1116238380) { // nenbutsu-mashimashi1
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
-        message = '✓ 仏性Lev2を解放しました！';
+        message = t.unlockSuccess1 || '✓ 仏性Lev2を解放しました！';
         unlocked = true;
     } else if (hashed === -1116238379) { // nenbutsu-mashimashi2
-        if (!cleared.includes('easy')) {
-            cleared.push('easy');
-        }
-        if (!cleared.includes('normal')) {
-            cleared.push('normal');
-        }
+        if (!cleared.includes('easy')) cleared.push('easy');
+        if (!cleared.includes('normal')) cleared.push('normal');
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
-        message = '✓ 仏性Lev3を解放しました！';
+        message = t.unlockSuccess2 || '✓ 仏性Lev3を解放しました！';
         unlocked = true;
     } else if (hashed === -1116238378) { // nenbutsu-mashimashi3
-        if (!cleared.includes('easy')) {
-            cleared.push('easy');
-        }
-        if (!cleared.includes('normal')) {
-            cleared.push('normal');
-        }
-        if (!cleared.includes('hard')) {
-            cleared.push('hard');
-        }
+        if (!cleared.includes('easy')) cleared.push('easy');
+        if (!cleared.includes('normal')) cleared.push('normal');
+        if (!cleared.includes('hard')) cleared.push('hard');
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
-        message = '✓ Lev悪魔を解放しました！';
+        message = t.unlockSuccessDemon || '✓ Lev悪魔を解放しました！';
         unlocked = true;
     }
 
@@ -677,7 +710,7 @@ function checkPassword() {
             showLevelSelect();
         }, 1500);
     } else {
-        passwordMessage.textContent = '✗ パスワードが違います';
+        passwordMessage.textContent = t.passwordWrong || '✗ パスワードが違います';
         passwordMessage.className = 'error';
         passwordInput.value = '';
         passwordInput.focus();
