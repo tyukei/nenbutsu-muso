@@ -401,6 +401,8 @@ function showTitle() {
     levelScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
     rankingScreen.classList.add('hidden');
+    buddhaMessageScreen.classList.add('hidden'); // Fix for close button not working
+    buddhaMessageDetailModal.classList.add('hidden'); // Safeguard
     infoPanel.classList.add('hidden');
     virtualControls.classList.add('hidden');
     bonnouMessageContainer.innerHTML = '';
