@@ -242,8 +242,12 @@ function escapeHtml(text) {
 }
 
 function renderIntroMainText(typedText) {
-    const redStart = TITLE_INTRO_PHRASE_MAIN.indexOf(INTRO_RED_WORD);
-    const redEnd = redStart + INTRO_RED_WORD.length;
+    const t = translations[GS.lang] || translations['ja'];
+    const introMainRaw = t.introMainRaw || TITLE_INTRO_PHRASE_MAIN;
+    const introRedWord = t.introRedWord || INTRO_RED_WORD;
+
+    const redStart = introMainRaw.indexOf(introRedWord);
+    const redEnd = redStart + introRedWord.length;
 
     if (redStart < 0) {
         titleIntroMessageTextMain.innerHTML = escapeHtml(typedText);
@@ -255,9 +259,9 @@ function renderIntroMainText(typedText) {
         html = escapeHtml(typedText);
     } else {
         html += escapeHtml(typedText.slice(0, redStart));
-        const redTypedLength = Math.min(typedText.length - redStart, INTRO_RED_WORD.length);
+        const redTypedLength = Math.min(typedText.length - redStart, introRedWord.length);
         if (redTypedLength > 0) {
-            html += `<span class="text-bonnou-red">${escapeHtml(INTRO_RED_WORD.slice(0, redTypedLength))}</span>`;
+            html += `<span class="text-bonnou-red">${escapeHtml(introRedWord.slice(0, redTypedLength))}</span>`;
         }
         if (typedText.length > redEnd) {
             html += escapeHtml(typedText.slice(redEnd));
@@ -282,12 +286,16 @@ function finishTitleIntro() {
     GS.intro.running = false;
     GS.intro.played = true;
 
+    const t = translations[GS.lang] || translations['ja'];
+    const introMainRaw = t.introMainRaw || TITLE_INTRO_PHRASE_MAIN;
+    const introSub = t.introSub || TITLE_INTRO_PHRASE_SUB;
+
     introMonkHappy.classList.add('intro-active');
     introMonkSad.classList.add('intro-active');
     introMonkPray.classList.add('intro-active');
     titleIntroMessage.classList.add('intro-active');
-    renderIntroMainText(TITLE_INTRO_PHRASE_MAIN);
-    titleIntroMessageTextSub.textContent = TITLE_INTRO_PHRASE_SUB;
+    renderIntroMainText(introMainRaw);
+    titleIntroMessageTextSub.textContent = introSub;
     titlePersistentPray.classList.remove('hidden');
     titlePersistentPray.classList.add('visible');
     titleMainContent.classList.add('intro-visible');
@@ -311,18 +319,22 @@ function startTitleIntro() {
     alignIntroMessageToInstruction();
     titleIntroMessage.classList.add('intro-active');
 
+    const t = translations[GS.lang] || translations['ja'];
+    const introMainRaw = t.introMainRaw || TITLE_INTRO_PHRASE_MAIN;
+    const introSub = t.introSub || TITLE_INTRO_PHRASE_SUB;
+
     let charIndex = 0;
-    const fullText = `${TITLE_INTRO_PHRASE_MAIN}\n${TITLE_INTRO_PHRASE_SUB}`;
-    const threshold = TITLE_INTRO_PHRASE_MAIN.length;
+    const fullText = `${introMainRaw}\n${introSub}`;
+    const threshold = introMainRaw.length;
     GS.intro.typingTimer = setInterval(() => {
         if (!GS.intro.running) return;
         charIndex += 1;
         if (charIndex <= threshold) {
-            renderIntroMainText(TITLE_INTRO_PHRASE_MAIN.slice(0, charIndex));
+            renderIntroMainText(introMainRaw.slice(0, charIndex));
             titleIntroMessageTextSub.textContent = '';
         } else {
-            renderIntroMainText(TITLE_INTRO_PHRASE_MAIN);
-            titleIntroMessageTextSub.textContent = TITLE_INTRO_PHRASE_SUB.slice(0, charIndex - threshold - 1);
+            renderIntroMainText(introMainRaw);
+            titleIntroMessageTextSub.textContent = introSub.slice(0, charIndex - threshold - 1);
         }
         if (charIndex >= fullText.length) {
             clearInterval(GS.intro.typingTimer);

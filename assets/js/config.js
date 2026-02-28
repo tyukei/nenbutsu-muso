@@ -240,6 +240,8 @@ const translations = {
 
         // --- 新規追加 ---
         'introMain': '降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……<br>迷わず撃て！悟りはその先にある。',
+        'introMainRaw': '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。',
+        'introRedWord': '煩悩',
         'introSub': '究極の徳（ハイスコア）を目指せ！',
         'tapToSkip': 'タップでスキップ',
         'tutorialBasic': '基本操作',
@@ -346,6 +348,8 @@ const translations = {
 
         // --- 新規追加 ---
         'introMain': 'A falling rain of <span class="text-bonnou-red">afflictions</span>...<br>Shoot without hesitation! Enlightenment lies beyond.',
+        'introMainRaw': 'A falling rain of afflictions...\nShoot without hesitation! Enlightenment lies beyond.',
+        'introRedWord': 'afflictions',
         'introSub': 'Aim for the ultimate virtue (High Score)!',
         'tapToSkip': 'Tap to skip',
         'tutorialBasic': 'Basic Controls',
