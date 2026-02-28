@@ -307,7 +307,17 @@ const translations = {
         'statMaxCombo': '最大連鎖',
         'statGainedKudoku': '獲得功徳',
         'newBuddhaMessage': '✨ 新しいブッダメッセージが届きました ✨',
-        'buddhaMsgOverlay': '✨ ブッダメッセージ が入りました ✨'
+        'buddhaMsgOverlay': '✨ ブッダメッセージ が入りました ✨',
+        'bonnouSokuBodai': '煩悩即菩提',
+        'ropparamitsu': '六波羅蜜成就',
+        'pressZ': 'Zを押して必殺技',
+        'visitorCount': 'あなたは $1 人目の修行者です',
+        'shareTitle': '煩悩シューティング\n',
+        'shareLevel': '【$1】\n',
+        'shareWin': '✨仏性が育ちました！✨\n',
+        'shareLose': '煩悩に呑まれた...\n',
+        'shareScore': '撃破数: $1/$2\n',
+        'shareCombo': '最大連鎖: $1\n',
     },
     'en': {
         'gameStart': 'Start Practice',
@@ -403,7 +413,17 @@ const translations = {
         'statMaxCombo': 'Max Combo',
         'statGainedKudoku': 'Gained Kudoku',
         'newBuddhaMessage': '✨ A new Buddha Message has arrived ✨',
-        'buddhaMsgOverlay': '✨ Buddha Message Received ✨'
+        'buddhaMsgOverlay': '✨ Buddha Message Received ✨',
+        'bonnouSokuBodai': 'Affliction to Bodhi',
+        'ropparamitsu': 'Paramita Achieved',
+        'pressZ': 'Press Z for Special',
+        'visitorCount': 'You are the $1th practitioner',
+        'shareTitle': 'Nenbutsu Muso\n',
+        'shareLevel': '[$1]\n',
+        'shareWin': '✨Buddha nature has grown!✨\n',
+        'shareLose': 'Swallowed by afflictions...\n',
+        'shareScore': 'Destroyed: $1/$2\n',
+        'shareCombo': 'Max Combo: $1\n',
     }
 };
 

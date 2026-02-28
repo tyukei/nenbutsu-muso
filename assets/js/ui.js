@@ -12,7 +12,10 @@ function showBonnouMessage(bonnouText) {
     messageItem.className = 'bonnou-message-item';
 
     if (isEn) {
-        messageItem.innerHTML = `<div class="bonnou-title font-en">${textToDisplay}</div>`;
+        messageItem.innerHTML = `
+            <div class="bonnou-title font-en">"${bonnouText}"</div>
+            <div class="bonnou-desc">${textToDisplay}</div>
+        `;
     } else {
         messageItem.innerHTML = `
             <div class="bonnou-title">「${textToDisplay}」</div>
@@ -622,17 +625,19 @@ function shareToTwitter() {
     const targetDisplay = settings.isInfinite ? '∞' : level.targetScore;
     const isWin = play.score >= level.targetScore && !settings.isInfinite;
 
-    let shareText = `煩悩シューティング\n`;
-    shareText += `【${levelName}】\n`;
+    const t = translations[GS.lang] || translations['ja'];
+
+    let shareText = t.shareTitle || `煩悩シューティング\n`;
+    shareText += (t.shareLevel || `【$1】\n`).replace('$1', levelName);
 
     if (isWin) {
-        shareText += `✨仏性が育ちました！✨\n`;
+        shareText += (t.shareWin || `✨仏性が育ちました！✨\n`);
     } else {
-        shareText += `煩悩に呑まれた...\n`;
+        shareText += (t.shareLose || `煩悩に呑まれた...\n`);
     }
 
-    shareText += `撃破数: ${play.score}/${targetDisplay}\n`;
-    shareText += `最大連鎖: ${play.maxCombo}\n`;
+    shareText += (t.shareScore || `撃破数: $1/$2\n`).replace('$1', play.score).replace('$2', targetDisplay);
+    shareText += (t.shareCombo || `最大連鎖: $1\n`).replace('$1', play.maxCombo);
     shareText += `\n#煩悩シューティング #般若心経EDM\n#神社仏閣オンライン\n`;
     shareText += `\nhttps://bonno-taisan.jinjabukkaku.online/`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
@@ -1012,10 +1017,12 @@ dots.forEach((dot, index) => {
 // 訪問者数取得 (CountAPI)
 function fetchAndDisplayVisitorCount() {
     const visitorCountDisplay = document.getElementById('visitorCountDisplay');
+    const t = translations[GS.lang] || translations['ja'];
 
     // 既に取得済みの場合は表示のみ更新
     if (GS.ui.visitorCount !== null) {
-        visitorCountDisplay.textContent = `あなたは ${GS.ui.visitorCount} 人目の修行者です`;
+        const visitorText = t.visitorCount || 'あなたは $1 人目の修行者です';
+        visitorCountDisplay.textContent = visitorText.replace('$1', GS.ui.visitorCount);
         visitorCountDisplay.classList.remove('hidden');
         return;
     }
@@ -1043,7 +1050,8 @@ function fetchAndDisplayVisitorCount() {
             const currentCount = data.count !== undefined ? data.count : (data.value !== undefined ? data.value : 0);
 
             GS.ui.visitorCount = currentCount;
-            visitorCountDisplay.textContent = `あなたは ${GS.ui.visitorCount} 人目の修行者です`;
+            const visitorText = t.visitorCount || 'あなたは $1 人目の修行者です';
+            visitorCountDisplay.textContent = visitorText.replace('$1', GS.ui.visitorCount);
             visitorCountDisplay.classList.remove('hidden');
 
             if (!hasCountedInSession) {

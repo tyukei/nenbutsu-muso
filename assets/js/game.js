@@ -183,52 +183,55 @@ function gameOver(win) {
 
     const settings = levelSettings[level.current];
     const targetDisplay = settings.isInfinite ? '∞' : level.targetScore;
-    const levelValue = settings.isInfinite ? '悪魔' : ({
+    const t = translations[GS.lang] || translations['ja'];
+
+    const levelValue = settings.isInfinite ? (t.levelDemon || 'Lev悪魔') : ({
         easy: '1',
         normal: '2',
         hard: '3',
-        demon: '悪魔'
+        demon: t.levelDemon || 'Lev悪魔'
     }[level.current] || level.current);
 
     if (win) {
-        let titleText = '仏性が育ちました!';
+        let titleText = t.resultWin || '仏性が育ちました!';
         if (level.current === 'hard') {
-            titleText = '解脱達成';
+            titleText = t.resultWinHard || '解脱達成';
         }
         document.getElementById('resultTitle').textContent = titleText;
-        document.getElementById('resultText').textContent = `${level.targetScore}の煩悩を全て打ち払いました`;
+        document.getElementById('resultText').textContent = `${level.targetScore}${t.resultTextWinSuffix || 'の煩悩を全て打ち払いました'}`;
         document.getElementById('currentScore').innerHTML = `
                     <div class="result-stats-container">
                         <div class="stat-item">
-                            <div class="stat-label">仏性Lev</div>
+                            <div class="stat-label">${t.statLevel || '仏性Lev'}</div>
                             <div class="stat-value">${levelValue}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">撃破数</div>
+                            <div class="stat-label">${t.statDestroyed || '撃破数'}</div>
                             <div class="stat-value">${play.score} / ${targetDisplay}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">最大連鎖</div>
+                            <div class="stat-label">${t.statMaxCombo || '最大連鎖'}</div>
                             <div class="stat-value">${play.maxCombo}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">獲得功徳</div>
+                            <div class="stat-label">${t.statGainedKudoku || '獲得功徳'}</div>
                             <div class="stat-value">${play.sessionKudoku}</div>
                         </div>
                     </div>`;
 
         if (unlockedMsgId && unlockedMsgData) {
+            const msgTitle = GS.lang === 'en' ? unlockedMsgData.titleEn : unlockedMsgData.title;
             document.getElementById('currentScore').innerHTML += `
                 <div style="margin-top: 15px; padding: 10px; background: rgba(212, 175, 55, 0.2); border: 1px solid #d4af37; border-radius: 5px; text-align: center;">
-                    <span style="color: #ffd700; font-weight: bold; font-size: 16px;">✨ 新しいブッダメッセージが届きました ✨</span><br>
-                    <span style="font-size: 14px;">「${unlockedMsgData.title}」</span>
+                    <span style="color: #ffd700; font-weight: bold; font-size: 16px;">${t.newBuddhaMessage || '✨ 新しいブッダメッセージが届きました ✨'}</span><br>
+                    <span style="font-size: 14px;">「${msgTitle}」</span>
                 </div>
             `;
 
             // Show overlay temporarily
             const overlay = document.createElement('div');
             overlay.className = 'bm-unlock-overlay';
-            overlay.innerHTML = `<div class="bm-unlock-text">✨ ブッダメッセージ が入りました ✨</div>`;
+            overlay.innerHTML = `<div class="bm-unlock-text">${t.buddhaMsgOverlay || '✨ ブッダメッセージ が入りました ✨'}</div>`;
             document.body.appendChild(overlay);
 
             // Trigger animation
@@ -245,28 +248,29 @@ function gameOver(win) {
             }, 3000);
         }
     } else {
-        document.getElementById('resultTitle').textContent = '煩悩に呑まれた';
+        document.getElementById('resultTitle').textContent = t.resultLose || '煩悩に呑まれた';
         if (settings.isInfinite) {
-            document.getElementById('resultText').textContent = `悪魔の煩悩に呑まれてしまいました...`;
+            document.getElementById('resultText').textContent = t.resultTextLoseDemon || `悪魔の煩悩に呑まれてしまいました...`;
         } else {
-            document.getElementById('resultText').textContent = `「${play.lastBonnou}」に心を侵されてしまいました`;
+            const bonnouName = GS.lang === 'en' ? (bonnouDescriptionsEn[play.lastBonnou] || play.lastBonnou) : play.lastBonnou;
+            document.getElementById('resultText').textContent = `${t.resultTextLosePrefix || '「'}${bonnouName}${t.resultTextLoseSuffix || '」に心を侵されてしまいました'}`;
         }
         document.getElementById('currentScore').innerHTML = `
                     <div class="result-stats-container">
                         <div class="stat-item">
-                            <div class="stat-label">仏性Lev</div>
+                            <div class="stat-label">${t.statLevel || '仏性Lev'}</div>
                             <div class="stat-value">${levelValue}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">撃破数</div>
+                            <div class="stat-label">${t.statDestroyed || '撃破数'}</div>
                             <div class="stat-value">${play.score} / ${targetDisplay}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">最大連鎖</div>
+                            <div class="stat-label">${t.statMaxCombo || '最大連鎖'}</div>
                             <div class="stat-value">${play.maxCombo}</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">獲得功徳</div>
+                            <div class="stat-label">${t.statGainedKudoku || '獲得功徳'}</div>
                             <div class="stat-value">${play.sessionKudoku}</div>
                         </div>
                     </div>`;
