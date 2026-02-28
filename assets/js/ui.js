@@ -1003,10 +1003,11 @@ function updateSlides() {
     prevSlideBtn.disabled = GS.ui.currentSlide === 0;
     prevSlideBtn.style.opacity = GS.ui.currentSlide === 0 ? 0.3 : 1;
 
+    const t = translations[GS.lang] || translations['ja'];
     if (GS.ui.currentSlide === slides.length - 1) {
-        nextSlideBtn.textContent = '閉じる';
+        nextSlideBtn.textContent = t.close || '閉じる';
     } else {
-        nextSlideBtn.textContent = '次へ';
+        nextSlideBtn.textContent = t.next || '次へ';
     }
 }
 
