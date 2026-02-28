@@ -193,7 +193,7 @@ function gameOver(win) {
     }[level.current] || level.current);
 
     if (win) {
-        let titleText = t.resultWin || '仏性が育ちました!';
+        let titleText = (t.resultWin || '仏性が$1に育ちました!').replace('$1', levelValue);
         if (level.current === 'hard') {
             titleText = t.resultWinHard || '解脱達成';
         }
@@ -201,10 +201,6 @@ function gameOver(win) {
         document.getElementById('resultText').textContent = `${level.targetScore}${t.resultTextWinSuffix || 'の煩悩を全て打ち払いました'}`;
         document.getElementById('currentScore').innerHTML = `
                     <div class="result-stats-container">
-                        <div class="stat-item">
-                            <div class="stat-label">${t.statLevel || '仏性Lev'}</div>
-                            <div class="stat-value">${levelValue}</div>
-                        </div>
                         <div class="stat-item">
                             <div class="stat-label">${t.statDestroyed || '撃破数'}</div>
                             <div class="stat-value">${play.score} / ${targetDisplay}</div>
@@ -257,10 +253,6 @@ function gameOver(win) {
         }
         document.getElementById('currentScore').innerHTML = `
                     <div class="result-stats-container">
-                        <div class="stat-item">
-                            <div class="stat-label">${t.statLevel || '仏性Lev'}</div>
-                            <div class="stat-value">${levelValue}</div>
-                        </div>
                         <div class="stat-item">
                             <div class="stat-label">${t.statDestroyed || '撃破数'}</div>
                             <div class="stat-value">${play.score} / ${targetDisplay}</div>
