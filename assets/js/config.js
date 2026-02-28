@@ -76,7 +76,7 @@ const monkImage = new Image();
 monkImage.src = 'images/monk/monk_back.png';
 
 const bulletImage = new Image();
-bulletImage.src = 'images/game/manzi.png';
+bulletImage.src = 'images/game/hourin.png'; // 卍から法輪
 
 // === 定数 ===
 const MAX_KUDOKU = 6;
