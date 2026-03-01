@@ -1596,11 +1596,21 @@
             margin-bottom: 5px;
         }
 
+        .lang-en .intro-message-main,
+        .lang-en .title-main-copy {
+            font-size: 10px;
+        }
+
         .intro-message-sub,
         .title-sub-copy {
             color: #d4af37;
             font-weight: bold;
             font-size: 15px;
+        }
+
+        .lang-en .intro-message-sub,
+        .lang-en .title-sub-copy {
+            font-size: 10px;
         }
 
         .text-bonnou-red {
