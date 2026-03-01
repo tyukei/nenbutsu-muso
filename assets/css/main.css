@@ -1219,6 +1219,16 @@
             right: 25px;
         }
 
+        .slide2-mode #shootBtn {
+            right: auto;
+            left: 20px;
+        }
+
+        .slide2-mode #specialBtn {
+            right: auto;
+            left: 25px;
+        }
+
 
 
 
