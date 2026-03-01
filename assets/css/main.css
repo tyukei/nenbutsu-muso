@@ -1833,7 +1833,7 @@
 
         /* Affiliate Modal Styles */
         .affiliate-content {
-            text-align: left;
+            text-align: center;
             margin: 20px 0;
         }
 
@@ -1844,33 +1844,39 @@
         .affiliate-company {
             color: #d4af37;
             font-size: 20px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
         .affiliate-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
             padding: 10px;
         }
 
         .affiliate-link-item {
-            margin-bottom: 12px;
-            line-height: 1.6;
+            width: 100%;
+            max-width: 400px;
         }
 
-        .affiliate-label {
-            color: #ff9800;
-            font-weight: bold;
-            margin-right: 5px;
+        .affiliate-image-link {
+            display: block;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
         }
 
-        .affiliate-url {
-            color: #6ec6ff;
-            text-decoration: none;
-            word-break: break-all;
-            transition: color 0.3s;
+        .affiliate-image-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6);
         }
 
-        .affiliate-url:hover {
-            color: #d4af37;
-            text-decoration: underline;
+        .affiliate-image {
+            width: 100%;
+            height: auto;
+            display: block;
         }
