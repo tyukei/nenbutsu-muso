@@ -71,6 +71,11 @@ const bmDetailContentJa = document.getElementById('bmDetailContentJa');
 const bmDetailContentEn = document.getElementById('bmDetailContentEn');
 const langToggleBtn = document.getElementById('langToggleBtn');
 
+// 関連会社関連要素
+const affiliateBtn = document.getElementById('affiliateBtn');
+const affiliateModal = document.getElementById('affiliateModal');
+const closeAffiliateBtn = document.getElementById('closeAffiliateBtn');
+
 // 画像リソース
 const monkImage = new Image();
 monkImage.src = 'images/monk/monk_back.png';
@@ -281,21 +286,85 @@ const translations = {
         'submit': '決定',
         'tosAgree': '閉じる',
         'tosTitle': '利用規約',
-        'tosArticle1': '第1条（目的）',
-        'tosContent1': '本規約は、当ゲーム「煩悩シューティング」の利用に関する条件を定めるものです。',
-        'tosArticle2': '第2条（免責）',
-        'tosContent2': '本ゲームの利用により生じた損害について、開発者は一切の責任を負いません。',
-        'tosArticle3': '第3条（禁止事項）',
-        'tosContent3': '公序良俗に反する行為、不正アクセス、その他開発者が不適切と判断する行為を禁止します。',
-        'tosArticle4': '第4条（データの保存）',
-        'tosContent4': '本ゲームのプレイデータ（スコア、設定など）は、ご利用のブラウザ（ローカルストレージ）に保存されます。ブラウザの履歴やキャッシュを削除した場合、データが消失する可能性があります。また、データの復元や別端末への引き継ぎはできません。',
-        'tosArticle5': '第5条（著作権等）',
-        'tosContent5': '本ゲームを構成するプログラム、画像、音声等の著作権その他の知的財産権は、開発者または正当な権利を有する第三者に帰属します。無断転載・再配布を禁じます。',
-        'tosArticle6': '第6条（SNSシェア）',
-        'tosContent6': 'シェア機能を利用した投稿内容や、SNS上でのトラブルについて開発者は一切の責任を負いません。',
-        'tosArticle7': '第7条（変更）',
-        'tosContent7': '本規約は予告なく変更される場合があります。',
-        'tosFooter': 'ゲームをお楽しみいただく前に、上記内容をご確認ください。',
+        'tosText': `<h3 style='margin-bottom: 0px;'>「煩悩シューティング」利用規約</h3>
+<p style='text-align: right; font-size: 0.8em; color: #888; margin-bottom: 15px;'>最終更新日：2026年3月1日</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>本利用規約（以下「本規約」といいます。）は、株式会社神社仏閣オンライン（以下「当社」といいます。）が提供するブラウザゲーム「煩悩シューティング」（以下「本ゲーム」といいます。）の利用条件を定めるものです。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>ユーザーは、本ゲームを利用することにより、本規約に同意したものとみなされます。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第1条（著作権および権利帰属）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒈　本ゲームに関する一切の権利（著作権、商標権、プログラム、画像、音声、テキスト、ゲームデザイン、キャラクター、世界観その他の知的財産権）は、当社または正当な権利を有する第三者に帰属し、ユーザーは、本規約で明示的に許可される範囲を超えて、本ゲームを利用することはできません。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒉　当社は、本ゲームの素材を、文章生成AI、画像生成AI、その他の生成系AIの学習用データとして使用、入力、または提供する行為を当社の利益を不当に害するものとして禁止します。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第2条（許諾される利用）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>当社は、ユーザーに対し、本ゲームを個人的かつ非営利目的で利用することを許諾します。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第3条（二次創作および動画配信の利用）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. 	ユーザーは、本ゲームのプレイ動画、スクリーンショット、実況動画、配信、レビュー、二次創作作品（イラスト・動画・文章等を含む）を、非営利目的の範囲で自由に制作・公開することができます。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. 	前項にかかわらず、以下のプラットフォームが提供する標準的な収益化機能による収益取得は、非営利利用の例外として許可します。</p>
+<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+<li>動画共有サイトの広告収益プログラム</li>
+<li>配信サイトの投げ銭・スーパーチャット・サブスク機能</li>
+<li>プラットフォーム公式のクリエイター収益分配制度</li>
+<li>その他当社が同等と認める標準収益化機能[聖宮1]</li>
+</ul>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. 	前項の例外は、プラットフォームが提供する仕組みによる収益取得のみを対象とし、以下の行為は許可されません。</p>
+<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+<li>二次創作物の販売</li>
+<li>グッズ販売</li>
+<li>有料配信・有料視聴販売</li>
+<li>有料会員限定コンテンツとしての公開</li>
+<li>企業案件</li>
+<li>広告タイアップ</li>
+<li>本ゲーム素材を用いた商用サービス提供</li>
+<li>その他営利を目的とする利用[聖宮2]</li>
+</ul>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. 	二次創作・配信にあたっては、以下の表示を推奨します。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>© 煩悩シューティング</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第4条（禁止事項）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>ユーザーは、以下の行為を行ってはなりません。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. 本ゲームのデータ・プログラムの解析、改変、リバースエンジニアリング</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. 本ゲームの再配布、再公開、無断転載</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. 本ゲームを商業・営利目的で利用する行為</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. 本ゲームの素材を独立したコンテンツとして使用する行為</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>5. 本ゲームの素材を生成AIの学習用データとして入力または提供する行為</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>6. 当社または第三者の権利を侵害する行為</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>7. 公序良俗に反する利用</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>8. 本ゲームのイメージを著しく損なう利用</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>9. 反社会的活動への利用</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒑ 本ゲーム公式または公認と誤認させる表示</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒒ その他当社が不適切と判断する行為</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第5条（ガイドライン違反時の措置）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>当社は、ユーザーの利用が本規約に違反すると判断した場合、公開停止要請、削除要請、利用差止め等の措置を行うことがあります。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第6条（免責）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. 	当社は、本ゲームの提供に関し、その完全性、正確性、継続性、および特定のデバイスやOSでの動作を保証しません。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. 	本ゲームの利用により、当社の責めに帰すべき事由によって、ユーザーに損害が生じた場合、当社は故意または重過失がある場合を除き、ユーザーに現実に生じた直接かつ通常の損害（特別損害、逸失利益、データの消失を除く）に限り、賠償責任を負うものとします。[聖宮3]</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第7条（情報の取り扱い及びプライバシー）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒈　ユーザーが登録したニックネーム、ユーザーID、スコア、およびゲームプレイ履歴は、原則として非個人情報として扱い、ランキング形式等で他のユーザーに公開されることがあります 。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒉　当社は、本ゲームの利用状況の分析およびサービス向上のため、Cookie（クッキー）等の技術を用いてユーザーのアクセスログ情報を収集することがあります 。[聖宮4]</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第8条（サービス変更・終了）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>当社は、予告なく本ゲームの内容変更、提供停止、終了を行うことがあります。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第9条（規約変更）[聖宮5]</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒈　当社は、民法第548条の4の規定に基づき、本規約を変更することができます。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒉　当社は、本規約を変更する場合、変更後の規約の効力発生時期を定め、その14日前までに、本ゲーム内または公式サイトへの掲載その他適切な方法により、規約を変更する旨、変更後の内容、および効力発生時期を周知します。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒊　ユーザーが変更後の規約の効力発生時期以降に本ゲームを利用した場合、変更後の契約に同意したものとみなされます。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第10条（準拠法・管轄）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>本規約は日本法に準拠します。本ゲームに関して紛争が生じた場合、当社所在地を管轄する裁判所を第一審の専属管轄裁判所とします。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮1]不明確なので削除してもよろしいでしょうか。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮2]当方からすると、不許可事項が多い方が有利ですので、包括条項を入れています。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮3]利用規約ですので、損害の範囲を限定的にしています。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>消費者契約法8条1項1号で事業者の軽過失による債務不履行や不法行為により消費者に生じた損害について、事業者の責任を「全面的に免除」する条項は無効とされます。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>そのため、可能な限り、損害額の範囲を限定しております。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>（事業者の損害賠償の責任を免除する条項等の無効）</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第八条 次に掲げる消費者契約の条項は、無効とする。</h4>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>一 事業者の債務不履行により消費者に生じた損害を賠償する責任の全部を免除し、又は当該事業者にその責任の有無を決定する権限を付与する条項</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮4]個人情報に配慮しておいた方がよいので、この記載を入れています。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>有料版にする際には、プライバシーポリシー等で個人情報の取り扱いを定めておいた方がよいです。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮5]第548条の4【定型約款の変更】</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>①　定型約款準備者は、次に掲げる場合には、定型約款の変更をすることにより、変更後の定型約款の条項について合意があったものとみなし、個別に相手方と合意をすることなく契約の内容を変更することができる。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>一　定型約款の変更が、相手方の一般の利益に適合するとき。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>二　定型約款の変更が、契約をした目的に反せず、かつ、変更の必要性、変更後の内容の相当性、この条の規定により定型約款の変更をすることがある旨の定めの有無及びその内容その他の変更に係る事情に照らして合理的なものであるとき。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>②　定型約款準備者は、前項の規定による定型約款の変更をするときは、その効力発生時期を定め、かつ、定型約款を変更する旨及び変更後の定型約款の内容並びにその効力発生時期をインターネットの利用その他の適切な方法により周知しなければならない。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>③　第一項第二号の規定による定型約款の変更は、前項の効力発生時期が到来するまでに同項の規定による周知をしなければ、その効力を生じない。</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>④　第548条の2第2項の規定は、第一項の規定による定型約款の変更については、適用しない。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>この条文が令和2年の民法改正で新設されたため、今回は、効力発生時期を定め、周知するという流れに条項を変更しております。</p>
+`,
         'pastRecord': '己の過去と向き合う',
         'playCount': 'プレイ回数',
         'totalDestroyed': '累計撃破数',
@@ -335,6 +404,10 @@ const translations = {
         'shareLose': '煩悩に呑まれた...\n',
         'shareScore': '撃破数: $1/$2\n',
         'shareCombo': '最大連鎖: $1\n',
+        'affiliate': '関連会社',
+        'affiliateCompany': '制作会社：神社仏閣オンライン',
+        'sponsor': '協賛会社',
+        'recruiting': '募集中',
     },
     'en': {
         'gameStart': 'Start Practice',
@@ -404,21 +477,83 @@ const translations = {
         'submit': 'OK',
         'tosAgree': 'Close',
         'tosTitle': 'Terms of Service',
-        'tosArticle1': 'Article 1 (Purpose)',
-        'tosContent1': 'These terms stipulate the conditions for using this game, "Bonno Shooter".',
-        'tosArticle2': 'Article 2 (Disclaimer)',
-        'tosContent2': 'The developer assumes no responsibility for any damages caused by the use of this game.',
-        'tosArticle3': 'Article 3 (Prohibitions)',
-        'tosContent3': 'Actions against public order and morals, unauthorized access, and other actions deemed inappropriate by the developer are prohibited.',
-        'tosArticle4': 'Article 4 (Data Save)',
-        'tosContent4': 'Play data (scores, settings, etc.) for this game is saved in your browser (LocalStorage). If you clear your browser history or cache, the data may be lost. Data cannot be restored or transferred to another device.',
-        'tosArticle5': 'Article 5 (Copyrights)',
-        'tosContent5': 'Copyrights and other intellectual property rights for the programs, images, audio, etc. that make up this game belong to the developer or third parties with legitimate rights. Unauthorized reproduction and redistribution are prohibited.',
-        'tosArticle6': 'Article 6 (SNS Sharing)',
-        'tosContent6': 'The developer assumes no responsibility for the content posted using the share feature or any troubles on SNS.',
-        'tosArticle7': 'Article 7 (Changes)',
-        'tosContent7': 'These terms are subject to change without notice.',
-        'tosFooter': 'Please review the above before enjoying the game.',
+        'tosText': `<h3 style='margin-bottom: 0px;'>"Bonno Shooter" Terms of Service</h3>
+<p style='text-align: right; font-size: 0.8em; color: #888; margin-bottom: 15px;'>Last Updated: March 1, 2026</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>These Terms of Service (hereinafter referred to as the "Terms") stipulate the conditions for using the browser game "Bonno Shooter" (hereinafter referred to as the "Game") provided by Jinja Bukkaku Online Co., Ltd. (hereinafter referred to as the "Company").</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>By using the Game, the user is deemed to have agreed to these Terms.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 1 (Copyrights and Attribution of Rights)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. All rights related to the Game (copyrights, trademarks, programs, images, audio, text, game design, characters, worldview, and other intellectual property rights) belong to the Company or a third party with legitimate rights, and the user may not use the Game beyond the scope expressly permitted by these Terms.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. The Company prohibits the act of using, inputting, or providing the materials of the Game as training data for text generation AI, image generation AI, and other generative AI, as it unjustly harms the interests of the Company.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 2 (Permitted Use)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>The Company grants the user permission to use the Game for personal and non-commercial purposes.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 3 (Secondary Creation and Use for Video Distribution)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. Users may freely create and publish play videos, screenshots, live gameplay videos, streams, reviews, and derivative works (including illustrations, videos, text, etc.) of the Game as long as they are for non-commercial purposes.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. Notwithstanding the preceding paragraph, obtaining revenue through standard monetization features provided by the following platforms is permitted as an exception to non-commercial use:</p>
+<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+<li>Advertising revenue programs on video sharing sites</li>
+<li>Tipping, Super Chat, and subscription features on streaming sites</li>
+<li>Official creator revenue sharing systems on platforms</li>
+<li>Other standard monetization features deemed equivalent by the Company [Seimiya 1]</li>
+</ul>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. The exception in the preceding paragraph applies only to obtaining revenue through mechanisms provided by the platforms, and the following actions are not permitted:</p>
+<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+<li>Sales of derivative works</li>
+<li>Merchandise sales</li>
+<li>Paid streaming/paid viewing sales</li>
+<li>Publishing as paid member-only content</li>
+<li>Corporate sponsorships</li>
+<li>Advertising tie-ups</li>
+<li>Providing commercial services using Game materials</li>
+<li>Other commercial uses [Seimiya 2]</li>
+</ul>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. When making derivative works or streaming, the following display is recommended:</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>© Bonno Shooter</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 4 (Prohibited Actions)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>Users must not engage in the following actions:</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. Analyzing, modifying, or reverse engineering the Game's data or programs</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. Redistributing, republishing, or unauthorized reproduction of the Game</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. Using the Game for commercial or profit-making purposes</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. Using the materials of the Game as independent content</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>5. Inputting or providing the materials of the Game as training data for generative AI</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>6. Infringing on the rights of the Company or third parties</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>7. Use contrary to public order and morals</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>8. Use that significantly damages the Game's image</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>9. Use for anti-social activities</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>10. Displays that mislead as being official or authorized by the Game</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>11. Other actions deemed inappropriate by the Company</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 5 (Measures in Case of Guideline Violations)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>If the Company determines that a user's use violates these Terms, it may take measures such as requests for suspension of publication, deletion requests, and injunctions against use.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 6 (Disclaimer)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. The Company does not guarantee the completeness, accuracy, continuity, or operation on specific devices or OSs regarding the provision of the Game.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. If the user suffers damages due to the use of the Game for reasons attributable to the Company, the Company shall be liable to compensate only for direct and ordinary damages actually incurred by the user (excluding special damages, lost profits, and data loss), except in cases of intentional or gross negligence by the Company. [Seimiya 3]</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 7 (Handling of Information and Privacy)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. Nicknames, User IDs, scores, and gameplay history registered by the user will generally be treated as non-personal information and may be published to other users in a ranking format, etc.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. The Company may collect users' access log information using technologies such as cookies for analyzing the usage status of the Game and improving the service. [Seimiya 4]</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 8 (Changes/Termination of Service)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>The Company may change the content, suspend provision, or terminate the Game without prior notice.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 9 (Changes to Terms) [Seimiya 5]</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. The Company may change these Terms based on the provisions of Article 548-4 of the Civil Code.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. When the Company changes these Terms, it shall determine the effective date of the amended Terms and inform users of the intention to change the Terms, the changed content, and the effective date at least 14 days in advance by posting within the Game or on the official website, or by other appropriate methods.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. If the user uses the Game on or after the effective date of the amended Terms, it shall be deemed that they have agreed to the amended contract.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 10 (Governing Law/Jurisdiction)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>These Terms shall be governed by Japanese law. In the event of a dispute related to the Game, the court with jurisdiction over the location of the Company shall be the exclusive agreement jurisdictional court of the first instance.</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[Seimiya 1] This is unclear, so may I delete it?</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[Seimiya 2] From our perspective, it is more advantageous to have more prohibited items, so we have included a comprehensive clause.</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[Seimiya 3] Since this is a terms of service, the scope of damages is limited.</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>Under Article 8, Paragraph 1, Item 1 of the Consumer Contract Act, a clause that "completely exempts" the business operator from liability for damages caused to consumers due to default or tort caused by the business operator's slight negligence is invalid. Therefore, we have limited the scope of the amount of damages as much as possible.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>(Invalidity of Clauses Exempting Business Operators from Liability for Damages)</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 8 The following clauses of a consumer contract are invalid.</h4>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>(1) A clause that completely exempts a business operator from liability for damages caused to a consumer by the default of the business operator or grants the business operator the authority to determine whether or not it is liable.</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[Seimiya 4] We have included this description because it is better to consider personal information. When making it a paid version, it is better to stipulate the handling of personal information in a privacy policy, etc.</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[Seimiya 5] Article 548-4 [Changes to Standard Terms and Conditions]</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>(1) A party making standard terms and conditions may change the standard terms and conditions without an individual agreement with the counterparty, considering that the counterparty has agreed to the clauses of the changed standard terms and conditions, in the following cases:</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. When the change to the standard terms and conditions conforms to the general interests of the counterparty.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. When the change to the standard terms and conditions does not run counter to the purpose for which the contract was concluded, and is reasonable in light of the necessity of the change, the appropriateness of the changed content, the presence or absence of a provision to the effect that the standard terms and conditions may be changed pursuant to this Article, its content, and other circumstances relating to the change.</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>(2) When changing standard terms and conditions pursuant to the preceding paragraph, the party making the standard terms and conditions must determine the effective date and make widely known to the public, by use of the Internet or other appropriate means, the fact that the standard terms and conditions are to be changed, the content of the changed standard terms and conditions, and the effective date thereof.</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>(3) A change to standard terms and conditions pursuant to the provisions of paragraph (1), item 2 does not become effective unless the public notice under the preceding paragraph is given by the effective date under the preceding paragraph.</p>
+<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>(4) The provisions of Article 548-2, paragraph 2 do not apply to a change to standard terms and conditions under paragraph (1).</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>Since this provision was newly established in the amendment to the Civil Code in 2020, we have changed the clause to follow the flow of determining the effective date and making it widely known.</p>
+`,
         'pastRecord': 'Facing your past',
         'playCount': 'Play Count',
         'totalDestroyed': 'Total Destroyed',
@@ -458,6 +593,10 @@ const translations = {
         'shareLose': 'Swallowed by afflictions...\n',
         'shareScore': 'Destroyed: $1/$2\n',
         'shareCombo': 'Max Combo: $1\n',
+        'affiliate': 'Affiliates',
+        'affiliateCompany': 'Production Company: Jinja Bukkaku Online',
+        'sponsor': 'Sponsors',
+        'recruiting': 'Now Recruiting',
     }
 };
 

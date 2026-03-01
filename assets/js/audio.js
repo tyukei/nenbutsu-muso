@@ -32,6 +32,11 @@ sounds.clear.volume = 0.6;
 
 // 音声再生のヘルパー関数
 function playSound(soundName) {
+    // 音声アンロックが完了していない場合は再生しない
+    if (!audioUnlocked) {
+        return;
+    }
+
     if (sounds[soundName]) {
         // 必殺技発動中(3秒間)は、rokuharamitsu 以外の音を鳴らさない
         if (typeof GS !== 'undefined' && GS.play && GS.play.specialActiveUntil > performance.now() && soundName !== 'rokuharamitsu') {
@@ -53,34 +58,51 @@ function stopSound(soundName) {
 
 // モバイル等の自動再生制限解除用
 let audioUnlocked = false;
+let audioUnlocking = false;  // アンロック処理中フラグ
 function unlockAudio() {
-    if (audioUnlocked) return;
+    if (audioUnlocked || audioUnlocking) return;
+    audioUnlocking = true;
 
     // 全ての音声を無音で一瞬再生してアンロック
-    Object.keys(sounds).forEach(key => {
+    for (const key of Object.keys(sounds)) {
         const audio = sounds[key];
 
         // 既に再生中の音声（startSoundなど）を止めないようにする
-        if (!audio.paused) return;
+        if (!audio.paused) continue;
 
         audio.muted = true;
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                // playSound()等でミュートが解除された・あるいは再生が意図的に開始された場合はpauseしない
-                if (audio.muted) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    audio.muted = false;
-                }
-            }).catch(e => {
-                // console.log('Audio unlock failed:', e);
-                audio.muted = false;
-            });
-        }
-    });
+        audio.volume = 0;  // 音量も0にして確実に無音化
 
+        // play() を呼んだ直後に pause() を呼ぶ
+        const playPromise = audio.play();
+        audio.pause();  // 即座に停止
+        audio.currentTime = 0;
+
+        // Promise のエラーを無視
+        if (playPromise !== undefined) {
+            playPromise.catch(() => { });
+        }
+    }
+
+    // 即座にアンロック完了とする
     audioUnlocked = true;
+    audioUnlocking = false;
+
+    // 少し待ってから音量を元に戻す（音が鳴らないように）
+    setTimeout(() => {
+        Object.keys(sounds).forEach(key => {
+            const audio = sounds[key];
+            audio.muted = false;
+            // 各音声の元の音量に戻す
+            if (key === 'bgm') audio.volume = 0.5;
+            else if (key === 'shoot') audio.volume = 0.3;
+            else if (key === 'hit') audio.volume = 0.4;
+            else if (key === 'damage') audio.volume = 0.5;
+            else if (key === 'gameover') audio.volume = 0.6;
+            else if (key === 'clear') audio.volume = 0.6;
+            else audio.volume = 1.0;
+        });
+    }, 200);  // 200ms 待機してから音量を復元
 
     // イベントリスナー削除
     document.removeEventListener('touchstart', unlockAudio);

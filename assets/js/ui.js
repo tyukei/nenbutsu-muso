@@ -537,6 +537,15 @@ buddhaMessageBtn.addEventListener('click', () => {
 });
 backFromBuddhaMessageBtn.addEventListener('click', showTitle);
 
+// 関連会社モーダルイベント
+affiliateBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'affiliate' });
+    affiliateModal.classList.remove('hidden');
+});
+closeAffiliateBtn.addEventListener('click', () => {
+    affiliateModal.classList.add('hidden');
+});
+
 for (let i = 1; i <= 4; i++) {
     document.getElementById(`bmBtn${i}`).addEventListener('click', () => {
         if (!document.getElementById(`bmBtn${i}`).classList.contains('locked')) {
