@@ -75,7 +75,7 @@
                         <button id="rankingBtn" class="title-button">修行の軌跡</button>
                         <button id="menuBtn" class="title-button title-button-menu">修行の準備</button>
                         <button id="buddhaMessageBtn" class="title-button">ブッダメッセージ</button>
-                        <button id="affiliateBtn" class="title-button">関連会社</button>
+                        <button id="affiliateBtn" class="title-button" data-i18n="affiliate">関連会社</button>
                         <button id="langToggleBtn" class="title-button">In English</button>
                     </div>
 
@@ -179,33 +179,7 @@
             <div id="tosModal" class="modal hidden">
                 <div class="modal-container">
                     <h2 class="modal-title" data-i18n="tosTitle">利用規約</h2>
-                    <div class="tos-content">
-                        <p><strong data-i18n="tosArticle1">第1条（目的）</strong></p>
-                        <p data-i18n="tosContent1">本規約は、当ゲーム「煩悩シューティング」の利用に関する条件を定めるものです。</p>
-                        <br>
-                        <p><strong data-i18n="tosArticle2">第2条（免責）</strong></p>
-                        <p data-i18n="tosContent2">本ゲームの利用により生じた損害について、開発者は一切の責任を負いません。</p>
-                        <br>
-                        <p><strong data-i18n="tosArticle3">第3条（禁止事項）</strong></p>
-                        <p data-i18n="tosContent3">公序良俗に反する行為、不正アクセス、その他開発者が不適切と判断する行為を禁止します。</p>
-                        <br>
-                        <p><strong data-i18n="tosArticle4">第4条（データの保存）</strong></p>
-                        <p data-i18n="tosContent4">
-                            本ゲームのプレイデータ（スコア、設定など）は、ご利用のブラウザ（ローカルストレージ）に保存されます。ブラウザの履歴やキャッシュを削除した場合、データが消失する可能性があります。また、データの復元や別端末への引き継ぎはできません。
-                        </p>
-                        <br>
-                        <p><strong data-i18n="tosArticle5">第5条（著作権等）</strong></p>
-                        <p data-i18n="tosContent5">
-                            本ゲームを構成するプログラム、画像、音声等の著作権その他の知的財産権は、開発者または正当な権利を有する第三者に帰属します。無断転載・再配布を禁じます。</p>
-                        <br>
-                        <p><strong data-i18n="tosArticle6">第6条（SNSシェア）</strong></p>
-                        <p data-i18n="tosContent6">シェア機能を利用した投稿内容や、SNS上でのトラブルについて開発者は一切の責任を負いません。</p>
-                        <br>
-                        <p><strong data-i18n="tosArticle7">第7条（変更）</strong></p>
-                        <p data-i18n="tosContent7">本規約は予告なく変更される場合があります。</p>
-                        <br>
-                        <p data-i18n="tosFooter">ゲームをお楽しみいただく前に、上記内容をご確認ください。</p>
-                    </div>
+                    <div class="tos-content" data-i18n-html="tosText"></div>
                     <button id="tosAgreeBtn" data-i18n="tosAgree">閉じる</button>
                 </div>
             </div>
@@ -291,10 +265,10 @@
             <!-- 関連会社モーダル -->
             <div id="affiliateModal" class="modal hidden">
                 <div class="modal-container">
-                    <h2 class="modal-title">関連会社</h2>
+                    <h2 class="modal-title" data-i18n="affiliate">関連会社</h2>
                     <div class="affiliate-content">
                         <div class="affiliate-section">
-                            <h3 class="affiliate-company">制作会社：神社仏閣オンライン</h3>
+                            <h3 class="affiliate-company" data-i18n="affiliateCompany">制作会社：神社仏閣オンライン</h3>
                             <div class="affiliate-links">
                                 <div class="affiliate-link-item">
                                     <a href="https://jinjabukkaku.online/" target="_blank" rel="noopener noreferrer" class="affiliate-image-link">
@@ -309,13 +283,13 @@
                             </div>
                         </div>
                         <div class="affiliate-section sponsor-section">
-                            <h3 class="affiliate-company">協賛会社</h3>
+                            <h3 class="affiliate-company" data-i18n="sponsor">協賛会社</h3>
                             <div class="sponsor-recruiting">
-                                <p class="recruiting-text">募集中</p>
+                                <p class="recruiting-text" data-i18n="recruiting">募集中</p>
                             </div>
                         </div>
                     </div>
-                    <button id="closeAffiliateBtn" class="menu-btn menu-close-btn">閉じる</button>
+                    <button id="closeAffiliateBtn" class="menu-btn menu-close-btn" data-i18n="close">閉じる</button>
                 </div>
             </div>
 

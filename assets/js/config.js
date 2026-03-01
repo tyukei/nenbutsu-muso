@@ -286,21 +286,66 @@ const translations = {
         'submit': '決定',
         'tosAgree': '閉じる',
         'tosTitle': '利用規約',
-        'tosArticle1': '第1条（目的）',
-        'tosContent1': '本規約は、当ゲーム「煩悩シューティング」の利用に関する条件を定めるものです。',
-        'tosArticle2': '第2条（免責）',
-        'tosContent2': '本ゲームの利用により生じた損害について、開発者は一切の責任を負いません。',
-        'tosArticle3': '第3条（禁止事項）',
-        'tosContent3': '公序良俗に反する行為、不正アクセス、その他開発者が不適切と判断する行為を禁止します。',
-        'tosArticle4': '第4条（データの保存）',
-        'tosContent4': '本ゲームのプレイデータ（スコア、設定など）は、ご利用のブラウザ（ローカルストレージ）に保存されます。ブラウザの履歴やキャッシュを削除した場合、データが消失する可能性があります。また、データの復元や別端末への引き継ぎはできません。',
-        'tosArticle5': '第5条（著作権等）',
-        'tosContent5': '本ゲームを構成するプログラム、画像、音声等の著作権その他の知的財産権は、開発者または正当な権利を有する第三者に帰属します。無断転載・再配布を禁じます。',
-        'tosArticle6': '第6条（SNSシェア）',
-        'tosContent6': 'シェア機能を利用した投稿内容や、SNS上でのトラブルについて開発者は一切の責任を負いません。',
-        'tosArticle7': '第7条（変更）',
-        'tosContent7': '本規約は予告なく変更される場合があります。',
-        'tosFooter': 'ゲームをお楽しみいただく前に、上記内容をご確認ください。',
+        'tosText': `<h3 style='margin-bottom: 0px;'>「煩悩シューティング」利用規約</h3>
+<p style='text-align: right; font-size: 0.8em; color: #888; margin-bottom: 15px;'>最終更新日：2026年3月1日</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>本利用規約（以下「本規約」といいます。）は、株式会社神社仏閣オンライン（以下「当社」といいます。）が提供するブラウザゲーム「煩悩シューティング」（以下「本ゲーム」といいます。）の利用条件を定めるものです。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>ユーザーは、本ゲームを利用することにより、本規約に同意したものとみなされます。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第1条（著作権および権利帰属）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒈　本ゲームに関する一切の権利（著作権、商標権、プログラム、画像、音声、テキスト、ゲームデザイン、キャラクター、世界観その他の知的財産権）は、当社または正当な権利を有する第三者に帰属し、ユーザーは、本規約で明示的に許可される範囲を超えて、本ゲームを利用することはできません。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒉　当社は、本ゲームの素材を、文章生成AI、画像生成AI、その他の生成系AIの学習用データとして使用、入力、または提供する行為を当社の利益を不当に害するものとして禁止します。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第2条（許諾される利用）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>当社は、ユーザーに対し、本ゲームを個人的かつ非営利目的で利用することを許諾します。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第3条（二次創作および動画配信の利用）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. 	ユーザーは、本ゲームのプレイ動画、スクリーンショット、実況動画、配信、レビュー、二次創作作品（イラスト・動画・文章等を含む）を、非営利目的の範囲で自由に制作・公開することができます。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. 	前項にかかわらず、以下のプラットフォームが提供する標準的な収益化機能による収益取得は、非営利利用の例外として許可します。</p>
+<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+<li>動画共有サイトの広告収益プログラム</li>
+<li>配信サイトの投げ銭・スーパーチャット・サブスク機能</li>
+<li>プラットフォーム公式のクリエイター収益分配制度</li>
+</ul>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. 	前項の例外は、プラットフォームが提供する仕組みによる収益取得のみを対象とし、以下の行為は許可されません。</p>
+<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+<li>二次創作物の販売</li>
+<li>グッズ販売</li>
+<li>有料配信・有料視聴販売</li>
+<li>有料会員限定コンテンツとしての公開</li>
+<li>企業案件</li>
+<li>広告タイアップ</li>
+<li>本ゲーム素材を用いた商用サービス提供</li>
+<li>その他営利を目的とする利用</li>
+</ul>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. 	二次創作・配信にあたっては、以下の表示を推奨します。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>© 煩悩シューティング</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第4条（禁止事項）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>ユーザーは、以下の行為を行ってはなりません。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. 本ゲームのデータ・プログラムの解析、改変、リバースエンジニアリング</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. 本ゲームの再配布、再公開、無断転載</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. 本ゲームを商業・営利目的で利用する行為</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. 本ゲームの素材を独立したコンテンツとして使用する行為</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>5. 本ゲームの素材を生成AIの学習用データとして入力または提供する行為</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>6. 当社または第三者の権利を侵害する行為</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>7. 公序良俗に反する利用</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>8. 本ゲームのイメージを著しく損なう利用</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>9. 反社会的活動への利用</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒑ 本ゲーム公式または公認と誤認させる表示</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒒ その他当社が不適切と判断する行為</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第5条（ガイドライン違反時の措置）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>当社は、ユーザーの利用が本規約に違反すると判断した場合、公開停止要請、削除要請、利用差止め等の措置を行うことがあります。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第6条（免責）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. 	当社は、本ゲームの提供に関し、その完全性、正確性、継続性、および特定のデバイスやOSでの動作を保証しません。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. 	本ゲームの利用により、当社の責めに帰すべき事由によって、ユーザーに損害が生じた場合、当社は故意または重過失がある場合を除き、ユーザーに現実に生じた直接かつ通常の損害（特別損害、逸失利益、データの消失を除く）に限り、賠償責任を負うものとします。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第7条（情報の取り扱い及びプライバシー）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒈　ユーザーが登録したニックネーム、ユーザーID、スコア、およびゲームプレイ履歴は、原則として非個人情報として扱い、ランキング形式等で他のユーザーに公開されることがあります。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒉　当社は、本ゲームの利用状況の分析およびサービス向上のため、Cookie（クッキー）等の技術を用いてユーザーのアクセスログ情報を収集することがあります。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第8条（サービス変更・終了）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>当社は、予告なく本ゲームの内容変更、提供停止、終了を行うことがあります。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第9条（規約変更）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒈　当社は、民法第548条の4の規定に基づき、本規約を変更することができます。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒉　当社は、本規約を変更する場合、変更後の規約の効力発生時期を定め、その14日前までに、本ゲーム内または公式サイトへの掲載その他適切な方法により、規約を変更する旨、変更後の内容、および効力発生時期を周知します。</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒊　ユーザーが変更後の規約の効力発生時期以降に本ゲームを利用した場合、変更後の契約に同意したものとみなされます。</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第10条（準拠法・管轄）</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>本規約は日本法に準拠します。本ゲームに関して紛争が生じた場合、当社所在地を管轄する裁判所を第一審の専属管轄裁判所とします。</p>
+`,
         'pastRecord': '己の過去と向き合う',
         'playCount': 'プレイ回数',
         'totalDestroyed': '累計撃破数',
@@ -340,6 +385,10 @@ const translations = {
         'shareLose': '煩悩に呑まれた...\n',
         'shareScore': '撃破数: $1/$2\n',
         'shareCombo': '最大連鎖: $1\n',
+        'affiliate': '関連会社',
+        'affiliateCompany': '制作会社：神社仏閣オンライン',
+        'sponsor': '協賛会社',
+        'recruiting': '募集中',
     },
     'en': {
         'gameStart': 'Start Practice',
@@ -409,21 +458,66 @@ const translations = {
         'submit': 'OK',
         'tosAgree': 'Close',
         'tosTitle': 'Terms of Service',
-        'tosArticle1': 'Article 1 (Purpose)',
-        'tosContent1': 'These terms stipulate the conditions for using this game, "Bonno Shooter".',
-        'tosArticle2': 'Article 2 (Disclaimer)',
-        'tosContent2': 'The developer assumes no responsibility for any damages caused by the use of this game.',
-        'tosArticle3': 'Article 3 (Prohibitions)',
-        'tosContent3': 'Actions against public order and morals, unauthorized access, and other actions deemed inappropriate by the developer are prohibited.',
-        'tosArticle4': 'Article 4 (Data Save)',
-        'tosContent4': 'Play data (scores, settings, etc.) for this game is saved in your browser (LocalStorage). If you clear your browser history or cache, the data may be lost. Data cannot be restored or transferred to another device.',
-        'tosArticle5': 'Article 5 (Copyrights)',
-        'tosContent5': 'Copyrights and other intellectual property rights for the programs, images, audio, etc. that make up this game belong to the developer or third parties with legitimate rights. Unauthorized reproduction and redistribution are prohibited.',
-        'tosArticle6': 'Article 6 (SNS Sharing)',
-        'tosContent6': 'The developer assumes no responsibility for the content posted using the share feature or any troubles on SNS.',
-        'tosArticle7': 'Article 7 (Changes)',
-        'tosContent7': 'These terms are subject to change without notice.',
-        'tosFooter': 'Please review the above before enjoying the game.',
+        'tosText': `<h3 style='margin-bottom: 0px;'>"Bonno Shooter" Terms of Service</h3>
+<p style='text-align: right; font-size: 0.8em; color: #888; margin-bottom: 15px;'>Last Updated: March 1, 2026</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>These Terms of Service (hereinafter referred to as the "Terms") stipulate the conditions for using the browser game "Bonno Shooter" (hereinafter referred to as the "Game") provided by Jinja Bukkaku Online Co., Ltd. (hereinafter referred to as the "Company").</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>By using the Game, the user is deemed to have agreed to these Terms.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 1 (Copyrights and Attribution of Rights)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. All rights related to the Game (copyrights, trademarks, programs, images, audio, text, game design, characters, worldview, and other intellectual property rights) belong to the Company or a third party with legitimate rights, and the user may not use the Game beyond the scope expressly permitted by these Terms.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. The Company prohibits the act of using, inputting, or providing the materials of the Game as training data for text generation AI, image generation AI, and other generative AI, as it unjustly harms the interests of the Company.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 2 (Permitted Use)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>The Company grants the user permission to use the Game for personal and non-commercial purposes.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 3 (Secondary Creation and Use for Video Distribution)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. Users may freely create and publish play videos, screenshots, live gameplay videos, streams, reviews, and derivative works (including illustrations, videos, text, etc.) of the Game as long as they are for non-commercial purposes.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. Notwithstanding the preceding paragraph, obtaining revenue through standard monetization features provided by the following platforms is permitted as an exception to non-commercial use:</p>
+<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+<li>Advertising revenue programs on video sharing sites</li>
+<li>Tipping, Super Chat, and subscription features on streaming sites</li>
+<li>Official creator revenue sharing systems on platforms</li>
+</ul>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. The exception in the preceding paragraph applies only to obtaining revenue through mechanisms provided by the platforms, and the following actions are not permitted:</p>
+<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+<li>Sales of derivative works</li>
+<li>Merchandise sales</li>
+<li>Paid streaming/paid viewing sales</li>
+<li>Publishing as paid member-only content</li>
+<li>Corporate sponsorships</li>
+<li>Advertising tie-ups</li>
+<li>Providing commercial services using Game materials</li>
+<li>Other commercial uses</li>
+</ul>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. When making derivative works or streaming, the following display is recommended:</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>© Bonno Shooter</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 4 (Prohibited Actions)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>Users must not engage in the following actions:</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. Analyzing, modifying, or reverse engineering the Game's data or programs</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. Redistributing, republishing, or unauthorized reproduction of the Game</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. Using the Game for commercial or profit-making purposes</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. Using the materials of the Game as independent content</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>5. Inputting or providing the materials of the Game as training data for generative AI</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>6. Infringing on the rights of the Company or third parties</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>7. Use contrary to public order and morals</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>8. Use that significantly damages the Game's image</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>9. Use for anti-social activities</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>10. Displays that mislead as being official or authorized by the Game</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>11. Other actions deemed inappropriate by the Company</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 5 (Measures in Case of Guideline Violations)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>If the Company determines that a user's use violates these Terms, it may take measures such as requests for suspension of publication, deletion requests, and injunctions against use.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 6 (Disclaimer)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. The Company does not guarantee the completeness, accuracy, continuity, or operation on specific devices or OSs regarding the provision of the Game.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. If the user suffers damages due to the use of the Game for reasons attributable to the Company, the Company shall be liable to compensate only for direct and ordinary damages actually incurred by the user (excluding special damages, lost profits, and data loss), except in cases of intentional or gross negligence by the Company.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 7 (Handling of Information and Privacy)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. Nicknames, User IDs, scores, and gameplay history registered by the user will generally be treated as non-personal information and may be published to other users in a ranking format, etc.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. The Company may collect users' access log information using technologies such as cookies for analyzing the usage status of the Game and improving the service.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 8 (Changes/Termination of Service)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>The Company may change the content, suspend provision, or terminate the Game without prior notice.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 9 (Changes to Terms)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. The Company may change these Terms based on the provisions of Article 548-4 of the Civil Code.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. When the Company changes these Terms, it shall determine the effective date of the amended Terms and inform users of the intention to change the Terms, the changed content, and the effective date at least 14 days in advance by posting within the Game or on the official website, or by other appropriate methods.</p>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. If the user uses the Game on or after the effective date of the amended Terms, it shall be deemed that they have agreed to the amended contract.</p>
+<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>Article 10 (Governing Law/Jurisdiction)</h4>
+<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>These Terms shall be governed by Japanese law. In the event of a dispute related to the Game, the court with jurisdiction over the location of the Company shall be the exclusive agreement jurisdictional court of the first instance.</p>
+`,
         'pastRecord': 'Facing your past',
         'playCount': 'Play Count',
         'totalDestroyed': 'Total Destroyed',
@@ -463,6 +557,10 @@ const translations = {
         'shareLose': 'Swallowed by afflictions...\n',
         'shareScore': 'Destroyed: $1/$2\n',
         'shareCombo': 'Max Combo: $1\n',
+        'affiliate': 'Affiliates',
+        'affiliateCompany': 'Production Company: Jinja Bukkaku Online',
+        'sponsor': 'Sponsors',
+        'recruiting': 'Now Recruiting',
     }
 };
 
