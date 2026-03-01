@@ -12,6 +12,14 @@ rankingBtn.addEventListener('click', showRanking);
 backToTitleBtn.addEventListener('click', showTitle);
 toTitleBtn.addEventListener('click', showTitle);
 
+// メニュー内のアナリティクス設定
+menuSettingsBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'settings' });
+});
+menuTutorialBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'tutorial' });
+});
+
 // X (Twitter) シェアボタン
 const shareBtn = document.getElementById('shareBtn');
 shareBtn.addEventListener('click', shareToTwitter);
@@ -19,18 +27,22 @@ shareBtn.addEventListener('click', shareToTwitter);
 // レベル選択ボタン
 document.getElementById('levelEasy').addEventListener('click', () => {
     playSound('level1');
+    sendAnalyticsEvent('game_start', { level: 'easy', control_mode: GS.settings?.mode || 'pc', lang: GS.lang });
     startLevelTransition('easy');
 });
 document.getElementById('levelNormal').addEventListener('click', () => {
     playSound('level2');
+    sendAnalyticsEvent('game_start', { level: 'normal', control_mode: GS.settings?.mode || 'pc', lang: GS.lang });
     startLevelTransition('normal');
 });
 document.getElementById('levelHard').addEventListener('click', () => {
     playSound('level3');
+    sendAnalyticsEvent('game_start', { level: 'hard', control_mode: GS.settings?.mode || 'pc', lang: GS.lang });
     startLevelTransition('hard');
 });
 document.getElementById('levelDemon').addEventListener('click', () => {
     playSound('level4');
+    sendAnalyticsEvent('game_start', { level: 'demon', control_mode: GS.settings?.mode || 'pc', lang: GS.lang });
     startLevelTransition('demon');
 });
 document.getElementById('backFromLevelBtn').addEventListener('click', showTitle);

@@ -531,7 +531,10 @@ function showBuddhaMessageDetail(id) {
 }
 
 // ブッダメッセージ画面イベント
-buddhaMessageBtn.addEventListener('click', showBuddhaMessageScreen);
+buddhaMessageBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'buddha_message' });
+    showBuddhaMessageScreen();
+});
 backFromBuddhaMessageBtn.addEventListener('click', showTitle);
 
 for (let i = 1; i <= 4; i++) {
@@ -626,6 +629,9 @@ function updateLanguageUI() {
 langToggleBtn.addEventListener('click', () => {
     GS.lang = GS.lang === 'ja' ? 'en' : 'ja';
     localStorage.setItem('nenbunLanguage', GS.lang);
+
+    sendAnalyticsEvent('lang_toggle', { new_lang: GS.lang });
+
     updateLanguageUI();
     showTitle(); // Refresh screen
 });
@@ -634,6 +640,9 @@ function showRanking() {
     GS.screen = 'ranking';
     titleScreen.classList.add('hidden');
     rankingScreen.classList.remove('hidden');
+
+    sendAnalyticsEvent('feature_usage', { feature_name: 'ranking' });
+
     displayCumulativeStats();
     displayRankings();
 }
@@ -661,6 +670,13 @@ function shareToTwitter() {
     shareText += (t.shareCombo || `最大連鎖: $1\n`).replace('$1', play.maxCombo);
     shareText += `\n#煩悩シューティング #般若心経EDM\n#神社仏閣オンライン\n`;
     shareText += `\nhttps://bonno-taisan.jinjabukkaku.online/`;
+
+    sendAnalyticsEvent('share_click', {
+        level: level.current,
+        score: play.score,
+        is_win: isWin
+    });
+
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
     window.open(twitterUrl, '_blank', 'width=550,height=420');
 }

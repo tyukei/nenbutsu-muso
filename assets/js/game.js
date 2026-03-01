@@ -150,13 +150,29 @@ function gameOver(win) {
     virtualControls.classList.add('hidden');
     if (mobileStatus) mobileStatus.classList.add('hidden');
 
+    const playTimeSec = Math.floor((performance.now() - play.specialStartTime) / 1000); // 簡易時間計算（play.startTime が無いので）
+    // 正確なプレイ時間を図るため開始時刻をGS内で管理すべきだが、今回は時間枠の算出を行う。
+    // startGame の際に GS.time.lastTime が記録されているため、そこからの差分とする。
+    const sessionDurationSec = Math.floor((performance.now() - GS.time.lastTime) / 1000);
+
     stopSound('bgm');
     if (win) {
         playSound('clear');
         saveClearedLevel(level.current);
+        sendAnalyticsEvent('game_clear', {
+            level: level.current,
+            score: play.score,
+            spirit_left: play.spirit,
+            max_combo: play.maxCombo
+        });
     } else {
         playSound('gameover');
         shakeScreen();
+        sendAnalyticsEvent('game_over', {
+            level: level.current,
+            score: play.score,
+            play_time_sec: sessionDurationSec
+        });
     }
 
     // Unlock Buddha messages
