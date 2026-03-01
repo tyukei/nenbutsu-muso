@@ -910,9 +910,17 @@
 
         .toggle-options-2row {
             flex-direction: column;
-            gap: 10px;
+            gap: 5px;
             background: transparent;
             padding: 0;
+        }
+
+        .toggle-row-label {
+            color: #ccc;
+            font-size: 14px;
+            margin-top: 5px;
+            margin-bottom: 2px;
+            margin-left: 5px;
         }
 
         .toggle-row {
@@ -983,6 +991,11 @@
         .mobile-mode .setting-label {
             font-size: 15px;
             margin-bottom: 8px;
+        }
+
+        .mobile-mode .toggle-row-label {
+            font-size: 12px;
+            margin-top: 2px;
         }
 
         .mobile-mode .toggle-row {
