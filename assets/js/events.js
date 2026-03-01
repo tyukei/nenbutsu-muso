@@ -1,5 +1,5 @@
 // ==========================================
-// events.js — 簡易イベントバス
+// events.js — 簡易イベントバス + GAユーティリティ
 // ==========================================
 
 const EventBus = {
@@ -37,3 +37,15 @@ const EventBus = {
         this._listeners[event].forEach(fn => fn(data));
     }
 };
+
+/**
+ * Google Analytics (GA4) イベント送信ヘルパー
+ * @param {string} eventName - GAのイベント名
+ * @param {Object} params - 送信するパラメータ
+ */
+function sendAnalyticsEvent(eventName, params = {}) {
+    if (typeof gtag === 'function') {
+        gtag('event', eventName, params);
+        console.log(`[GA] Event Sent: ${eventName}`, params); // デバッグ用
+    }
+}
