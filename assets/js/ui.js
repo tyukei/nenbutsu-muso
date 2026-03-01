@@ -864,6 +864,8 @@ function loadTempSettingsFromStorage() {
         if (tempSettings.mode === 'mobile') {
             tempSettings.mode = 'mobile_slide'; // Migrate legacy 'mobile' to 'mobile_slide'
         }
+        if (!tempSettings.sound) tempSettings.sound = 'on';
+        if (!tempSettings.mode) tempSettings.mode = 'mobile_slide';
     } else {
         tempSettings = {
             sound: 'on',
