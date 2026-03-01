@@ -53,32 +53,39 @@ function stopSound(soundName) {
 
 // モバイル等の自動再生制限解除用
 let audioUnlocked = false;
-function unlockAudio() {
+async function unlockAudio() {
     if (audioUnlocked) return;
 
-    // 全ての音声を無音で一瞬再生してアンロック
-    Object.keys(sounds).forEach(key => {
+    // 全ての音声を無音で一瞬再生してアンロック（順次処理）
+    for (const key of Object.keys(sounds)) {
         const audio = sounds[key];
 
         // 既に再生中の音声（startSoundなど）を止めないようにする
-        if (!audio.paused) return;
+        if (!audio.paused) continue;
 
         audio.muted = true;
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                // playSound()等でミュートが解除された・あるいは再生が意図的に開始された場合はpauseしない
-                if (audio.muted) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    audio.muted = false;
-                }
-            }).catch(e => {
-                // console.log('Audio unlock failed:', e);
-                audio.muted = false;
-            });
+        audio.volume = 0;  // 音量も0にして確実に無音化
+
+        try {
+            await audio.play();
+            // 即座に停止
+            audio.pause();
+            audio.currentTime = 0;
+        } catch (e) {
+            // 再生失敗は無視
+        } finally {
+            // ミュートと音量を元に戻す
+            audio.muted = false;
+            // 各音声の元の音量に戻す
+            if (key === 'bgm') audio.volume = 0.5;
+            else if (key === 'shoot') audio.volume = 0.3;
+            else if (key === 'hit') audio.volume = 0.4;
+            else if (key === 'damage') audio.volume = 0.5;
+            else if (key === 'gameover') audio.volume = 0.6;
+            else if (key === 'clear') audio.volume = 0.6;
+            else audio.volume = 1.0;
         }
-    });
+    }
 
     audioUnlocked = true;
 
