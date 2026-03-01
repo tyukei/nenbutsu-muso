@@ -59,13 +59,11 @@ function stopSound(soundName) {
 // モバイル等の自動再生制限解除用
 let audioUnlocked = false;
 let audioUnlocking = false;  // アンロック処理中フラグ
-async function unlockAudio() {
+function unlockAudio() {
     if (audioUnlocked || audioUnlocking) return;
     audioUnlocking = true;
 
     // 全ての音声を無音で一瞬再生してアンロック
-    const promises = [];
-
     for (const key of Object.keys(sounds)) {
         const audio = sounds[key];
 
@@ -80,31 +78,31 @@ async function unlockAudio() {
         audio.pause();  // 即座に停止
         audio.currentTime = 0;
 
-        // Promise を収集（エラーは無視）
+        // Promise のエラーを無視
         if (playPromise !== undefined) {
-            promises.push(playPromise.catch(() => { }));
+            playPromise.catch(() => { });
         }
     }
 
-    // すべてのアンロック処理が完了するまで待機
-    await Promise.all(promises);
-
-    // 完了後、ミュートと音量を元に戻す
-    Object.keys(sounds).forEach(key => {
-        const audio = sounds[key];
-        audio.muted = false;
-        // 各音声の元の音量に戻す
-        if (key === 'bgm') audio.volume = 0.5;
-        else if (key === 'shoot') audio.volume = 0.3;
-        else if (key === 'hit') audio.volume = 0.4;
-        else if (key === 'damage') audio.volume = 0.5;
-        else if (key === 'gameover') audio.volume = 0.6;
-        else if (key === 'clear') audio.volume = 0.6;
-        else audio.volume = 1.0;
-    });
-
+    // 即座にアンロック完了とする
     audioUnlocked = true;
     audioUnlocking = false;
+
+    // 少し待ってから音量を元に戻す（音が鳴らないように）
+    setTimeout(() => {
+        Object.keys(sounds).forEach(key => {
+            const audio = sounds[key];
+            audio.muted = false;
+            // 各音声の元の音量に戻す
+            if (key === 'bgm') audio.volume = 0.5;
+            else if (key === 'shoot') audio.volume = 0.3;
+            else if (key === 'hit') audio.volume = 0.4;
+            else if (key === 'damage') audio.volume = 0.5;
+            else if (key === 'gameover') audio.volume = 0.6;
+            else if (key === 'clear') audio.volume = 0.6;
+            else audio.volume = 1.0;
+        });
+    }, 200);  // 200ms 待機してから音量を復元
 
     // イベントリスナー削除
     document.removeEventListener('touchstart', unlockAudio);
