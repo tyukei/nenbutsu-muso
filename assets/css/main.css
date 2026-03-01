@@ -900,10 +900,28 @@
 
         .toggle-options {
             display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
+            border-radius: 15px;
             padding: 5px;
             position: relative;
+        }
+
+        .toggle-options-2row {
+            flex-direction: column;
+            gap: 10px;
+            background: transparent;
+            padding: 0;
+        }
+
+        .toggle-row {
+            display: flex;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+            width: 100%;
         }
 
         .toggle-btn {
@@ -912,14 +930,12 @@
             background: transparent;
             color: #aaa;
             padding: 10px;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
-            border-radius: 25px;
+            border-radius: 12px;
             transition: all 0.3s;
             margin: 0;
             box-shadow: none;
-            min-height: auto;
-            min-width: auto;
         }
 
         .toggle-btn.active {
@@ -969,9 +985,14 @@
             margin-bottom: 8px;
         }
 
+        .mobile-mode .toggle-row {
+            border-radius: 12px;
+        }
+
         .mobile-mode .toggle-btn {
-            font-size: 13px;
+            font-size: 12px;
             padding: 8px 6px;
+            min-width: 90px;
         }
 
         .mobile-mode .settings-desc {
@@ -1156,18 +1177,22 @@
             display: none !important;
         }
 
+        body:not(.joycon-mode) .joystick-container {
+            display: none !important;
+        }
+
         body:not(.mobile-mode) .mobile-status {
             display: none !important;
         }
 
-        .mobile-mode .joystick-container {
+        .joycon-mode .joystick-container {
             width: 90px;
             height: 90px;
             bottom: 100px;
             left: 15px;
         }
 
-        .mobile-mode .joystick-inner {
+        .joycon-mode .joystick-inner {
             width: 35px;
             height: 35px;
         }

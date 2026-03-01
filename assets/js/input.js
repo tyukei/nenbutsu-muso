@@ -64,6 +64,7 @@ function initJoystick() {
 
 function handleJoystickStart(e) {
     if (GS.screen !== 'playing') return;
+    if (!document.body.classList.contains('joycon-mode')) return;
 
     e.preventDefault();
     const touch = e.touches ? e.touches[0] : e;
@@ -197,10 +198,12 @@ window.addEventListener('touchstart', (e) => {
             continue;
         }
 
-        // モバイルモードではスワイプを無効化（ジョイスティックを使用）
-        if (document.body.classList.contains('mobile-mode')) {
+        // ジョイコンモードではスワイプを無効化
+        if (document.body.classList.contains('joycon-mode')) {
             return;
         }
+
+        // スマホスライドモードの場合のデバッグ（ジョイスティック以外）
 
         GS.input.dragTouchId = touch.identifier;
         GS.input.lastTouchX = touch.clientX;
