@@ -71,6 +71,11 @@ const bmDetailContentJa = document.getElementById('bmDetailContentJa');
 const bmDetailContentEn = document.getElementById('bmDetailContentEn');
 const langToggleBtn = document.getElementById('langToggleBtn');
 
+// 関連会社関連要素
+const affiliateBtn = document.getElementById('affiliateBtn');
+const affiliateModal = document.getElementById('affiliateModal');
+const closeAffiliateBtn = document.getElementById('closeAffiliateBtn');
+
 // 画像リソース
 const monkImage = new Image();
 monkImage.src = 'images/monk/monk_back.png';
