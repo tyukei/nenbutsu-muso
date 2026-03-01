@@ -140,6 +140,8 @@ function displayCumulativeStats() {
     const cumulativeStats = document.getElementById('cumulativeStats');
     if (!cumulativeStats) return;
 
+    const t = translations[GS.lang] || translations['ja'];
+
     // 累計撃破数の計算
     const rankings = loadRankings();
     const totalDestroyed = rankings.reduce((sum, rank) => sum + parseInt(rank.score || 0, 10), 0);
