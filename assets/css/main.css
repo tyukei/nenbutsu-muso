@@ -1548,6 +1548,7 @@
 
         #affiliateModal .modal-container,
         #menuModal .modal-container {
+            background: rgba(0, 0, 0, 0.92);
             border: 1px solid rgba(212, 175, 55, 0.12);
             box-shadow: none;
         }
@@ -1743,6 +1744,62 @@
         .menu-close-btn:hover {
             background: #666;
             color: #fff;
+        }
+
+        #menuModal .modal-container {
+            width: min(92%, 420px);
+            max-width: 420px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 8px 10px 14px;
+            max-height: 100%;
+            overflow: visible;
+        }
+
+        #menuModal .menu-modal-title {
+            font-size: 20px;
+            margin-bottom: 18px;
+            text-shadow: 0 0 16px rgba(212, 175, 55, 0.7);
+        }
+
+        #menuModal .menu-modal-actions {
+            gap: 14px;
+        }
+
+        #menuModal .menu-btn:not(.menu-close-btn) {
+            min-height: 80px;
+            border-radius: 16px;
+            background: rgba(24, 24, 32, 0.9);
+            border: 2px solid #d4af37;
+            box-shadow: none;
+            color: #fff;
+        }
+
+        #menuModal .menu-btn:not(.menu-close-btn):hover {
+            transform: none;
+            background: rgba(24, 24, 32, 0.98);
+            border-color: #ffd700;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        #menuModal #closeMenuBtn {
+            width: min(72vw, 260px);
+            align-self: center;
+            margin-top: 18px;
+            min-height: 54px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2e 100%);
+            color: #1a1a2e;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        #menuModal #closeMenuBtn:hover {
+            background: linear-gradient(135deg, #e2c14b 0%, #ba9b3c 100%);
+            color: #1a1a2e;
         }
 
         #backFromLevelBtn,
