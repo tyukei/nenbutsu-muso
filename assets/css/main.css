@@ -1759,6 +1759,19 @@
         ----------------------- */
 
 
+        .buddha-message-monk {
+            display: block;
+            margin: 10px auto 20px;
+            width: 90px;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
+        }
+
+        .mobile-mode .buddha-message-monk {
+            width: 70px;
+            margin-bottom: 15px;
+        }
+
         .buddha-message-list {
             display: flex;
             flex-direction: column;
