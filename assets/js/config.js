@@ -287,26 +287,29 @@ const translations = {
         'submit': '決定',
         'tosAgree': '閉じる',
         'tosTitle': '利用規約',
-        'tosText': `<h3 style='margin-bottom: 0px;'>「煩悩シューティング」利用規約</h3>
-<p style='text-align: right; font-size: 0.8em; color: #888; margin-bottom: 15px;'>最終更新日：2026年3月1日</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>本利用規約（以下「本規約」といいます。）は、株式会社神社仏閣オンライン（以下「当社」といいます。）が提供するブラウザゲーム「煩悩シューティング」（以下「本ゲーム」といいます。）の利用条件を定めるものです。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>ユーザーは、本ゲームを利用することにより、本規約に同意したものとみなされます。</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第1条（著作権および権利帰属）</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒈　本ゲームに関する一切の権利（著作権、商標権、プログラム、画像、音声、テキスト、ゲームデザイン、キャラクター、世界観その他の知的財産権）は、当社または正当な権利を有する第三者に帰属し、ユーザーは、本規約で明示的に許可される範囲を超えて、本ゲームを利用することはできません。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒉　当社は、本ゲームの素材を、文章生成AI、画像生成AI、その他の生成系AIの学習用データとして使用、入力、または提供する行為を当社の利益を不当に害するものとして禁止します。</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第2条（許諾される利用）</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>当社は、ユーザーに対し、本ゲームを個人的かつ非営利目的で利用することを許諾します。</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第3条（二次創作および動画配信の利用）</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. 	ユーザーは、本ゲームのプレイ動画、スクリーンショット、実況動画、配信、レビュー、二次創作作品（イラスト・動画・文章等を含む）を、非営利目的の範囲で自由に制作・公開することができます。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. 	前項にかかわらず、以下のプラットフォームが提供する標準的な収益化機能による収益取得は、非営利利用の例外として許可します。</p>
-<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+        'tosText': `<h3 style='margin-bottom: 0;'>「煩悩シューティング」利用規約</h3>
+<p style='text-align: right; margin-bottom: 15px;'>最終更新日：2026年3月1日</p>
+
+<p>本利用規約（以下「本規約」といいます。）は、株式会社神社仏閣オンライン（以下「当社」といいます。）が提供するブラウザゲーム「煩悩シューティング」（以下「本ゲーム」といいます。）の利用条件を定めるものです。</p>
+<p>ユーザーは、本ゲームを利用することにより、本規約に同意したものとみなされます。</p>
+
+<h4>第1条（著作権および権利帰属）</h4>
+<p>⒈　本ゲームに関する一切の権利（著作権、商標権、プログラム、画像、音声、テキスト、ゲームデザイン、キャラクター、世界観その他の知的財産権）は、当社または正当な権利を有する第三者に帰属し、ユーザーは、本規約で明示的に許可される範囲を超えて、本ゲームを利用することはできません。</p>
+<p>⒉　当社は、本ゲームの素材を、文章生成AI、画像生成AI、その他の生成系AIの学習用データとして使用、入力、または提供する行為を当社の利益を不当に害するものとして禁止します。</p>
+
+<h4>第2条（許諾される利用）</h4>
+<p>当社は、ユーザーに対し、本ゲームを個人的かつ非営利目的で利用することを許諾します。</p>
+
+<h4>第3条（二次創作および動画配信の利用）</h4>
+<p>1. ユーザーは、本ゲームのプレイ動画、スクリーンショット、実況動画、配信、レビュー、二次創作作品（イラスト・動画・文章等を含む）を、非営利目的の範囲で自由に制作・公開することができます。</p>
+<p>2. 前項にかかわらず、以下のプラットフォームが提供する標準的な収益化機能による収益取得は、非営利利用の例外として許可します。</p>
+<ul>
 <li>動画共有サイトの広告収益プログラム</li>
 <li>配信サイトの投げ銭・スーパーチャット・サブスク機能</li>
 <li>プラットフォーム公式のクリエイター収益分配制度</li>
-<li>その他当社が同等と認める標準収益化機能[聖宮1]</li>
 </ul>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. 	前項の例外は、プラットフォームが提供する仕組みによる収益取得のみを対象とし、以下の行為は許可されません。</p>
-<ul style='margin-left: 20px; list-style-type: disc; margin-bottom: 10px; color: #ddd; font-size: 0.9em;'>
+<p>3. 前項の例外は、プラットフォームが提供する仕組みによる収益取得のみを対象とし、以下の行為は許可されません。</p>
+<ul>
 <li>二次創作物の販売</li>
 <li>グッズ販売</li>
 <li>有料配信・有料視聴販売</li>
@@ -314,57 +317,46 @@ const translations = {
 <li>企業案件</li>
 <li>広告タイアップ</li>
 <li>本ゲーム素材を用いた商用サービス提供</li>
-<li>その他営利を目的とする利用[聖宮2]</li>
+<li>その他営利を目的とする利用</li>
 </ul>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. 	二次創作・配信にあたっては、以下の表示を推奨します。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>© 煩悩シューティング</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第4条（禁止事項）</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>ユーザーは、以下の行為を行ってはなりません。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. 本ゲームのデータ・プログラムの解析、改変、リバースエンジニアリング</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. 本ゲームの再配布、再公開、無断転載</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>3. 本ゲームを商業・営利目的で利用する行為</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>4. 本ゲームの素材を独立したコンテンツとして使用する行為</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>5. 本ゲームの素材を生成AIの学習用データとして入力または提供する行為</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>6. 当社または第三者の権利を侵害する行為</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>7. 公序良俗に反する利用</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>8. 本ゲームのイメージを著しく損なう利用</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>9. 反社会的活動への利用</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒑ 本ゲーム公式または公認と誤認させる表示</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒒ その他当社が不適切と判断する行為</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第5条（ガイドライン違反時の措置）</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>当社は、ユーザーの利用が本規約に違反すると判断した場合、公開停止要請、削除要請、利用差止め等の措置を行うことがあります。</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第6条（免責）</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>1. 	当社は、本ゲームの提供に関し、その完全性、正確性、継続性、および特定のデバイスやOSでの動作を保証しません。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>2. 	本ゲームの利用により、当社の責めに帰すべき事由によって、ユーザーに損害が生じた場合、当社は故意または重過失がある場合を除き、ユーザーに現実に生じた直接かつ通常の損害（特別損害、逸失利益、データの消失を除く）に限り、賠償責任を負うものとします。[聖宮3]</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第7条（情報の取り扱い及びプライバシー）</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒈　ユーザーが登録したニックネーム、ユーザーID、スコア、およびゲームプレイ履歴は、原則として非個人情報として扱い、ランキング形式等で他のユーザーに公開されることがあります 。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒉　当社は、本ゲームの利用状況の分析およびサービス向上のため、Cookie（クッキー）等の技術を用いてユーザーのアクセスログ情報を収集することがあります 。[聖宮4]</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第8条（サービス変更・終了）</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>当社は、予告なく本ゲームの内容変更、提供停止、終了を行うことがあります。</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第9条（規約変更）[聖宮5]</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒈　当社は、民法第548条の4の規定に基づき、本規約を変更することができます。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒉　当社は、本規約を変更する場合、変更後の規約の効力発生時期を定め、その14日前までに、本ゲーム内または公式サイトへの掲載その他適切な方法により、規約を変更する旨、変更後の内容、および効力発生時期を周知します。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>⒊　ユーザーが変更後の規約の効力発生時期以降に本ゲームを利用した場合、変更後の契約に同意したものとみなされます。</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第10条（準拠法・管轄）</h4>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>本規約は日本法に準拠します。本ゲームに関して紛争が生じた場合、当社所在地を管轄する裁判所を第一審の専属管轄裁判所とします。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮1]不明確なので削除してもよろしいでしょうか。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮2]当方からすると、不許可事項が多い方が有利ですので、包括条項を入れています。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮3]利用規約ですので、損害の範囲を限定的にしています。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>消費者契約法8条1項1号で事業者の軽過失による債務不履行や不法行為により消費者に生じた損害について、事業者の責任を「全面的に免除」する条項は無効とされます。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>そのため、可能な限り、損害額の範囲を限定しております。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>（事業者の損害賠償の責任を免除する条項等の無効）</p>
-<h4 style='margin-top: 15px; margin-bottom: 5px; color: #fff;'>第八条 次に掲げる消費者契約の条項は、無効とする。</h4>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>一 事業者の債務不履行により消費者に生じた損害を賠償する責任の全部を免除し、又は当該事業者にその責任の有無を決定する権限を付与する条項</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮4]個人情報に配慮しておいた方がよいので、この記載を入れています。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>有料版にする際には、プライバシーポリシー等で個人情報の取り扱いを定めておいた方がよいです。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; border-left: 2px solid #ffaa55; padding-left: 10px; background-color: rgba(255, 170, 85, 0.1);'>[聖宮5]第548条の4【定型約款の変更】</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>①　定型約款準備者は、次に掲げる場合には、定型約款の変更をすることにより、変更後の定型約款の条項について合意があったものとみなし、個別に相手方と合意をすることなく契約の内容を変更することができる。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>一　定型約款の変更が、相手方の一般の利益に適合するとき。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>二　定型約款の変更が、契約をした目的に反せず、かつ、変更の必要性、変更後の内容の相当性、この条の規定により定型約款の変更をすることがある旨の定めの有無及びその内容その他の変更に係る事情に照らして合理的なものであるとき。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>②　定型約款準備者は、前項の規定による定型約款の変更をするときは、その効力発生時期を定め、かつ、定型約款を変更する旨及び変更後の定型約款の内容並びにその効力発生時期をインターネットの利用その他の適切な方法により周知しなければならない。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>③　第一項第二号の規定による定型約款の変更は、前項の効力発生時期が到来するまでに同項の規定による周知をしなければ、その効力を生じない。</p>
-<p style='margin-bottom: 8px; font-size: 0.85em; color: #ffaa55; line-height: 1.4; padding-left: 10px;'>④　第548条の2第2項の規定は、第一項の規定による定型約款の変更については、適用しない。</p>
-<p style='margin-bottom: 8px; font-size: 0.9em; color: #eee; line-height: 1.4;'>この条文が令和2年の民法改正で新設されたため、今回は、効力発生時期を定め、周知するという流れに条項を変更しております。</p>
+<p>4. 二次創作・配信にあたっては、以下の表示を推奨します。</p>
+<p>© 煩悩シューティング</p>
+
+<h4>第4条（禁止事項）</h4>
+<p>ユーザーは、以下の行為を行ってはなりません。</p>
+<p>1. 本ゲームのデータ・プログラムの解析、改変、リバースエンジニアリング</p>
+<p>2. 本ゲームの再配布、再公開、無断転載</p>
+<p>3. 本ゲームを商業・営利目的で利用する行為</p>
+<p>4. 本ゲームの素材を独立したコンテンツとして使用する行為</p>
+<p>5. 本ゲームの素材を生成AIの学習用データとして入力または提供する行為</p>
+<p>6. 当社または第三者の権利を侵害する行為</p>
+<p>7. 公序良俗に反する利用</p>
+<p>8. 本ゲームのイメージを著しく損なう利用</p>
+<p>9. 反社会的活動への利用</p>
+<p>⒑ 本ゲーム公式または公認と誤認させる表示</p>
+<p>⒒ その他当社が不適切と判断する行為</p>
+
+<h4>第5条（ガイドライン違反時の措置）</h4>
+<p>当社は、ユーザーの利用が本規約に違反すると判断した場合、公開停止要請、削除要請、利用差止め等の措置を行うことがあります。</p>
+
+<h4>第6条（免責）</h4>
+<p>1. 当社は、本ゲームの提供に関し、その完全性、正確性、継続性、および特定のデバイスやOSでの動作を保証しません。</p>
+<p>2. 本ゲームの利用により、当社の責めに帰すべき事由によって、ユーザーに損害が生じた場合、当社は故意または重過失がある場合を除き、ユーザーに現実に生じた直接かつ通常の損害（特別損害、逸失利益、データの消失を除く）に限り、賠償責任を負うものとします。</p>
+
+<h4>第7条（情報の取り扱い及びプライバシー）</h4>
+<p>⒈　ユーザーが登録したニックネーム、ユーザーID、スコア、およびゲームプレイ履歴は、原則として非個人情報として扱い、ランキング形式等で他のユーザーに公開されることがあります。</p>
+<p>⒉　当社は、本ゲームの利用状況の分析およびサービス向上のため、Cookie（クッキー）等の技術を用いてユーザーのアクセスログ情報を収集することがあります。</p>
+
+<h4>第８条（サービス変更・終了）</h4>
+<p>当社は、予告なく本ゲームの内容変更、提供停止、終了を行うことがあります。</p>
+
+<h4>第９条（規約変更）</h4>
+<p>⒈　当社は、民法第548条の4の規定に基づき、本規約を変更することができます。</p>
+<p>⒉　当社は、本規約を変更する場合、変更後の規約の効力発生時期を定め、その14日前までに、本ゲーム内または公式サイトへの掲載その他適切な方法により、規約を変更する旨、変更後の内容、および効力発生時期を周知します。</p>
+<p>⒊　ユーザーが変更後の規約の効力発生時期以降に本ゲームを利用した場合、変更後の契約に同意したものとみなされます。</p>
+
+<h4>第１０条（準拠法・管轄）</h4>
+<p>本規約は日本法に準拠します。本ゲームに関して紛争が生じた場合、当社所在地を管轄する裁判所を第一審の専属管轄裁判所とします。</p>
 `,
         'pastRecord': '己の過去と向き合う',
         'playCount': 'プレイ回数',
