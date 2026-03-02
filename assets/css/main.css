@@ -1761,7 +1761,7 @@
 
         .buddha-message-monk {
             display: block;
-            margin: 10px auto 20px;
+            margin: 0 auto 0;
             width: 90px;
             height: auto;
             filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
@@ -1769,14 +1769,14 @@
 
         .mobile-mode .buddha-message-monk {
             width: 70px;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
         }
 
         .buddha-message-list {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin: 20px 0;
+            margin: 0 0 20px 0;
             width: 100%;
             max-width: 420px;
         }
@@ -1920,8 +1920,8 @@
 
         .affiliate-company {
             color: #d4af37;
-            font-size: 16px;
-            margin-bottom: 15px;
+            font-size: 13px;
+            margin-bottom: 12px;
             text-align: center;
         }
 
