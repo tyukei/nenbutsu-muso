@@ -1538,13 +1538,14 @@
 
         #tosModal .modal-container {
             position: relative;
-            width: min(92%, 420px);
-            max-width: 420px;
+            width: min(100%, 480px);
+            max-width: 480px;
+            height: min(100dvh, 640px);
             background: transparent;
             border: none;
             box-shadow: none;
             padding: 24px 18px 18px;
-            max-height: 100%;
+            max-height: min(100dvh, 640px);
             overflow: visible;
         }
 
@@ -1552,7 +1553,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            border: 3px solid #d4af37;
+            border: none;
             background: rgba(0, 0, 0, 0.9);
             border-radius: 15px;
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
