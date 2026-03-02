@@ -1761,15 +1761,15 @@
 
         .buddha-message-monk {
             display: block;
-            margin: 0 auto 0;
-            width: 90px;
+            margin: 0 auto -10px;
+            width: 100px;
             height: auto;
             filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
         }
 
         .mobile-mode .buddha-message-monk {
-            width: 70px;
-            margin-bottom: 5px;
+            width: 100px;
+            margin-bottom: -10px;
         }
 
         .buddha-message-list {
