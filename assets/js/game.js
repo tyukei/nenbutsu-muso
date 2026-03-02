@@ -339,7 +339,9 @@ function update(timeScale) {
             let volumeSetting = 0.5;
             try {
                 const settings = JSON.parse(localStorage.getItem('nenbunSettings'));
-                if (settings && settings.bgm !== undefined) {
+                if (settings && settings.sound === 'off') {
+                    volumeSetting = 0;
+                } else if (settings && settings.bgm !== undefined) {
                     volumeSetting = settings.bgm;
                 }
             } catch (e) { }
