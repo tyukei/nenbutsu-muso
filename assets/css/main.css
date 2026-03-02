@@ -1764,7 +1764,7 @@
             position: absolute;
             inset: 0;
             border: 1px solid rgba(212, 175, 55, 0.14);
-            background: rgba(0, 0, 0, 0.9);
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.96) 0%, rgba(22, 33, 62, 0.96) 100%);
             border-radius: 8px;
             box-shadow: 0 0 52px rgba(212, 175, 55, 0.42);
             pointer-events: none;
@@ -1836,7 +1836,7 @@
             position: absolute;
             inset: 0;
             border: 1px solid rgba(212, 175, 55, 0.14);
-            background: rgba(0, 0, 0, 0.9);
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.96) 0%, rgba(22, 33, 62, 0.96) 100%);
             border-radius: 8px;
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
             pointer-events: none;
