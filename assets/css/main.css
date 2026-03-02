@@ -20,6 +20,11 @@
             touch-action: none;
         }
 
+        body.mobile-mode {
+            align-items: flex-start;
+            min-height: 100dvh;
+        }
+
         #gameContainer {
             position: relative;
             text-align: center;
@@ -42,7 +47,8 @@
 
         .mobile-mode #gameContainer {
             width: 100%;
-            height: 100vh;
+            height: 100dvh;
+            max-height: none;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -56,7 +62,7 @@
             width: 100%;
             height: auto;
             max-width: 100%;
-            max-height: calc(100vh - 180px);
+            max-height: calc(100dvh - 180px);
             object-fit: contain;
             border-width: 2px;
         }
@@ -145,6 +151,18 @@
             50% {
                 text-shadow: 0 0 40px rgba(212, 175, 55, 1), 0 0 60px rgba(212, 175, 55, 0.8);
             }
+        }
+
+        #buddhaMessageScreen h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .mobile-mode #levelScreen h1,
+        .mobile-mode #rankingScreen h1,
+        .mobile-mode #buddhaMessageScreen h1 {
+            font-size: 20px;
+            margin-bottom: 6px;
         }
 
         h2 {
@@ -1528,6 +1546,13 @@
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
         }
 
+        #affiliateModal .modal-container,
+        #menuModal .modal-container {
+            background: rgba(0, 0, 0, 0.92);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            box-shadow: none;
+        }
+
         .modal-title {
             color: #d4af37;
             font-size: 28px;
@@ -1547,6 +1572,11 @@
             overflow-y: scroll;
             font-size: 14px;
             line-height: 1.6;
+        }
+
+        .tos-content,
+        .tos-content * {
+            color: #000 !important;
         }
 
         /* Carousel Styles */
@@ -1716,6 +1746,155 @@
             color: #fff;
         }
 
+        #menuModal .modal-container {
+            position: relative;
+            width: min(92%, 420px);
+            max-width: 420px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 20px 18px 18px;
+            max-height: 100%;
+            overflow: visible;
+        }
+
+        #menuModal .modal-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(212, 175, 55, 0.14);
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 52px rgba(212, 175, 55, 0.42);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        #menuModal .menu-modal-title {
+            position: relative;
+            z-index: 1;
+            font-size: 20px;
+            margin-bottom: 18px;
+            text-shadow: 0 0 16px rgba(212, 175, 55, 0.7);
+        }
+
+        #menuModal .menu-modal-actions {
+            position: relative;
+            z-index: 1;
+            gap: 14px;
+        }
+
+        #menuModal .menu-btn:not(.menu-close-btn) {
+            width: 60%;
+            align-self: center;
+            min-height: 80px;
+            border-radius: 16px;
+            background: rgba(24, 24, 32, 0.9);
+            border: 2px solid #d4af37;
+            box-shadow: none;
+            color: #fff;
+        }
+
+        #menuModal .menu-btn:not(.menu-close-btn):hover {
+            transform: none;
+            background: rgba(24, 24, 32, 0.98);
+            border-color: #ffd700;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        #menuModal #closeMenuBtn {
+            width: min(68vw, 240px);
+            align-self: center;
+            margin-top: 18px;
+            min-height: 54px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2e 100%);
+            color: #1a1a2e;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        #menuModal #closeMenuBtn:hover {
+            background: linear-gradient(135deg, #e2c14b 0%, #ba9b3c 100%);
+            color: #1a1a2e;
+        }
+
+        #affiliateModal .modal-container {
+            position: relative;
+            width: min(92%, 420px);
+            max-width: 420px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 24px 18px 18px;
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        #affiliateModal .modal-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(212, 175, 55, 0.14);
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        #menuModal.modal,
+        #affiliateModal.modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        #affiliateModal .modal-title,
+        #affiliateModal .affiliate-content,
+        #affiliateModal #closeAffiliateBtn {
+            position: relative;
+            z-index: 1;
+        }
+
+        #affiliateModal #closeAffiliateBtn {
+            width: min(72vw, 260px);
+            align-self: center;
+            margin-top: 18px;
+            min-height: 54px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2e 100%);
+            color: #1a1a2e;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        #affiliateModal #closeAffiliateBtn:hover {
+            background: linear-gradient(135deg, #e2c14b 0%, #ba9b3c 100%);
+            color: #1a1a2e;
+        }
+
+        #backFromLevelBtn,
+        #backToTitleBtn,
+        #backFromBuddhaMessageBtn {
+            width: min(78vw, 280px);
+            min-width: 0;
+            min-height: 54px;
+            border-radius: 10px;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .mobile-mode #backFromLevelBtn,
+        .mobile-mode #backToTitleBtn,
+        .mobile-mode #backFromBuddhaMessageBtn {
+            width: min(72vw, 260px);
+            padding: 12px 20px;
+            font-size: 15px;
+            margin-top: 20px;
+        }
+
         .ranking-empty {
             color: #888;
             padding: 20px;
@@ -1761,22 +1940,22 @@
 
         .buddha-message-monk {
             display: block;
-            margin: 10px auto 20px;
-            width: 90px;
+            margin: 0 auto -10px;
+            width: 100px;
             height: auto;
             filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
         }
 
         .mobile-mode .buddha-message-monk {
-            width: 70px;
-            margin-bottom: 15px;
+            width: 100px;
+            margin-bottom: -10px;
         }
 
         .buddha-message-list {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin: 20px 0;
+            margin: 0 0 20px 0;
             width: 100%;
             max-width: 420px;
         }
@@ -1920,45 +2099,56 @@
 
         .affiliate-company {
             color: #d4af37;
-            font-size: 20px;
-            margin-bottom: 20px;
+            font-size: 13px;
+            margin-bottom: 12px;
             text-align: center;
         }
 
         .affiliate-links {
             display: flex;
             flex-direction: row;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
             align-items: center;
-            padding: 10px;
-            flex-wrap: wrap;
+            padding: 5px;
+            flex-wrap: nowrap;
         }
 
         .affiliate-link-item {
-            width: auto;
-            max-width: 200px;
+            width: 50%;
+            max-width: 130px;
         }
 
         .affiliate-image-link {
             display: block;
             width: 100%;
-            border-radius: 10px;
+            aspect-ratio: 2 / 1;
+            border-radius: 8px;
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
         }
 
         .affiliate-image-link:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6);
+            box-shadow: 0 8px 16px rgba(212, 175, 55, 0.6);
         }
 
         .affiliate-image {
             width: 100%;
-            height: 100px;
+            height: 100%;
             display: block;
             object-fit: contain;
+            object-position: center;
+            background: #fff;
+        }
+
+        .affiliate-image-logo {
+            object-position: center 50%;
+        }
+
+        .affiliate-image-youtube {
+            object-position: center 46%;
         }
 
         .sponsor-section {
@@ -1980,7 +2170,7 @@
 
         .recruiting-text {
             color: #ff9800;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
             margin: 0;
