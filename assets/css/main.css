@@ -147,6 +147,15 @@
             }
         }
 
+        #buddhaMessageScreen h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .mobile-mode #buddhaMessageScreen h1 {
+            font-size: 18px;
+        }
+
         h2 {
             color: #ff9800;
             font-size: 20px;
@@ -1943,6 +1952,7 @@
         .affiliate-image-link {
             display: block;
             width: 100%;
+            aspect-ratio: 2 / 1;
             border-radius: 8px;
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
@@ -1956,9 +1966,19 @@
 
         .affiliate-image {
             width: 100%;
-            height: 70px;
+            height: 100%;
             display: block;
             object-fit: contain;
+            object-position: center;
+            background: #fff;
+        }
+
+        .affiliate-image-logo {
+            object-position: center 50%;
+        }
+
+        .affiliate-image-youtube {
+            object-position: center 46%;
         }
 
         .sponsor-section {
