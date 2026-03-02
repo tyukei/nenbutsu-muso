@@ -879,7 +879,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -887,81 +887,114 @@
         }
 
         .settings-container {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 3px solid #d4af37;
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 450px;
-            width: 90%;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
+            position: relative;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 20px 18px 18px;
+            width: min(100%, 480px);
+            max-width: 480px;
+            height: min(100dvh, 640px);
+            max-height: min(100dvh, 640px);
+            overflow: hidden;
+            box-shadow: none;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .settings-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: none;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5), 0 0 56px rgba(212, 175, 55, 0.34);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .settings-container>* {
+            position: relative;
+            z-index: 1;
         }
 
         .settings-container h2 {
-            font-size: 28px;
-            margin-bottom: 30px;
+            font-size: 20px;
+            margin-bottom: 4px;
             border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 15px;
+            padding-bottom: 12px;
+            color: #d4af37;
+            text-shadow: 0 0 16px rgba(212, 175, 55, 0.7);
         }
 
         .setting-group {
-            margin-bottom: 25px;
+            margin-bottom: 0;
             text-align: left;
         }
 
         .setting-label {
             color: #d4af37;
-            font-size: 18px;
-            margin-bottom: 10px;
+            font-size: 16px;
+            margin-bottom: 8px;
             display: block;
         }
 
         .toggle-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 5px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
             position: relative;
         }
 
         .toggle-options-2row {
-            flex-direction: column;
-            gap: 5px;
+            grid-template-columns: 1fr;
+            gap: 6px;
             background: transparent;
             padding: 0;
         }
 
         .toggle-row-label {
-            color: #ccc;
-            font-size: 14px;
-            margin-top: 5px;
-            margin-bottom: 2px;
-            margin-left: 5px;
+            color: #a8acb8;
+            font-size: 12px;
+            margin: 0;
+            padding-left: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         .toggle-row {
-            display: flex;
-            gap: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 5px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
             width: 100%;
         }
 
+        .toggle-options-2row .toggle-row:last-child {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
         .toggle-btn {
-            flex: 1;
-            border: none;
-            background: transparent;
-            color: #aaa;
-            padding: 10px;
-            font-size: 14px;
+            border: 2px solid #d4af37;
+            background: rgba(24, 24, 32, 0.9);
+            color: #d2d5dd;
+            padding: 10px 8px;
+            font-size: 13px;
             cursor: pointer;
-            border-radius: 12px;
+            border-radius: 14px;
             transition: all 0.3s;
             margin: 0;
             box-shadow: none;
+            min-height: 52px;
+            min-width: 0;
         }
 
         .toggle-btn.active {
@@ -977,64 +1010,65 @@
         }
 
         .settings-desc {
-            font-size: 12px;
+            font-size: 11px;
             color: #888;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         #settingsSubmitBtn {
             background: linear-gradient(135deg, #d4af37 0%, #aa8c2e 100%);
-            width: 100%;
-            margin-top: 20px;
-            font-size: 20px;
-            padding: 15px;
+            width: min(68vw, 240px);
+            align-self: center;
+            margin-top: auto;
+            margin-bottom: 0;
+            font-size: 16px;
+            padding: 12px 20px;
+            min-height: 54px;
+            border-radius: 10px;
         }
 
         /* モバイル版での環境設定調整 */
         .mobile-mode .settings-container {
-            padding: 20px 15px;
-            max-width: 90%;
+            padding: 18px 14px 16px;
+            width: min(100%, 480px);
+            max-width: 480px;
         }
 
         .mobile-mode .settings-container h2 {
-            font-size: 22px;
-            margin-bottom: 20px;
+            font-size: 20px;
+            margin-bottom: 4px;
             padding-bottom: 10px;
         }
 
         .mobile-mode .setting-group {
-            margin-bottom: 20px;
+            margin-bottom: 0;
         }
 
         .mobile-mode .setting-label {
             font-size: 15px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .mobile-mode .toggle-row-label {
             font-size: 12px;
-            margin-top: 2px;
-        }
-
-        .mobile-mode .toggle-row {
-            border-radius: 12px;
+            margin-top: 0;
         }
 
         .mobile-mode .toggle-btn {
             font-size: 12px;
             padding: 8px 6px;
-            min-width: 90px;
+            min-height: 48px;
         }
 
         .mobile-mode .settings-desc {
             font-size: 11px;
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
         .mobile-mode #settingsSubmitBtn {
-            font-size: 18px;
-            padding: 12px;
-            margin-top: 15px;
+            font-size: 15px;
+            padding: 10px 16px;
+            margin-top: auto;
         }
 
         /* 仮想コントローラー */
@@ -1532,6 +1566,44 @@
             z-index: 300;
         }
 
+        #tosModal.modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        #tosModal .modal-container {
+            position: relative;
+            width: min(100%, 480px);
+            max-width: 480px;
+            height: min(100dvh, 640px);
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 24px 18px 18px;
+            max-height: min(100dvh, 640px);
+            overflow: hidden;
+        }
+
+        #tosModal .modal-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: none;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        #tosModal .modal-title,
+        #tosModal .tos-content,
+        #tosModal #tosAgreeBtn {
+            position: relative;
+            z-index: 1;
+        }
+
         .modal-container {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border: 3px solid #d4af37;
@@ -1576,7 +1648,33 @@
 
         .tos-content,
         .tos-content * {
-            color: #000 !important;
+            color: #fff !important;
+        }
+
+        #tosModal .tos-content {
+            flex: 1;
+            min-height: 0;
+            height: auto;
+            max-height: none;
+            margin-bottom: 12px;
+        }
+
+        #tosModal #tosAgreeBtn {
+            width: min(68vw, 240px);
+            align-self: center;
+            margin-top: 0;
+            flex-shrink: 0;
+            min-height: 54px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2e 100%);
+            color: #1a1a2e;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        #tosModal #tosAgreeBtn:hover {
+            background: linear-gradient(135deg, #e2c14b 0%, #ba9b3c 100%);
+            color: #1a1a2e;
         }
 
         /* Carousel Styles */
@@ -1748,14 +1846,15 @@
 
         #menuModal .modal-container {
             position: relative;
-            width: min(92%, 420px);
-            max-width: 420px;
+            width: min(100%, 480px);
+            max-width: 480px;
+            height: min(100dvh, 640px);
             background: transparent;
             border: none;
             border-radius: 0;
             box-shadow: none;
             padding: 20px 18px 18px;
-            max-height: 100%;
+            max-height: min(100dvh, 640px);
             overflow: visible;
         }
 
@@ -1763,10 +1862,10 @@
             content: "";
             position: absolute;
             inset: 0;
-            border: 1px solid rgba(212, 175, 55, 0.14);
+            border: none;
             background: rgba(0, 0, 0, 0.9);
-            border-radius: 8px;
-            box-shadow: 0 0 52px rgba(212, 175, 55, 0.42);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5), 0 0 56px rgba(212, 175, 55, 0.34);
             pointer-events: none;
             z-index: 0;
         }
@@ -1837,10 +1936,10 @@
             content: "";
             position: absolute;
             inset: 0;
-            border: 1px solid rgba(212, 175, 55, 0.14);
+            border: 3px solid #d4af37;
             background: rgba(0, 0, 0, 0.9);
-            border-radius: 8px;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
             pointer-events: none;
             z-index: 0;
         }
