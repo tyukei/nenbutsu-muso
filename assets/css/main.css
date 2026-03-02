@@ -1940,15 +1940,15 @@
 
         .buddha-message-monk {
             display: block;
-            margin: 0 auto -10px;
-            width: 100px;
+            margin: 0 auto 0px;
+            width: 90px;
             height: auto;
             filter: drop-shadow(0 0 10px rgba(255, 215, 120, 0.35));
         }
 
         .mobile-mode .buddha-message-monk {
-            width: 100px;
-            margin-bottom: -10px;
+            width: 90px;
+            margin-bottom: 0px;
         }
 
         .buddha-message-list {
