@@ -1786,6 +1786,8 @@
         }
 
         #menuModal .menu-btn:not(.menu-close-btn) {
+            width: 60%;
+            align-self: center;
             min-height: 80px;
             border-radius: 16px;
             background: rgba(24, 24, 32, 0.9);
@@ -1803,7 +1805,7 @@
         }
 
         #menuModal #closeMenuBtn {
-            width: min(72vw, 260px);
+            width: min(68vw, 240px);
             align-self: center;
             margin-top: 18px;
             min-height: 54px;
