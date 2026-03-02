@@ -158,8 +158,11 @@
             margin-bottom: 5px;
         }
 
+        .mobile-mode #levelScreen h1,
+        .mobile-mode #rankingScreen h1,
         .mobile-mode #buddhaMessageScreen h1 {
-            font-size: 18px;
+            font-size: 20px;
+            margin-bottom: 6px;
         }
 
         h2 {
@@ -1729,6 +1732,27 @@
         .menu-close-btn:hover {
             background: #666;
             color: #fff;
+        }
+
+        #backFromLevelBtn,
+        #backToTitleBtn,
+        #backFromBuddhaMessageBtn {
+            width: min(78vw, 280px);
+            min-width: 0;
+            min-height: 54px;
+            border-radius: 10px;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .mobile-mode #backFromLevelBtn,
+        .mobile-mode #backToTitleBtn,
+        .mobile-mode #backFromBuddhaMessageBtn {
+            width: min(72vw, 260px);
+            padding: 12px 20px;
+            font-size: 15px;
+            margin-top: 20px;
         }
 
         .ranking-empty {
