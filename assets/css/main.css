@@ -1546,6 +1546,12 @@
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
         }
 
+        #affiliateModal .modal-container,
+        #menuModal .modal-container {
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            box-shadow: none;
+        }
+
         .modal-title {
             color: #d4af37;
             font-size: 28px;
@@ -1565,6 +1571,11 @@
             overflow-y: scroll;
             font-size: 14px;
             line-height: 1.6;
+        }
+
+        .tos-content,
+        .tos-content * {
+            color: #000 !important;
         }
 
         /* Carousel Styles */
