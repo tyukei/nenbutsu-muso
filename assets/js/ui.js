@@ -854,17 +854,22 @@ const toggleBtns = document.querySelectorAll('.toggle-btn');
 // Default temporary settings for the modal
 let tempSettings = {
     sound: 'on',
-    mode: 'pc'
+    mode: 'mobile_slide1'
 };
 
 function loadTempSettingsFromStorage() {
     const savedSettings = localStorage.getItem('nenbunSettings');
     if (savedSettings) {
         tempSettings = JSON.parse(savedSettings);
+        if (tempSettings.mode === 'mobile' || tempSettings.mode === 'mobile_slide') {
+            tempSettings.mode = 'mobile_slide1'; // Migrate legacy 'mobile' or 'mobile_slide' to 'mobile_slide1'
+        }
+        if (!tempSettings.sound) tempSettings.sound = 'on';
+        if (!tempSettings.mode) tempSettings.mode = 'mobile_slide1';
     } else {
         tempSettings = {
             sound: 'on',
-            mode: 'pc'
+            mode: 'mobile_slide1'
         };
     }
 
@@ -892,12 +897,29 @@ function initSettings() {
 }
 
 function applySettings(settings) {
+    if (settings.mode === 'mobile' || settings.mode === 'mobile_slide') {
+        settings.mode = 'mobile_slide1';
+    }
+
     // Apply Mode
-    if (settings.mode === 'mobile') {
+    if (settings.mode === 'mobile_slide1' || settings.mode === 'mobile_slide2' || settings.mode === 'mobile_joycon') {
         document.body.classList.add('mobile-mode');
     } else {
         document.body.classList.remove('mobile-mode');
     }
+
+    if (settings.mode === 'mobile_joycon') {
+        document.body.classList.add('joycon-mode');
+    } else {
+        document.body.classList.remove('joycon-mode');
+    }
+
+    if (settings.mode === 'mobile_slide2') {
+        document.body.classList.add('slide2-mode');
+    } else {
+        document.body.classList.remove('slide2-mode');
+    }
+
     resizeCanvas();
 
     // Apply Sound
