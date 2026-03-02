@@ -71,7 +71,7 @@ const bmDetailContentJa = document.getElementById('bmDetailContentJa');
 const bmDetailContentEn = document.getElementById('bmDetailContentEn');
 const langToggleBtn = document.getElementById('langToggleBtn');
 
-// 関連会社関連要素
+// 関連リンク関連要素
 const affiliateBtn = document.getElementById('affiliateBtn');
 const affiliateModal = document.getElementById('affiliateModal');
 const closeAffiliateBtn = document.getElementById('closeAffiliateBtn');
@@ -405,7 +405,7 @@ const translations = {
         'shareLose': '煩悩に呑まれた...\n',
         'shareScore': '撃破数: $1/$2\n',
         'shareCombo': '最大連鎖: $1\n',
-        'affiliate': '関連会社',
+        'affiliate': '関連リンク',
         'affiliateCompany': '制作会社：神社仏閣オンライン',
         'sponsor': '協賛会社',
         'recruiting': '募集中',

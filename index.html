@@ -3,12 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="version" content="1.1.52">
+    <meta name="version" content="1.1.55">
     <!-- 修正前: <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
     <!-- 修正後: -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="「煩悩シューティング」は、心に止まない煩悩を「読経」で撃ち落とす、新感覚の無料ブラウザシューティングゲームです。PC・スマホ料対応。">
     <title>煩悩シューティング</title>
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
@@ -75,7 +76,7 @@
                         <button id="rankingBtn" class="title-button">修行の軌跡</button>
                         <button id="menuBtn" class="title-button title-button-menu">修行の準備</button>
                         <button id="buddhaMessageBtn" class="title-button">ブッダメッセージ</button>
-                        <button id="affiliateBtn" class="title-button" data-i18n="affiliate">関連会社</button>
+                        <button id="affiliateBtn" class="title-button" data-i18n="affiliate">関連リンク</button>
                         <button id="langToggleBtn" class="title-button">In English</button>
                     </div>
 
@@ -239,6 +240,8 @@
             <div id="buddhaMessageScreen" class="screen hidden">
                 <h1>ブッダメッセージ</h1>
 
+                <img src="images/monk/monk_pray.png" alt="praying monk" class="buddha-message-monk">
+
                 <div class="buddha-message-list">
                     <button id="bmBtn1" class="buddha-message-btn locked" data-index="1">
                         <span class="bm-title" data-i18n="locked">Locked</span>
@@ -271,10 +274,10 @@
                 </div>
             </div>
 
-            <!-- 関連会社モーダル -->
+            <!-- 関連リンクモーダル -->
             <div id="affiliateModal" class="modal hidden">
                 <div class="modal-container">
-                    <h2 class="modal-title" data-i18n="affiliate">関連会社</h2>
+                    <h2 class="modal-title" data-i18n="affiliate">関連リンク</h2>
                     <div class="affiliate-content">
                         <div class="affiliate-section">
                             <h3 class="affiliate-company" data-i18n="affiliateCompany">制作会社：神社仏閣オンライン</h3>
@@ -295,61 +298,75 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="affiliate-section sponsor-section">
-                            <h3 class="affiliate-company" data-i18n="sponsor">協賛会社</h3>
-                            <div class="sponsor-recruiting">
-                                <p class="recruiting-text" data-i18n="recruiting">募集中</p>
+                        <div class="affiliate-section">
+                            <h3 class="affiliate-company" style="margin-top: 20px;">使用楽曲：般若心経EDM</h3>
+                            <div class="affiliate-links">
+                                <div class="affiliate-link-item">
+                                    <a href="https://youtu.be/c2WFsB94ZL0?si=ViaDhN6uFjc9u_O8" target="_blank"
+                                        rel="noopener noreferrer" class="affiliate-image-link">
+                                        <img src="images/company/creator/edm.jpg" alt="使用楽曲：般若心経EDM"
+                                            class="affiliate-image">
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <button id="closeAffiliateBtn" class="menu-btn menu-close-btn" data-i18n="close">閉じる</button>
                 </div>
-            </div>
-
-            <canvas id="gameCanvas" width="480" height="640"></canvas>
-
-            <div id="info" class="hidden">
-                <div><span id="levelDisplay"></span> | <span data-i18n="hudTitle">煩悩シューティング:</span> <span
-                        id="score">0</span> / <span id="targetScore">108</span>
-                </div>
-                <div><span data-i18n="hudSpirit">精神力:</span> <span id="spirit">3</span> | <span
-                        data-i18n="hudKudoku">功徳:</span> <span id="kudoku" class="info-kudoku">0</span>/6 | <span
-                        data-i18n="hudCombo">連鎖数:</span> <span id="combo">0</span></div>
-            </div>
-
-            <!-- 仮想コントローラー（スマホ用） -->
-            <div id="virtualControls" class="hidden">
-                <!-- 仮想ジョイスティック（左下） -->
-                <div id="joystickContainer" class="joystick-container">
-                    <div id="joystickOuter" class="joystick-outer">
-                        <div id="joystickInner" class="joystick-inner"></div>
+                <div class="affiliate-section sponsor-section">
+                    <h3 class="affiliate-company" data-i18n="sponsor">協賛会社</h3>
+                    <div class="sponsor-recruiting">
+                        <p class="recruiting-text" data-i18n="recruiting">募集中</p>
                     </div>
                 </div>
+            </div>
+            <button id="closeAffiliateBtn" class="menu-btn menu-close-btn" data-i18n="close">閉じる</button>
+        </div>
+        </div>
 
-                <!-- 右側のボタン -->
-                <div id="shootBtn" class="control-btn">読経発射</div>
-                <div id="specialBtn" class="control-btn disabled">煩悩即菩薩</div>
+        <canvas id="gameCanvas" width="480" height="640"></canvas>
+
+        <div id="info" class="hidden">
+            <div><span id="levelDisplay"></span> | <span data-i18n="hudTitle">煩悩シューティング:</span> <span
+                    id="score">0</span> / <span id="targetScore">108</span>
+            </div>
+            <div><span data-i18n="hudSpirit">精神力:</span> <span id="spirit">3</span> | <span
+                    data-i18n="hudKudoku">功徳:</span> <span id="kudoku" class="info-kudoku">0</span>/6 | <span
+                    data-i18n="hudCombo">連鎖数:</span> <span id="combo">0</span></div>
+        </div>
+
+        <!-- 仮想コントローラー（スマホ用） -->
+        <div id="virtualControls" class="hidden">
+            <!-- 仮想ジョイスティック（左下） -->
+            <div id="joystickContainer" class="joystick-container">
+                <div id="joystickOuter" class="joystick-outer">
+                    <div id="joystickInner" class="joystick-inner"></div>
+                </div>
             </div>
 
-            <!-- スマホモード用ステータス表示 -->
-            <div id="mobileStatus" class="mobile-status hidden">
-                <div class="status-item">
-                    <span class="status-label" data-i18n="mobileScore">徳</span>
-                    <span id="mobileScore" class="status-value">0</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label" data-i18n="mobileSpirit">精神力</span>
-                    <span id="mobileSpirit" class="status-value">3</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label" data-i18n="mobileKudoku">功徳</span>
-                    <span id="mobileKudoku" class="status-value">0/6</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label" data-i18n="mobileCombo">連鎖</span>
-                    <span id="mobileCombo" class="status-value">0</span>
-                </div>
+            <!-- 右側のボタン -->
+            <div id="shootBtn" class="control-btn">読経発射</div>
+            <div id="specialBtn" class="control-btn disabled">煩悩即菩薩</div>
+        </div>
+
+        <!-- スマホモード用ステータス表示 -->
+        <div id="mobileStatus" class="mobile-status hidden">
+            <div class="status-item">
+                <span class="status-label" data-i18n="mobileScore">徳</span>
+                <span id="mobileScore" class="status-value">0</span>
             </div>
+            <div class="status-item">
+                <span class="status-label" data-i18n="mobileSpirit">精神力</span>
+                <span id="mobileSpirit" class="status-value">3</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label" data-i18n="mobileKudoku">功徳</span>
+                <span id="mobileKudoku" class="status-value">0/6</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label" data-i18n="mobileCombo">連鎖</span>
+                <span id="mobileCombo" class="status-value">0</span>
+            </div>
+        </div>
         </div>
 
         <!-- メニューモーダル -->

@@ -539,7 +539,7 @@ buddhaMessageBtn.addEventListener('click', () => {
 });
 backFromBuddhaMessageBtn.addEventListener('click', showTitle);
 
-// 関連会社モーダルイベント
+// 関連リンクモーダルイベント
 affiliateBtn.addEventListener('click', () => {
     sendAnalyticsEvent('feature_usage', { feature_name: 'affiliate' });
     affiliateModal.classList.remove('hidden');
