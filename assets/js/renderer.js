@@ -4,6 +4,50 @@
 
 const Renderer = {
     stars: [],
+    backgroundOverlayAlpha: 0.55,
+    backgroundSources: {
+        easy: 'images/back/back_1.jpg',
+        normal: 'images/back/back_2.jpg',
+        hard: 'images/back/back_3.jpg',
+        demon: 'images/back/back_4.jpg'
+    },
+    backgroundImages: {},
+    backgroundsInitialized: false,
+
+    /**
+     * 背景画像を初期化
+     */
+    initBackgroundImages() {
+        if (this.backgroundsInitialized) return;
+        for (const [levelKey, src] of Object.entries(this.backgroundSources)) {
+            const img = new Image();
+            img.src = src;
+            this.backgroundImages[levelKey] = img;
+        }
+        this.backgroundsInitialized = true;
+    },
+
+    /**
+     * レベル背景を描画
+     * @returns {boolean} 背景画像描画に成功したら true
+     */
+    drawLevelBackground() {
+        this.initBackgroundImages();
+        const img = this.backgroundImages[GS.level.current];
+        if (!img || !img.complete || img.naturalWidth === 0) return false;
+
+        const scale = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+        const drawWidth = img.naturalWidth * scale;
+        const drawHeight = img.naturalHeight * scale;
+        const offsetX = (canvas.width - drawWidth) / 2;
+        const offsetY = (canvas.height - drawHeight) / 2;
+
+        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+        // 背景画像を暗くして、敵や弾の視認性を確保する
+        ctx.fillStyle = `rgba(0, 0, 0, ${this.backgroundOverlayAlpha})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        return true;
+    },
 
     /**
      * 星の初期化
@@ -437,11 +481,13 @@ const Renderer = {
     draw(timestamp) {
         const now = timestamp || performance.now();
 
-        // 背景クリア（トレイルを消すために不透明度1で塗りつぶし）
-        ctx.fillStyle = 'rgb(15, 12, 41)'; // rgba(..., 1)と同じ
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        this.drawStars();
+        const hasBackgroundImage = this.drawLevelBackground();
+        if (!hasBackgroundImage) {
+            // 背景画像の読み込み前は従来背景でフォールバック
+            ctx.fillStyle = 'rgb(15, 12, 41)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            this.drawStars();
+        }
         this.drawPlayer();
         this.drawBullets();
         this.drawEnemies();
