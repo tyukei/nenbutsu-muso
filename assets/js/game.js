@@ -5,6 +5,7 @@
 // ゲーム開始
 function startGame(level) {
     GS.reset(level);
+    monkImage.src = monkBackSources[level] || monkBackSources.easy;
     player.x = canvas.width / 2;
     player.y = canvas.height - 80;
 

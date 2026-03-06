@@ -78,7 +78,13 @@ const closeAffiliateBtn = document.getElementById('closeAffiliateBtn');
 
 // 画像リソース
 const monkImage = new Image();
-monkImage.src = 'images/monk/monk_back.png';
+const monkBackSources = {
+    easy: 'images/monk/monk_back_1.png',
+    normal: 'images/monk/monk_back_2.png',
+    hard: 'images/monk/monk_back_3.png',
+    demon: 'images/monk/monk_back_4.png'
+};
+monkImage.src = monkBackSources.easy;
 
 const bulletImage = new Image();
 bulletImage.src = 'images/game/hourin.png'; // 卍から法輪
