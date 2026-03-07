@@ -4,7 +4,7 @@
 
 const Renderer = {
     stars: [],
-    backgroundOverlayAlpha: 0.8,
+    backgroundOverlayAlpha: 0.5,
     backgroundSources: {
         easy: 'images/back/back_1.jpg',
         normal: 'images/back/back_2.jpg',
