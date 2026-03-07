@@ -1928,7 +1928,8 @@
             color: #fff;
         }
 
-        #menuModal .modal-container {
+        #menuModal .modal-container,
+        #recordMenuScreen .modal-container {
             position: relative;
             width: min(100%, 480px);
             max-width: 480px;
@@ -1942,7 +1943,8 @@
             overflow: visible;
         }
 
-        #menuModal .modal-container::before {
+        #menuModal .modal-container::before,
+        #recordMenuScreen .modal-container::before {
             content: "";
             position: absolute;
             inset: 0;
@@ -1954,7 +1956,8 @@
             z-index: 0;
         }
 
-        #menuModal .menu-modal-title {
+        #menuModal .menu-modal-title,
+        #recordMenuScreen .menu-modal-title {
             position: relative;
             z-index: 1;
             font-size: 20px;
@@ -1962,13 +1965,15 @@
             text-shadow: 0 0 16px rgba(212, 175, 55, 0.7);
         }
 
-        #menuModal .menu-modal-actions {
+        #menuModal .menu-modal-actions,
+        #recordMenuScreen .menu-modal-actions {
             position: relative;
             z-index: 1;
             gap: 14px;
         }
 
-        #menuModal .menu-btn:not(.menu-close-btn) {
+        #menuModal .menu-btn:not(.menu-close-btn),
+        #recordMenuScreen .menu-btn:not(.menu-close-btn) {
             width: 60%;
             align-self: center;
             min-height: 80px;
@@ -1979,7 +1984,8 @@
             color: #fff;
         }
 
-        #menuModal .menu-btn:not(.menu-close-btn):hover {
+        #menuModal .menu-btn:not(.menu-close-btn):hover,
+        #recordMenuScreen .menu-btn:not(.menu-close-btn):hover {
             transform: none;
             background: rgba(24, 24, 32, 0.98);
             border-color: #ffd700;
@@ -1987,7 +1993,8 @@
             font-weight: bold;
         }
 
-        #menuModal #closeMenuBtn {
+        #menuModal #closeMenuBtn,
+        #recordMenuScreen #backFromRecordMenuBtn {
             width: min(68vw, 240px);
             align-self: center;
             margin-top: 18px;
@@ -1999,7 +2006,8 @@
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
-        #menuModal #closeMenuBtn:hover {
+        #menuModal #closeMenuBtn:hover,
+        #recordMenuScreen #backFromRecordMenuBtn:hover {
             background: linear-gradient(135deg, #e2c14b 0%, #ba9b3c 100%);
             color: #1a1a2e;
         }

@@ -269,7 +269,7 @@ const translations = {
         'locked': 'Locked',
 
         // --- 新規追加 ---
-        'recordZukan': '煩悩図鑑',
+        'recordZukan': '煩悩退散図鑑',
         'recordHistory': '修行歴',
         'introMain': '降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……<br>迷わず撃て！悟りはその先にある。',
         'introMainRaw': '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。',

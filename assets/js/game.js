@@ -85,13 +85,6 @@ function spawnEnemy() {
         );
     }
     GS.entities.enemies.push(e);
-
-    if (!isNenbutsu) {
-        if (!GS.play.unlockedBonnou.includes(text)) {
-            GS.play.unlockedBonnou.push(text);
-            GS.savePersistentStats();
-        }
-    }
 }
 
 // 必殺技
@@ -129,6 +122,12 @@ function activateSpecialAttack() {
         play.score++;
         play.combo++;
         if (play.combo > play.maxCombo) play.maxCombo = play.combo;
+
+        // Bonnou Tracker: Record destroyed affliction
+        if (!play.unlockedBonnou.includes(enemy.text)) {
+            play.unlockedBonnou.push(enemy.text);
+            GS.savePersistentStats();
+        }
 
         const idx = entities.enemies.indexOf(enemy);
         if (idx !== -1) {
@@ -460,24 +459,29 @@ function update(timeScale) {
                     entities.enemies[i].getCenterY(),
                     entities.enemies[i].color);
 
-                GS.pools.bullets.push(entities.bullets[j]); // Pool return
-                entities.bullets.splice(j, 1);
-
-                GS.pools.enemies.push(entities.enemies[i]); // Pool return (will be spliced below)
-
-                if (entities.enemies[i].isNenbutsu) {
-                    entities.enemies.splice(i, 1);
-                } else {
-                    entities.enemies.splice(i, 1);
+                if (!entities.enemies[i].isNenbutsu) {
                     play.score++;
                     play.combo++;
                     if (play.combo > play.maxCombo) play.maxCombo = play.combo;
-                    playSound('hit');
-                    updateUI();
 
-                    if (play.score >= level.targetScore) {
-                        gameOver(true);
+                    // Bonnou Tracker: Record destroyed affliction
+                    if (!play.unlockedBonnou.includes(entities.enemies[i].text)) {
+                        play.unlockedBonnou.push(entities.enemies[i].text);
+                        GS.savePersistentStats();
                     }
+
+                    playSound('hit');
+                }
+
+                GS.pools.bullets.push(entities.bullets[j]); // Pool return
+                entities.bullets.splice(j, 1);
+
+                GS.pools.enemies.push(entities.enemies[i]);
+                entities.enemies.splice(i, 1);
+                updateUI();
+
+                if (play.score >= level.targetScore) {
+                    gameOver(true);
                 }
                 break;
             }
