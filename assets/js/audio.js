@@ -19,16 +19,71 @@ const sounds = {
     level4: new Audio('sounds/mika/level4.mp3')
 };
 
+const soundVolumes = {
+    bgm: 0.5,
+    shoot: 0.3,
+    hit: 0.4,
+    hit_bounas: 0.5,
+    damage: 0.5,
+    gameover: 0.6,
+    clear: 0.6,
+    start: 1.0,
+    rokuharamitsu: 1.0,
+    level1: 1.0,
+    level2: 1.0,
+    level3: 1.0,
+    level4: 1.0
+};
+
+const pooledSoundSizes = {
+    shoot: 3,
+    hit: 4,
+    hit_bounas: 2,
+    damage: 2
+};
+
+const soundPools = {};
+const soundPoolIndexes = {};
+const soundLastPlayAt = {};
+const mobileSoundMinIntervalMs = {
+    hit: 35,
+    shoot: 25
+};
+
+function initSoundPools() {
+    Object.entries(pooledSoundSizes).forEach(([name, size]) => {
+        const base = sounds[name];
+        if (!base) return;
+
+        soundPools[name] = [];
+        soundPoolIndexes[name] = 0;
+        for (let i = 0; i < size; i++) {
+            const clone = base.cloneNode();
+            clone.volume = soundVolumes[name] ?? 1.0;
+            clone.preload = 'auto';
+            soundPools[name].push(clone);
+        }
+    });
+}
+
+function getAllAudioElements() {
+    const all = [...Object.values(sounds)];
+    Object.values(soundPools).forEach(pool => all.push(...pool));
+    return all;
+}
+
 // BGMの設定
 sounds.bgm.loop = true;
-sounds.bgm.volume = 0.5;
+sounds.bgm.volume = soundVolumes.bgm;
 
 // 効果音の音量設定
-sounds.shoot.volume = 0.3;
-sounds.hit.volume = 0.4;
-sounds.damage.volume = 0.5;
-sounds.gameover.volume = 0.6;
-sounds.clear.volume = 0.6;
+sounds.shoot.volume = soundVolumes.shoot;
+sounds.hit.volume = soundVolumes.hit;
+sounds.damage.volume = soundVolumes.damage;
+sounds.gameover.volume = soundVolumes.gameover;
+sounds.clear.volume = soundVolumes.clear;
+
+initSoundPools();
 
 // 音声再生のヘルパー関数
 function playSound(soundName) {
@@ -37,16 +92,41 @@ function playSound(soundName) {
         return;
     }
 
-    if (sounds[soundName]) {
-        // 必殺技発動中(3秒間)は、rokuharamitsu 以外の音を鳴らさない
-        if (typeof GS !== 'undefined' && GS.play && GS.play.specialActiveUntil > performance.now() && soundName !== 'rokuharamitsu') {
-            return;
-        }
+    if (!sounds[soundName]) return;
 
-        sounds[soundName].muted = false;
-        sounds[soundName].currentTime = 0;
-        sounds[soundName].play().catch(e => console.log('Audio play failed:', e));
+    // 必殺技発動中(3秒間)は、rokuharamitsu 以外の音を鳴らさない
+    if (typeof GS !== 'undefined' && GS.play && GS.play.specialActiveUntil > performance.now() && soundName !== 'rokuharamitsu') {
+        return;
     }
+
+    if (document.body.classList.contains('mobile-mode')) {
+        const minInterval = mobileSoundMinIntervalMs[soundName] || 0;
+        if (minInterval > 0) {
+            const now = performance.now();
+            const last = soundLastPlayAt[soundName] || 0;
+            if (now - last < minInterval) return;
+            soundLastPlayAt[soundName] = now;
+        }
+    }
+
+    // 連打される効果音は再生プールを使って、モバイルでの currentTime 巻き戻し負荷を避ける
+    if (soundPools[soundName] && soundPools[soundName].length > 0) {
+        const pool = soundPools[soundName];
+        const idx = soundPoolIndexes[soundName] % pool.length;
+        soundPoolIndexes[soundName] = idx + 1;
+        const audio = pool[idx];
+        audio.muted = false;
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+        return;
+    }
+
+    const audio = sounds[soundName];
+    audio.muted = false;
+    if (soundName !== 'bgm') {
+        audio.currentTime = 0;
+    }
+    audio.play().catch(e => console.log('Audio play failed:', e));
 }
 
 function stopSound(soundName) {
@@ -64,8 +144,8 @@ function unlockAudio() {
     audioUnlocking = true;
 
     // 全ての音声を無音で一瞬再生してアンロック
-    for (const key of Object.keys(sounds)) {
-        const audio = sounds[key];
+    const allAudios = getAllAudioElements();
+    for (const audio of allAudios) {
 
         // 既に再生中の音声（startSoundなど）を止めないようにする
         if (!audio.paused) continue;
@@ -93,14 +173,13 @@ function unlockAudio() {
         Object.keys(sounds).forEach(key => {
             const audio = sounds[key];
             audio.muted = false;
-            // 各音声の元の音量に戻す
-            if (key === 'bgm') audio.volume = 0.5;
-            else if (key === 'shoot') audio.volume = 0.3;
-            else if (key === 'hit') audio.volume = 0.4;
-            else if (key === 'damage') audio.volume = 0.5;
-            else if (key === 'gameover') audio.volume = 0.6;
-            else if (key === 'clear') audio.volume = 0.6;
-            else audio.volume = 1.0;
+            audio.volume = soundVolumes[key] ?? 1.0;
+        });
+        Object.entries(soundPools).forEach(([key, pool]) => {
+            for (const audio of pool) {
+                audio.muted = false;
+                audio.volume = soundVolumes[key] ?? 1.0;
+            }
         });
     }, 200);  // 200ms 待機してから音量を復元
 
