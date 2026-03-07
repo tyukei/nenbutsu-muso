@@ -433,6 +433,8 @@ function showTitle() {
     titleScreen.classList.remove('hidden');
     levelScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
+    recordMenuScreen.classList.add('hidden');
+    zukanScreen.classList.add('hidden');
     rankingScreen.classList.add('hidden');
     buddhaMessageScreen.classList.add('hidden'); // Fix for close button not working
     buddhaMessageDetailModal.classList.add('hidden'); // Safeguard
@@ -462,6 +464,8 @@ function showLevelSelect() {
     titleScreen.classList.add('hidden');
     levelScreen.classList.remove('hidden');
     gameOverScreen.classList.add('hidden');
+    recordMenuScreen.classList.add('hidden');
+    zukanScreen.classList.add('hidden');
     rankingScreen.classList.add('hidden');
     buddhaMessageScreen.classList.add('hidden');
     bonnouMessageContainer.innerHTML = '';
@@ -593,13 +597,17 @@ function updateLanguageUI() {
     // Update defined elements
     setTranslation('startBtn', 'gameStart');
     setTranslation('rankingBtn', 'record');
+    setTranslation('zukanMenuBtn', 'recordZukan');
+    setTranslation('historyMenuBtn', 'recordHistory');
     setTranslation('menuBtn', 'setting');
     setTranslation('buddhaMessageBtn', 'buddhaMessage', true);
     setTranslation('langToggleBtn', 'langToggle');
 
     setTranslation('levelScreen h1', 'stageSelect');
     setTranslation('backFromLevelBtn', 'back');
-    setTranslation('backToTitleBtn', 'toTitle');
+    setTranslation('backFromRecordMenuBtn', 'back');
+    setTranslation('backFromZukanBtn', 'back');
+    setTranslation('backFromRankingBtn', 'back');
     setTranslation('restartBtn', 'restart');
     setTranslation('toTitleBtn', 'title');
     setTranslation('shareBtn', 'share');
@@ -664,9 +672,73 @@ langToggleBtn.addEventListener('click', () => {
     showTitle(); // Refresh screen
 });
 
+function showRecordMenu() {
+    GS.screen = 'recordMenu';
+    titleScreen.classList.add('hidden');
+    recordMenuScreen.classList.remove('hidden');
+    rankingScreen.classList.add('hidden');
+    zukanScreen.classList.add('hidden');
+
+    sendAnalyticsEvent('feature_usage', { feature_name: 'recordMenu' });
+}
+
+function showZukan() {
+    GS.screen = 'zukan';
+    recordMenuScreen.classList.add('hidden');
+    zukanScreen.classList.remove('hidden');
+
+    sendAnalyticsEvent('feature_usage', { feature_name: 'zukan' });
+
+    displayZukan();
+}
+
+function displayZukan() {
+    const isEn = GS.lang === 'en';
+    let html = '';
+
+    bonnouList.forEach(bonnou => {
+        const isUnlocked = GS.play.unlockedBonnou.includes(bonnou);
+
+        if (isUnlocked) {
+            const displayTitle = isEn ? (bonnouDescriptionsEn[bonnou] || bonnou) : bonnou;
+            const fullDesc = isEn ? '' : (bonnouDescriptionsJa[bonnou] || '');
+            let phonetic = '';
+            let meaning = '';
+
+            if (!isEn && fullDesc) {
+                const parts = fullDesc.split('：');
+                if (parts.length === 2) {
+                    phonetic = parts[0];
+                    meaning = parts[1];
+                } else {
+                    meaning = fullDesc;
+                }
+            }
+
+            html += `
+                <div class="zukan-item">
+                    <div class="zukan-item-title ${isEn ? 'font-en' : ''}">
+                        ${isEn ? `"${escapeHtml(displayTitle)}"` : `「${escapeHtml(displayTitle)}」`}
+                    </div>
+                    ${!isEn ? `<div class="zukan-item-desc">${escapeHtml(phonetic)}：${escapeHtml(meaning)}</div>` : ''}
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="zukan-item locked">
+                    <!-- Locked content empty as requested -->
+                </div>
+            `;
+        }
+    });
+
+    zukanList.innerHTML = html;
+}
+
 function showRanking() {
     GS.screen = 'ranking';
     titleScreen.classList.add('hidden');
+    recordMenuScreen.classList.add('hidden');
     rankingScreen.classList.remove('hidden');
 
     sendAnalyticsEvent('feature_usage', { feature_name: 'ranking' });

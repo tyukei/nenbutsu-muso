@@ -85,6 +85,13 @@ function spawnEnemy() {
         );
     }
     GS.entities.enemies.push(e);
+
+    if (!isNenbutsu) {
+        if (!GS.play.unlockedBonnou.includes(text)) {
+            GS.play.unlockedBonnou.push(text);
+            GS.savePersistentStats();
+        }
+    }
 }
 
 // 必殺技
