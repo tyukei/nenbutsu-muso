@@ -238,7 +238,7 @@ const bonnouDescriptionsEn = {
 const translations = {
     'ja': {
         'gameStart': '修行の開始',
-        'record': '修行の軌跡',
+        'record': '修行の記録',
         'setting': '修行の準備',
         'buddhaMessage': 'ブッダメッセージ',
         'langToggle': 'In English',

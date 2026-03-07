@@ -76,7 +76,7 @@ function decodeBase64(str) {
     return decodeURIComponent(escape(atob(str)));
 }
 
-// 修行の軌跡データ
+// 修行の記録データ
 function loadRankings() {
     try {
         const saved = localStorage.getItem('nenbunRankings');
@@ -186,7 +186,7 @@ function updateTitleImages(level = 'easy') {
     // イントロ画像を更新
     introMonkHappy.src = monkHappySources[level] || monkHappySources.easy;
     introMonkSad.src = monkSadSources[level] || monkSadSources.easy;
-    
+
     // 永続的な画像を更新
     const persistentHappy = document.querySelector('.persistent-happy');
     const persistentSad = document.querySelector('.persistent-sad');
