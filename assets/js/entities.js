@@ -102,8 +102,14 @@ class Particle {
 function createParticles(x, y, color) {
     const pool = GS.pools.particles;
     const particles = GS.entities.particles;
+    const isMobileMode = document.body.classList.contains('mobile-mode');
+    const burstCount = isMobileMode ? 12 : 20;
+    const maxParticles = isMobileMode ? 140 : 260;
 
-    for (let i = 0; i < 20; i++) {
+    if (particles.length >= maxParticles) return;
+
+    const canSpawn = Math.min(burstCount, maxParticles - particles.length);
+    for (let i = 0; i < canSpawn; i++) {
         let p;
         if (pool.length > 0) {
             p = pool.pop();

@@ -281,13 +281,21 @@ const Renderer = {
         const len = particles.length;
         if (len === 0) return;
 
-        for (let i = 0; i < len; i++) {
+        const isMobileMode = document.body.classList.contains('mobile-mode');
+        const step = (isMobileMode && len > 70) ? 2 : 1;
+
+        for (let i = 0; i < len; i += step) {
             const particle = particles[i];
             ctx.fillStyle = particle.color;
             ctx.globalAlpha = particle.life / 40;
-            ctx.beginPath();
-            ctx.arc(Math.round(particle.x), Math.round(particle.y), Math.round(particle.size), 0, Math.PI * 2);
-            ctx.fill();
+            if (isMobileMode) {
+                const size = Math.max(2, Math.round(particle.size));
+                ctx.fillRect(Math.round(particle.x), Math.round(particle.y), size, size);
+            } else {
+                ctx.beginPath();
+                ctx.arc(Math.round(particle.x), Math.round(particle.y), Math.round(particle.size), 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
         ctx.globalAlpha = 1;
     },

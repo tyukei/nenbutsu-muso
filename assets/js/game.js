@@ -317,6 +317,7 @@ function update(timeScale) {
 
     const { play, input, entities, level, effects } = GS;
     const now = performance.now();
+    let uiDirty = false;
 
     play.frame++;
 
@@ -408,7 +409,7 @@ function update(timeScale) {
                 play.combo = 0;
                 playSound('damage');
                 shakeScreen();
-                updateUI();
+                uiDirty = true;
                 if (play.spirit <= 0) {
                     gameOver(false);
                 }
@@ -446,7 +447,7 @@ function update(timeScale) {
                 triggerRoppaBanner();
             }
             triggerHeartPurify();
-            updateUI();
+            uiDirty = true;
             playSound('hit_bounas');
             continue;
         }
@@ -486,7 +487,7 @@ function update(timeScale) {
 
                 GS.pools.enemies.push(entities.enemies[i]);
                 entities.enemies.splice(i, 1);
-                updateUI();
+                uiDirty = true;
 
                 if (play.score >= level.targetScore) {
                     gameOver(true);
@@ -494,6 +495,10 @@ function update(timeScale) {
                 break;
             }
         }
+    }
+
+    if (uiDirty) {
+        updateUI();
     }
 
     // パーティクルの更新
