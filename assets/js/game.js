@@ -2,6 +2,8 @@
 // game.js — ゲームコアロジック (Controller)
 // ==========================================
 
+let gameLoopId = null;
+
 // ゲーム開始
 function startGame(level) {
     GS.reset(level);
@@ -29,8 +31,14 @@ function startGame(level) {
     updateUI();
 
     GS.time.lastTime = performance.now();
-    requestAnimationFrame(gameLoop);
+
+    // 既存のループがあればキャンセルして二重起動を防ぐ
+    if (gameLoopId) {
+        cancelAnimationFrame(gameLoopId);
+    }
+    gameLoopId = requestAnimationFrame(gameLoop);
 }
+
 
 // 弾発射
 function shootBullet() {
@@ -500,7 +508,10 @@ function update(timeScale) {
 
 // ゲームループ
 function gameLoop(timestamp) {
-    if (GS.screen !== 'playing') return;
+    if (GS.screen !== 'playing') {
+        gameLoopId = null;
+        return;
+    }
 
     const deltaTime = timestamp - GS.time.lastTime;
     GS.time.lastTime = timestamp;
@@ -516,5 +527,5 @@ function gameLoop(timestamp) {
     update(timeScale);
     Renderer.draw(timestamp);
 
-    requestAnimationFrame(gameLoop);
+    gameLoopId = requestAnimationFrame(gameLoop);
 }

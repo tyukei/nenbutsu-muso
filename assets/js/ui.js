@@ -25,6 +25,11 @@ function showBonnouMessage(bonnouText) {
 
     bonnouMessageContainer.insertBefore(messageItem, bonnouMessageContainer.firstChild);
 
+    // 要素が増えすぎないよう最大20個に制限 (ラグ防止)
+    while (bonnouMessageContainer.children.length > 20) {
+        bonnouMessageContainer.removeChild(bonnouMessageContainer.lastChild);
+    }
+
     // スマホの場合（mobile-mode）、3秒経ったら消えるようにする
     if (document.body.classList.contains('mobile-mode')) {
         setTimeout(() => {
