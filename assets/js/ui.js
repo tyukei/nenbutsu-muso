@@ -829,20 +829,20 @@ function checkPassword() {
 
     const t = translations[GS.lang] || translations['ja'];
 
-    if (hashed === -1116238380) { // nenbutsu-mashimashi1
+    if (hashed === -625714864) { // nenbutsu-mashimashi1
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = t.unlockSuccess1 || '✓ 仏性Lev2を解放しました！';
         unlocked = true;
-    } else if (hashed === -1116238379) { // nenbutsu-mashimashi2
+    } else if (hashed === -625714863) { // nenbutsu-mashimashi2
         if (!cleared.includes('easy')) cleared.push('easy');
         if (!cleared.includes('normal')) cleared.push('normal');
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = t.unlockSuccess2 || '✓ 仏性Lev3を解放しました！';
         unlocked = true;
-    } else if (hashed === -1116238378) { // nenbutsu-mashimashi3
+    } else if (hashed === -625714862) { // nenbutsu-mashimashi3
         if (!cleared.includes('easy')) cleared.push('easy');
         if (!cleared.includes('normal')) cleared.push('normal');
         if (!cleared.includes('hard')) cleared.push('hard');
