@@ -580,6 +580,13 @@ closeBmDetailBtn.addEventListener('click', () => {
     buddhaMessageDetailModal.classList.add('hidden');
 });
 
+// 関連リンク内の各リンクに対する監視
+document.querySelectorAll('.affiliate-image-link').forEach(link => {
+    link.addEventListener('click', () => {
+        sendAnalyticsEvent('affiliate_link_click', { link_url: link.href });
+    });
+});
+
 // 言語切り替えロジック
 function updateLanguageUI() {
     const t = translations[GS.lang];
@@ -1062,6 +1069,12 @@ toggleBtns.forEach(btn => {
 settingsSubmitBtn.addEventListener('click', () => {
     localStorage.setItem('nenbunSettings', JSON.stringify(tempSettings));
     applySettings(tempSettings);
+
+    sendAnalyticsEvent('setting_changed', {
+        sound_setting: tempSettings.sound,
+        control_mode: tempSettings.mode
+    });
+
     settingsModal.classList.add('hidden');
 
     const tosAgreed = localStorage.getItem('nenbunTosAgreed');
@@ -1088,6 +1101,7 @@ closeMenuBtn.addEventListener('click', () => {
 });
 
 menuSettingsBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'settings' });
     menuModal.classList.add('hidden');
     loadTempSettingsFromStorage();
     updateToggleButtons();
@@ -1095,17 +1109,20 @@ menuSettingsBtn.addEventListener('click', () => {
 });
 
 menuTosBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'tos' });
     menuModal.classList.add('hidden');
     tosModal.classList.remove('hidden');
 });
 
 menuTutorialBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'tutorial' });
     menuModal.classList.add('hidden');
     openTutorial();
 });
 
 const menuDeveloperBtn = document.getElementById('menuDeveloperBtn');
 menuDeveloperBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'developer_mode' });
     menuModal.classList.add('hidden');
     passwordModal.classList.remove('hidden');
     passwordInput.value = '';
