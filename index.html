@@ -226,13 +226,14 @@
             </div>
 
             <!-- 記録メニュー画面 -->
-            <div id="recordMenuScreen" class="screen hidden">
-                <h1 data-i18n="record">修行の記録</h1>
-                <div
-                    style="display: flex; flex-direction: column; align-items: stretch; gap: 20px; width: 100%; max-width: 260px; margin: 40px auto;">
-                    <button id="zukanMenuBtn" data-i18n="recordZukan" style="margin: 0;">煩悩図鑑</button>
-                    <button id="historyMenuBtn" data-i18n="recordHistory" style="margin: 0;">修行歴</button>
-                    <button id="backFromRecordMenuBtn" data-i18n="back" style="margin: 0;">戻る</button>
+            <div id="recordMenuScreen" class="modal hidden">
+                <div class="modal-container menu-modal-compact">
+                    <h2 class="menu-modal-title" data-i18n="record">修行の記録</h2>
+                    <div class="menu-modal-actions">
+                        <button id="zukanMenuBtn" class="menu-btn" data-i18n="recordZukan">煩悩図鑑</button>
+                        <button id="historyMenuBtn" class="menu-btn" data-i18n="recordHistory">修行歴</button>
+                        <button id="backFromRecordMenuBtn" class="menu-btn menu-close-btn" data-i18n="back">戻る</button>
+                    </div>
                 </div>
             </div>
 

@@ -673,7 +673,7 @@ langToggleBtn.addEventListener('click', () => {
 
 function showRecordMenu() {
     GS.screen = 'recordMenu';
-    titleScreen.classList.add('hidden');
+    titleScreen.classList.remove('hidden'); // Modal is an overlay over the title screen
     recordMenuScreen.classList.remove('hidden');
     rankingScreen.classList.add('hidden');
     zukanScreen.classList.add('hidden');
@@ -683,6 +683,7 @@ function showRecordMenu() {
 
 function showZukan() {
     GS.screen = 'zukan';
+    titleScreen.classList.add('hidden');
     recordMenuScreen.classList.add('hidden');
     zukanScreen.classList.remove('hidden');
 
