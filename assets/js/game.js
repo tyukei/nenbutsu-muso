@@ -132,10 +132,7 @@ function activateSpecialAttack() {
         if (play.combo > play.maxCombo) play.maxCombo = play.combo;
 
         // Bonnou Tracker: Record destroyed affliction
-        if (!play.unlockedBonnou.includes(enemy.text)) {
-            play.unlockedBonnou.push(enemy.text);
-            GS.savePersistentStats();
-        }
+        GS.registerUnlockedBonnou(enemy.text);
 
         const idx = entities.enemies.indexOf(enemy);
         if (idx !== -1) {
@@ -211,7 +208,7 @@ function gameOver(win) {
     }
 
     play.totalPlays++;
-    GS.savePersistentStats();
+    GS.savePersistentStats(true);
 
     saveRanking(play.score, play.maxCombo);
 
@@ -474,10 +471,7 @@ function update(timeScale) {
                     if (play.combo > play.maxCombo) play.maxCombo = play.combo;
 
                     // Bonnou Tracker: Record destroyed affliction
-                    if (!play.unlockedBonnou.includes(entities.enemies[i].text)) {
-                        play.unlockedBonnou.push(entities.enemies[i].text);
-                        GS.savePersistentStats();
-                    }
+                    GS.registerUnlockedBonnou(entities.enemies[i].text);
 
                     playSound('hit');
                 }

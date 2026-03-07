@@ -90,11 +90,21 @@ const GS = {
         visitorCount: null,
     },
 
+    // ランタイム状態（永続化しない）
+    runtime: {
+        unlockedBonnouSet: new Set(),
+        persistentSaveTimer: null,
+        persistentSaveIdle: false,
+    },
+
     /**
      * ゲーム開始時に状態をリセット
      * @param {string} level - 難易度キー
      */
     reset(level) {
+        // 遅延セーブが残っている場合は先に確定する
+        this.flushPersistentStats();
+
         const s = levelSettings[level];
 
         // 難易度
@@ -176,13 +186,16 @@ const GS = {
             } catch (e) {
                 this.play.unlockedBonnou = [];
             }
+        } else {
+            this.play.unlockedBonnou = [];
         }
+        this.runtime.unlockedBonnouSet = new Set(this.play.unlockedBonnou);
     },
 
     /**
      * 累計功徳とプレイ回数をセーブ
      */
-    savePersistentStats() {
+    savePersistentStatsNow() {
         const levelKey = this.level.current || 'normal';
         localStorage.setItem('nenbunTotalKudoku_' + levelKey, this.play.totalKudoku);
         localStorage.setItem('nenbunTotalPlays_' + levelKey, this.play.totalPlays);
@@ -192,5 +205,49 @@ const GS = {
 
         // Save unlocked Bonnou
         localStorage.setItem('nenbunUnlockedBonnou', btoa(unescape(encodeURIComponent(JSON.stringify(this.play.unlockedBonnou)))));
+    },
+
+    savePersistentStats(immediate = false) {
+        if (immediate) {
+            this.flushPersistentStats();
+            this.savePersistentStatsNow();
+            return;
+        }
+
+        if (this.runtime.persistentSaveTimer) return;
+
+        const flush = () => {
+            this.runtime.persistentSaveTimer = null;
+            this.runtime.persistentSaveIdle = false;
+            this.savePersistentStatsNow();
+        };
+
+        if (typeof requestIdleCallback === 'function') {
+            this.runtime.persistentSaveIdle = true;
+            this.runtime.persistentSaveTimer = requestIdleCallback(flush, { timeout: 500 });
+        } else {
+            this.runtime.persistentSaveIdle = false;
+            this.runtime.persistentSaveTimer = setTimeout(flush, 120);
+        }
+    },
+
+    flushPersistentStats() {
+        if (!this.runtime.persistentSaveTimer) return;
+        if (this.runtime.persistentSaveIdle && typeof cancelIdleCallback === 'function') {
+            cancelIdleCallback(this.runtime.persistentSaveTimer);
+        } else {
+            clearTimeout(this.runtime.persistentSaveTimer);
+        }
+        this.runtime.persistentSaveTimer = null;
+        this.runtime.persistentSaveIdle = false;
+        this.savePersistentStatsNow();
+    },
+
+    registerUnlockedBonnou(bonnou) {
+        if (this.runtime.unlockedBonnouSet.has(bonnou)) return false;
+        this.runtime.unlockedBonnouSet.add(bonnou);
+        this.play.unlockedBonnou.push(bonnou);
+        this.savePersistentStats();
+        return true;
     }
 };
