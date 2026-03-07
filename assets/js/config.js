@@ -20,6 +20,9 @@ const levelScreen = document.getElementById('levelScreen');
 const gameOverScreen = document.getElementById('gameOverScreen');
 const rankingScreen = document.getElementById('rankingScreen');
 const rankingList = document.getElementById('rankingList');
+const recordMenuScreen = document.getElementById('recordMenuScreen');
+const zukanScreen = document.getElementById('zukanScreen');
+const zukanList = document.getElementById('zukanList');
 const infoPanel = document.getElementById('info');
 const virtualControls = document.getElementById('virtualControls');
 const versionDisplay = document.getElementById('version-display');
@@ -34,7 +37,11 @@ const levelDisplay = document.getElementById('levelDisplay');
 const startBtn = document.getElementById('startBtn');
 const restartBtn = document.getElementById('restartBtn');
 const rankingBtn = document.getElementById('rankingBtn');
-const backToTitleBtn = document.getElementById('backToTitleBtn');
+const zukanMenuBtn = document.getElementById('zukanMenuBtn');
+const historyMenuBtn = document.getElementById('historyMenuBtn');
+const backFromRecordMenuBtn = document.getElementById('backFromRecordMenuBtn');
+const backFromZukanBtn = document.getElementById('backFromZukanBtn');
+const backFromRankingBtn = document.getElementById('backFromRankingBtn');
 const toTitleBtn = document.getElementById('toTitleBtn');
 
 // ToS & Tutorial Elements
@@ -83,6 +90,18 @@ const monkBackSources = {
     normal: 'images/monk/monk_back_2.png',
     hard: 'images/monk/monk_back_3.png',
     demon: 'images/monk/monk_back_4.png'
+};
+const monkHappySources = {
+    easy: 'images/monk/monk_happy_1.png',
+    normal: 'images/monk/monk_happy_2.png',
+    hard: 'images/monk/monk_happy_3.png',
+    demon: 'images/monk/monk_happy_4.png'
+};
+const monkSadSources = {
+    easy: 'images/monk/monk_sad_1.png',
+    normal: 'images/monk/monk_sad_2.png',
+    hard: 'images/monk/monk_sad_3.png',
+    demon: 'images/monk/monk_sad_4.png'
 };
 monkImage.src = monkBackSources.easy;
 
@@ -226,7 +245,7 @@ const bonnouDescriptionsEn = {
 const translations = {
     'ja': {
         'gameStart': '修行の開始',
-        'record': '修行の軌跡',
+        'record': '修行の記録',
         'setting': '修行の準備',
         'buddhaMessage': 'ブッダメッセージ',
         'langToggle': 'In English',
@@ -250,6 +269,8 @@ const translations = {
         'locked': 'Locked',
 
         // --- 新規追加 ---
+        'recordZukan': '煩悩退散図鑑',
+        'recordHistory': '修行歴',
         'introMain': '降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……<br>迷わず撃て！悟りはその先にある。',
         'introMainRaw': '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。',
         'introRedWord': '煩悩',
@@ -434,6 +455,8 @@ const translations = {
         'locked': 'Locked',
 
         // --- 新規追加 ---
+        'recordZukan': 'Encyclopedia',
+        'recordHistory': 'History',
         'introMain': 'A falling rain of <span class="text-bonnou-red">afflictions</span>...<br>Shoot without hesitation! Enlightenment lies beyond.',
         'introMainRaw': 'A falling rain of afflictions...\nShoot without hesitation! Enlightenment lies beyond.',
         'introRedWord': 'afflictions',

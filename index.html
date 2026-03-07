@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="version" content="1.1.64">
+    <meta name="version" content="1.1.65">
     <!-- 修正前: <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
     <!-- 修正後: -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,9 +34,9 @@
             <div id="titleScreen" class="screen">
                 <div id="titleIntroOverlay">
                     <div class="intro-black"></div>
-                    <img id="introMonkHappy" class="intro-monk intro-happy" src="images/monk/monk_happy.png"
+                    <img id="introMonkHappy" class="intro-monk intro-happy" src="images/monk/monk_happy_1.png"
                         alt="happy monk">
-                    <img id="introMonkSad" class="intro-monk intro-sad" src="images/monk/monk_sad.png" alt="sad monk">
+                    <img id="introMonkSad" class="intro-monk intro-sad" src="images/monk/monk_sad_1.png" alt="sad monk">
                     <img id="introMonkPray" class="intro-monk intro-pray" src="images/monk/monk_pray.png"
                         alt="praying monk">
                     <div id="titleIntroMessage" class="intro-message instruction">
@@ -46,8 +46,8 @@
                     <div class="intro-skip-hint" data-i18n="tapToSkip">タップでスキップ</div>
                 </div>
                 <div id="titlePersistentPray">
-                    <img class="persistent-happy" src="images/monk/monk_happy.png" alt="happy monk">
-                    <img class="persistent-sad" src="images/monk/monk_sad.png" alt="sad monk">
+                    <img class="persistent-happy" src="images/monk/monk_happy_1.png" alt="happy monk">
+                    <img class="persistent-sad" src="images/monk/monk_sad_1.png" alt="sad monk">
                     <img class="persistent-pray" src="images/monk/monk_pray.png" alt="praying monk">
                 </div>
 
@@ -73,7 +73,7 @@
 
                     <div class="title-buttons">
                         <button id="startBtn" class="title-button">修行の開始</button>
-                        <button id="rankingBtn" class="title-button">修行の軌跡</button>
+                        <button id="rankingBtn" class="title-button">修行の記録</button>
                         <button id="menuBtn" class="title-button title-button-menu">修行の準備</button>
                         <button id="buddhaMessageBtn" class="title-button">ブッダメッセージ</button>
                         <button id="affiliateBtn" class="title-button" data-i18n="affiliate">関連リンク</button>
@@ -225,15 +225,39 @@
                 </div>
             </div>
 
-            <!-- 修行の軌跡画面 -->
+            <!-- 記録メニュー画面 -->
+            <div id="recordMenuScreen" class="modal hidden">
+                <div class="modal-container menu-modal-compact">
+                    <h2 class="menu-modal-title" data-i18n="record">修行の記録</h2>
+                    <div class="menu-modal-actions">
+                        <button id="zukanMenuBtn" class="menu-btn" data-i18n="recordZukan">煩悩退散図鑑</button>
+                        <button id="historyMenuBtn" class="menu-btn" data-i18n="recordHistory">修行歴</button>
+                        <button id="backFromRecordMenuBtn" class="menu-btn menu-close-btn" data-i18n="back">戻る</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 煩悩退散図鑑画面 -->
+            <div id="zukanScreen" class="screen hidden">
+                <h1 data-i18n="recordZukan">煩悩退散図鑑</h1>
+                <div id="zukanStats"
+                    style="text-align: center; color: #ffd700; font-size: 1.1em; margin-bottom: 15px; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);">
+                    <span data-i18n="zukanCompletion">コンプリート数</span>: <span id="zukanCompletionCount">0</span> / <span
+                        id="zukanTotalCount">28</span>
+                </div>
+                <div id="zukanList" class="zukan-list-container"></div>
+                <button id="backFromZukanBtn" data-i18n="back">戻る</button>
+            </div>
+
+            <!-- 修行歴画面 (元・修行の記録画面) -->
             <div id="rankingScreen" class="screen hidden">
-                <h1 data-i18n="record">修行の軌跡</h1>
+                <h1 data-i18n="recordHistory">修行歴</h1>
                 <h2 data-i18n="pastRecord">己の過去と向き合う</h2>
 
                 <div id="cumulativeStats" class="cumulative-stats-container"></div>
                 <div id="rankingList"></div>
 
-                <button id="backToTitleBtn">戻る</button>
+                <button id="backFromRankingBtn" data-i18n="back">戻る</button>
             </div>
 
             <!-- ブッダメッセージ一覧画面 -->

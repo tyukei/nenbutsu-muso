@@ -21,7 +21,8 @@ const GS = {
         lastBonnou: '',
         specialActiveUntil: 0,
         specialEnemies: [],
-        unlockedMessages: [] // ids of unlocked buddha messages
+        unlockedMessages: [], // ids of unlocked buddha messages
+        unlockedBonnou: [] // tracked encountered bonnou list
     },
 
     lang: 'ja', // 'ja' or 'en'
@@ -166,6 +167,16 @@ const GS = {
                 this.play.unlockedMessages = [];
             }
         }
+
+        // Load unlocked Bonnou
+        const savedBonnou = localStorage.getItem('nenbunUnlockedBonnou');
+        if (savedBonnou) {
+            try {
+                this.play.unlockedBonnou = JSON.parse(decodeURIComponent(escape(atob(savedBonnou))));
+            } catch (e) {
+                this.play.unlockedBonnou = [];
+            }
+        }
     },
 
     /**
@@ -178,5 +189,8 @@ const GS = {
 
         // Save unlocked Buddha messages
         localStorage.setItem('nenbunUnlockedMessages', btoa(JSON.stringify(this.play.unlockedMessages)));
+
+        // Save unlocked Bonnou
+        localStorage.setItem('nenbunUnlockedBonnou', btoa(unescape(encodeURIComponent(JSON.stringify(this.play.unlockedBonnou)))));
     }
 };

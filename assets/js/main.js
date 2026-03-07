@@ -8,8 +8,12 @@ startBtn.addEventListener('click', () => {
     startTitleTransition();
 });
 restartBtn.addEventListener('click', showLevelSelect);
-rankingBtn.addEventListener('click', showRanking);
-backToTitleBtn.addEventListener('click', showTitle);
+rankingBtn.addEventListener('click', showRecordMenu);
+zukanMenuBtn.addEventListener('click', showZukan);
+historyMenuBtn.addEventListener('click', showRanking);
+backFromRecordMenuBtn.addEventListener('click', showTitle);
+backFromZukanBtn.addEventListener('click', showRecordMenu);
+backFromRankingBtn.addEventListener('click', showRecordMenu);
 toTitleBtn.addEventListener('click', showTitle);
 
 // メニュー内のアナリティクス設定
@@ -56,6 +60,7 @@ initSettings();
 GS.loadPersistentStats(); // 累計データをロード
 Renderer.preCacheEnemies(); // 煩悩画像を事前キャッシュ
 fetchAndDisplayVisitorCount(); // 訪問者数を取得・表示
+updateTitleImages('easy'); // 初期画像をeasyレベルに設定
 
 
 // キャンバスリサイズ処理

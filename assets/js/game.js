@@ -19,6 +19,9 @@ function startGame(level) {
 
     bonnouMessageContainer.innerHTML = '';
 
+    // ゲーム開始時にタイトル画像も現在のレベルに更新
+    updateTitleImages(level);
+
     stopSound('gameover');
     stopSound('clear');
     playSound('bgm');
@@ -119,6 +122,12 @@ function activateSpecialAttack() {
         play.score++;
         play.combo++;
         if (play.combo > play.maxCombo) play.maxCombo = play.combo;
+
+        // Bonnou Tracker: Record destroyed affliction
+        if (!play.unlockedBonnou.includes(enemy.text)) {
+            play.unlockedBonnou.push(enemy.text);
+            GS.savePersistentStats();
+        }
 
         const idx = entities.enemies.indexOf(enemy);
         if (idx !== -1) {
@@ -286,7 +295,12 @@ function gameOver(win) {
     }
 
     const resultImage = document.getElementById('resultImage');
-    resultImage.src = win ? 'images/monk/monk_happy.png' : 'images/monk/monk_sad.png';
+    const currentLevel = GS.level.current;
+    if (win) {
+        resultImage.src = monkHappySources[currentLevel] || monkHappySources.easy;
+    } else {
+        resultImage.src = monkSadSources[currentLevel] || monkSadSources.easy;
+    }
 }
 
 // ゲーム更新
@@ -445,24 +459,29 @@ function update(timeScale) {
                     entities.enemies[i].getCenterY(),
                     entities.enemies[i].color);
 
-                GS.pools.bullets.push(entities.bullets[j]); // Pool return
-                entities.bullets.splice(j, 1);
-
-                GS.pools.enemies.push(entities.enemies[i]); // Pool return (will be spliced below)
-
-                if (entities.enemies[i].isNenbutsu) {
-                    entities.enemies.splice(i, 1);
-                } else {
-                    entities.enemies.splice(i, 1);
+                if (!entities.enemies[i].isNenbutsu) {
                     play.score++;
                     play.combo++;
                     if (play.combo > play.maxCombo) play.maxCombo = play.combo;
-                    playSound('hit');
-                    updateUI();
 
-                    if (play.score >= level.targetScore) {
-                        gameOver(true);
+                    // Bonnou Tracker: Record destroyed affliction
+                    if (!play.unlockedBonnou.includes(entities.enemies[i].text)) {
+                        play.unlockedBonnou.push(entities.enemies[i].text);
+                        GS.savePersistentStats();
                     }
+
+                    playSound('hit');
+                }
+
+                GS.pools.bullets.push(entities.bullets[j]); // Pool return
+                entities.bullets.splice(j, 1);
+
+                GS.pools.enemies.push(entities.enemies[i]);
+                entities.enemies.splice(i, 1);
+                updateUI();
+
+                if (play.score >= level.targetScore) {
+                    gameOver(true);
                 }
                 break;
             }

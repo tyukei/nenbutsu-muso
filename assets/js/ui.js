@@ -76,7 +76,7 @@ function decodeBase64(str) {
     return decodeURIComponent(escape(atob(str)));
 }
 
-// 修行の軌跡データ
+// 修行の記録データ
 function loadRankings() {
     try {
         const saved = localStorage.getItem('nenbunRankings');
@@ -179,6 +179,19 @@ function displayCumulativeStats() {
             <div class="cumulative-stat-value">${totalKudoku}</div>
         </div>
     `;
+}
+
+// レベルに基づいてタイトル画面の画像を更新する関数
+function updateTitleImages(level = 'easy') {
+    // イントロ画像を更新
+    introMonkHappy.src = monkHappySources[level] || monkHappySources.easy;
+    introMonkSad.src = monkSadSources[level] || monkSadSources.easy;
+
+    // 永続的な画像を更新
+    const persistentHappy = document.querySelector('.persistent-happy');
+    const persistentSad = document.querySelector('.persistent-sad');
+    if (persistentHappy) persistentHappy.src = monkHappySources[level] || monkHappySources.easy;
+    if (persistentSad) persistentSad.src = monkSadSources[level] || monkSadSources.easy;
 }
 
 // レベル進行システム
@@ -420,12 +433,17 @@ function showTitle() {
     titleScreen.classList.remove('hidden');
     levelScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
+    recordMenuScreen.classList.add('hidden');
+    zukanScreen.classList.add('hidden');
     rankingScreen.classList.add('hidden');
     buddhaMessageScreen.classList.add('hidden'); // Fix for close button not working
     buddhaMessageDetailModal.classList.add('hidden'); // Safeguard
     infoPanel.classList.add('hidden');
     virtualControls.classList.add('hidden');
     bonnouMessageContainer.innerHTML = '';
+
+    // ホーム画面は常に monk_happy_1 / monk_sad_1 に固定するため 'easy' を指定
+    updateTitleImages('easy');
 
     if (!GS.intro.played) {
         startTitleIntro();
@@ -445,6 +463,8 @@ function showLevelSelect() {
     titleScreen.classList.add('hidden');
     levelScreen.classList.remove('hidden');
     gameOverScreen.classList.add('hidden');
+    recordMenuScreen.classList.add('hidden');
+    zukanScreen.classList.add('hidden');
     rankingScreen.classList.add('hidden');
     buddhaMessageScreen.classList.add('hidden');
     bonnouMessageContainer.innerHTML = '';
@@ -560,6 +580,13 @@ closeBmDetailBtn.addEventListener('click', () => {
     buddhaMessageDetailModal.classList.add('hidden');
 });
 
+// 関連リンク内の各リンクに対する監視
+document.querySelectorAll('.affiliate-image-link').forEach(link => {
+    link.addEventListener('click', () => {
+        sendAnalyticsEvent('affiliate_link_click', { link_url: link.href });
+    });
+});
+
 // 言語切り替えロジック
 function updateLanguageUI() {
     const t = translations[GS.lang];
@@ -576,13 +603,17 @@ function updateLanguageUI() {
     // Update defined elements
     setTranslation('startBtn', 'gameStart');
     setTranslation('rankingBtn', 'record');
+    setTranslation('zukanMenuBtn', 'recordZukan');
+    setTranslation('historyMenuBtn', 'recordHistory');
     setTranslation('menuBtn', 'setting');
     setTranslation('buddhaMessageBtn', 'buddhaMessage', true);
     setTranslation('langToggleBtn', 'langToggle');
 
     setTranslation('levelScreen h1', 'stageSelect');
     setTranslation('backFromLevelBtn', 'back');
-    setTranslation('backToTitleBtn', 'toTitle');
+    setTranslation('backFromRecordMenuBtn', 'back');
+    setTranslation('backFromZukanBtn', 'back');
+    setTranslation('backFromRankingBtn', 'back');
     setTranslation('restartBtn', 'restart');
     setTranslation('toTitleBtn', 'title');
     setTranslation('shareBtn', 'share');
@@ -647,9 +678,82 @@ langToggleBtn.addEventListener('click', () => {
     showTitle(); // Refresh screen
 });
 
+function showRecordMenu() {
+    GS.screen = 'recordMenu';
+    titleScreen.classList.remove('hidden'); // Modal is an overlay over the title screen
+    recordMenuScreen.classList.remove('hidden');
+    rankingScreen.classList.add('hidden');
+    zukanScreen.classList.add('hidden');
+
+    sendAnalyticsEvent('feature_usage', { feature_name: 'recordMenu' });
+}
+
+function showZukan() {
+    GS.screen = 'zukan';
+    titleScreen.classList.add('hidden');
+    recordMenuScreen.classList.add('hidden');
+    zukanScreen.classList.remove('hidden');
+
+    sendAnalyticsEvent('feature_usage', { feature_name: 'zukan' });
+
+    displayZukan();
+}
+
+function displayZukan() {
+    const isEn = GS.lang === 'en';
+    let html = '';
+
+    // Calculate completion
+    const totalBonnou = bonnouList.length;
+    // Count how many unlocked Bonnou are actually in the bonnouList
+    const unlockedCount = bonnouList.filter(b => GS.play.unlockedBonnou.includes(b)).length;
+
+    document.getElementById('zukanCompletionCount').textContent = unlockedCount;
+    document.getElementById('zukanTotalCount').textContent = totalBonnou;
+
+    bonnouList.forEach(bonnou => {
+        const isUnlocked = GS.play.unlockedBonnou.includes(bonnou);
+
+        if (isUnlocked) {
+            const displayTitle = isEn ? (bonnouDescriptionsEn[bonnou] || bonnou) : bonnou;
+            const fullDesc = isEn ? '' : (bonnouDescriptionsJa[bonnou] || '');
+            let phonetic = '';
+            let meaning = '';
+
+            if (!isEn && fullDesc) {
+                const parts = fullDesc.split('：');
+                if (parts.length === 2) {
+                    phonetic = parts[0];
+                    meaning = parts[1];
+                } else {
+                    meaning = fullDesc;
+                }
+            }
+
+            html += `
+                <div class="zukan-item">
+                    <div class="zukan-item-title ${isEn ? 'font-en' : ''}">
+                        ${isEn ? `"${escapeHtml(displayTitle)}"` : `「${escapeHtml(displayTitle)}」`}
+                    </div>
+                    ${!isEn ? `<div class="zukan-item-desc">${escapeHtml(phonetic)}：${escapeHtml(meaning)}</div>` : ''}
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="zukan-item locked">
+                    <!-- Locked content empty as requested -->
+                </div>
+            `;
+        }
+    });
+
+    zukanList.innerHTML = html;
+}
+
 function showRanking() {
     GS.screen = 'ranking';
     titleScreen.classList.add('hidden');
+    recordMenuScreen.classList.add('hidden');
     rankingScreen.classList.remove('hidden');
 
     sendAnalyticsEvent('feature_usage', { feature_name: 'ranking' });
@@ -732,20 +836,20 @@ function checkPassword() {
 
     const t = translations[GS.lang] || translations['ja'];
 
-    if (hashed === -1116238380) { // nenbutsu-mashimashi1
+    if (hashed === -625714864) { // nenbutsu-mashimashi1
         if (!cleared.includes('easy')) {
             cleared.push('easy');
         }
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = t.unlockSuccess1 || '✓ 仏性Lev2を解放しました！';
         unlocked = true;
-    } else if (hashed === -1116238379) { // nenbutsu-mashimashi2
+    } else if (hashed === -625714863) { // nenbutsu-mashimashi2
         if (!cleared.includes('easy')) cleared.push('easy');
         if (!cleared.includes('normal')) cleared.push('normal');
         localStorage.setItem('nenbunClearedLevels', encodeBase64(JSON.stringify(cleared)));
         message = t.unlockSuccess2 || '✓ 仏性Lev3を解放しました！';
         unlocked = true;
-    } else if (hashed === -1116238378) { // nenbutsu-mashimashi3
+    } else if (hashed === -625714862) { // nenbutsu-mashimashi3
         if (!cleared.includes('easy')) cleared.push('easy');
         if (!cleared.includes('normal')) cleared.push('normal');
         if (!cleared.includes('hard')) cleared.push('hard');
@@ -965,6 +1069,12 @@ toggleBtns.forEach(btn => {
 settingsSubmitBtn.addEventListener('click', () => {
     localStorage.setItem('nenbunSettings', JSON.stringify(tempSettings));
     applySettings(tempSettings);
+
+    sendAnalyticsEvent('setting_changed', {
+        sound_setting: tempSettings.sound,
+        control_mode: tempSettings.mode
+    });
+
     settingsModal.classList.add('hidden');
 
     const tosAgreed = localStorage.getItem('nenbunTosAgreed');
@@ -991,6 +1101,7 @@ closeMenuBtn.addEventListener('click', () => {
 });
 
 menuSettingsBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'settings' });
     menuModal.classList.add('hidden');
     loadTempSettingsFromStorage();
     updateToggleButtons();
@@ -998,17 +1109,20 @@ menuSettingsBtn.addEventListener('click', () => {
 });
 
 menuTosBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'tos' });
     menuModal.classList.add('hidden');
     tosModal.classList.remove('hidden');
 });
 
 menuTutorialBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'tutorial' });
     menuModal.classList.add('hidden');
     openTutorial();
 });
 
 const menuDeveloperBtn = document.getElementById('menuDeveloperBtn');
 menuDeveloperBtn.addEventListener('click', () => {
+    sendAnalyticsEvent('feature_usage', { feature_name: 'developer_mode' });
     menuModal.classList.add('hidden');
     passwordModal.classList.remove('hidden');
     passwordInput.value = '';
