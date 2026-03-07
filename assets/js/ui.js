@@ -696,6 +696,14 @@ function displayZukan() {
     const isEn = GS.lang === 'en';
     let html = '';
 
+    // Calculate completion
+    const totalBonnou = bonnouList.length;
+    // Count how many unlocked Bonnou are actually in the bonnouList
+    const unlockedCount = bonnouList.filter(b => GS.play.unlockedBonnou.includes(b)).length;
+
+    document.getElementById('zukanCompletionCount').textContent = unlockedCount;
+    document.getElementById('zukanTotalCount').textContent = totalBonnou;
+
     bonnouList.forEach(bonnou => {
         const isUnlocked = GS.play.unlockedBonnou.includes(bonnou);
 
