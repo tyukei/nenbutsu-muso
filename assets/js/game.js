@@ -289,11 +289,11 @@ function gameOver(win) {
     }
 
     const resultImage = document.getElementById('resultImage');
-    const level = GS.level.current;
+    const currentLevel = GS.level.current;
     if (win) {
-        resultImage.src = monkHappySources[level] || monkHappySources.easy;
+        resultImage.src = monkHappySources[currentLevel] || monkHappySources.easy;
     } else {
-        resultImage.src = monkSadSources[level] || monkSadSources.easy;
+        resultImage.src = monkSadSources[currentLevel] || monkSadSources.easy;
     }
 }
 
