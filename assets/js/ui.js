@@ -442,9 +442,8 @@ function showTitle() {
     virtualControls.classList.add('hidden');
     bonnouMessageContainer.innerHTML = '';
 
-    // 最後にプレイしたレベルまたはデフォルト（easy）の画像を設定
-    const lastLevel = GS.level.current || 'easy';
-    updateTitleImages(lastLevel);
+    // ホーム画面は常に monk_happy_1 / monk_sad_1 に固定するため 'easy' を指定
+    updateTitleImages('easy');
 
     if (!GS.intro.played) {
         startTitleIntro();
