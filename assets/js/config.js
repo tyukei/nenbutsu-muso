@@ -84,6 +84,18 @@ const monkBackSources = {
     hard: 'images/monk/monk_back_3.png',
     demon: 'images/monk/monk_back_4.png'
 };
+const monkHappySources = {
+    easy: 'images/monk/monk_happy_1.png',
+    normal: 'images/monk/monk_happy_2.png',
+    hard: 'images/monk/monk_happy_3.png',
+    demon: 'images/monk/monk_happy_4.png'
+};
+const monkSadSources = {
+    easy: 'images/monk/monk_sad_1.png',
+    normal: 'images/monk/monk_sad_2.png',
+    hard: 'images/monk/monk_sad_3.png',
+    demon: 'images/monk/monk_sad_4.png'
+};
 monkImage.src = monkBackSources.easy;
 
 const bulletImage = new Image();

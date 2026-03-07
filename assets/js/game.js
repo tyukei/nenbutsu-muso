@@ -19,6 +19,9 @@ function startGame(level) {
 
     bonnouMessageContainer.innerHTML = '';
 
+    // ゲーム開始時にタイトル画像も現在のレベルに更新
+    updateTitleImages(level);
+
     stopSound('gameover');
     stopSound('clear');
     playSound('bgm');
@@ -286,7 +289,12 @@ function gameOver(win) {
     }
 
     const resultImage = document.getElementById('resultImage');
-    resultImage.src = win ? 'images/monk/monk_happy.png' : 'images/monk/monk_sad.png';
+    const level = GS.level.current;
+    if (win) {
+        resultImage.src = monkHappySources[level] || monkHappySources.easy;
+    } else {
+        resultImage.src = monkSadSources[level] || monkSadSources.easy;
+    }
 }
 
 // ゲーム更新

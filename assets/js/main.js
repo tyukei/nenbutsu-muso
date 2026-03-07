@@ -56,6 +56,7 @@ initSettings();
 GS.loadPersistentStats(); // 累計データをロード
 Renderer.preCacheEnemies(); // 煩悩画像を事前キャッシュ
 fetchAndDisplayVisitorCount(); // 訪問者数を取得・表示
+updateTitleImages('easy'); // 初期画像をeasyレベルに設定
 
 
 // キャンバスリサイズ処理

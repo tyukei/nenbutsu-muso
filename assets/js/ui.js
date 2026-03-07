@@ -181,6 +181,19 @@ function displayCumulativeStats() {
     `;
 }
 
+// レベルに基づいてタイトル画面の画像を更新する関数
+function updateTitleImages(level = 'easy') {
+    // イントロ画像を更新
+    introMonkHappy.src = monkHappySources[level] || monkHappySources.easy;
+    introMonkSad.src = monkSadSources[level] || monkSadSources.easy;
+    
+    // 永続的な画像を更新
+    const persistentHappy = document.querySelector('.persistent-happy');
+    const persistentSad = document.querySelector('.persistent-sad');
+    if (persistentHappy) persistentHappy.src = monkHappySources[level] || monkHappySources.easy;
+    if (persistentSad) persistentSad.src = monkSadSources[level] || monkSadSources.easy;
+}
+
 // レベル進行システム
 function loadClearedLevels() {
     try {
@@ -426,6 +439,10 @@ function showTitle() {
     infoPanel.classList.add('hidden');
     virtualControls.classList.add('hidden');
     bonnouMessageContainer.innerHTML = '';
+
+    // 最後にプレイしたレベルまたはデフォルト（easy）の画像を設定
+    const lastLevel = GS.level.current || 'easy';
+    updateTitleImages(lastLevel);
 
     if (!GS.intro.played) {
         startTitleIntro();
