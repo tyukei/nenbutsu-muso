@@ -218,6 +218,7 @@ const Renderer = {
     preCacheEnemies() {
         // 全てのテキストを一度だけ事前生成してキャッシュさせる
         bonnouList.forEach(text => this.getTextImage(text));
+        publicBonnouList.forEach(text => this.getTextImage(text));
         ROPPARAMITSU_LIST.forEach(text => this.getTextImage(text));
     },
 
@@ -235,6 +236,8 @@ const Renderer = {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
+        const now = performance.now();
+
         for (let i = 0; i < len; i++) {
             const enemy = enemies[i];
             const cx = Math.round(enemy.getCenterX());
@@ -245,8 +248,20 @@ const Renderer = {
             const eh = Math.round(enemy.height);
 
             // 1. 敵の本体（単純な図形）
-            ctx.fillStyle = enemy.color;
-            ctx.shadowBlur = 0; // 毎フレームのShadowBlurは重いのでオフ
+            if (enemy.color === 'rainbow') {
+                // SSR風の動的グラデーション
+                const gradient = ctx.createLinearGradient(ex, ey, ex + ew, ey + eh);
+                const hueOffset = (now * 0.2 + (i * 30)) % 360;
+                gradient.addColorStop(0, `hsl(${hueOffset}, 100%, 65%)`);
+                gradient.addColorStop(0.5, `hsl(${(hueOffset + 120) % 360}, 100%, 65%)`);
+                gradient.addColorStop(1, `hsl(${(hueOffset + 240) % 360}, 100%, 65%)`);
+                ctx.fillStyle = gradient;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = `hsl(${hueOffset}, 100%, 75%)`;
+            } else {
+                ctx.fillStyle = enemy.color;
+                ctx.shadowBlur = 0; // 毎フレームのShadowBlurは重いのでオフ
+            }
 
             ctx.beginPath();
             if (enemy.isNenbutsu) {

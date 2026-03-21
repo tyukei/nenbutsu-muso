@@ -177,6 +177,12 @@ const bonnouList = [
     '色欲', '声欲', '香欲', '味欲', '触欲'
 ];
 
+// 般公募の煩悩のリスト（3文字等）
+const publicBonnouList = [
+    '承認欲', '出世欲', '自己顕', '金銭欲', '独占欲', '破壊欲', '睡眠欲', '過食欲'
+];
+
+
 // 煩悩の説明と対処法 (Japanese)
 const bonnouDescriptionsJa = {
     '貪': 'とん：むさぼり',
