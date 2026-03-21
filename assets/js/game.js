@@ -69,11 +69,16 @@ function spawnEnemy() {
     if (isNenbutsu) {
         text = ROPPARAMITSU_LIST[Math.floor(Math.random() * ROPPARAMITSU_LIST.length)];
     } else {
-        if (Math.random() < 0.2) {
+        const isEasy = GS.level.current === 'easy';
+        const isHardOrDemon = GS.level.current === 'hard' || GS.level.current === 'demon';
+
+        const availableBonnou = isEasy ? bonnouListLevel1 : bonnouList;
+
+        if (isHardOrDemon && Math.random() < 0.1) {
             text = publicBonnouList[Math.floor(Math.random() * publicBonnouList.length)];
             isPublicBonnou = true;
         } else {
-            text = bonnouList[Math.floor(Math.random() * bonnouList.length)];
+            text = availableBonnou[Math.floor(Math.random() * availableBonnou.length)];
         }
     }
 

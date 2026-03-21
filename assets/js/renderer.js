@@ -54,7 +54,9 @@ const Renderer = {
      */
     initStars() {
         this.stars = [];
-        for (let i = 0; i < 100; i++) {
+        const isMobileMode = document.body.classList.contains('mobile-mode');
+        const starCount = isMobileMode ? 30 : 100;
+        for (let i = 0; i < starCount; i++) {
             this.stars.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
@@ -137,9 +139,10 @@ const Renderer = {
             }
         } else {
             // フォールバック描画
-            ctx.shadowBlur = 10;
+            const isMobileMode = document.body.classList.contains('mobile-mode');
+            ctx.shadowBlur = isMobileMode ? 0 : 10;
             ctx.fillStyle = '#d4af37';
-            ctx.shadowColor = '#d4af37';
+            if (!isMobileMode) ctx.shadowColor = '#d4af37';
 
             for (let i = 0; i < len; i++) {
                 const bullet = bullets[i];
@@ -256,8 +259,9 @@ const Renderer = {
                 gradient.addColorStop(0.5, `hsl(${(hueOffset + 120) % 360}, 100%, 65%)`);
                 gradient.addColorStop(1, `hsl(${(hueOffset + 240) % 360}, 100%, 65%)`);
                 ctx.fillStyle = gradient;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = `hsl(${hueOffset}, 100%, 75%)`;
+                const isMobileMode = document.body.classList.contains('mobile-mode');
+                ctx.shadowBlur = isMobileMode ? 0 : 15;
+                if (!isMobileMode) ctx.shadowColor = `hsl(${hueOffset}, 100%, 75%)`;
             } else {
                 ctx.fillStyle = enemy.color;
                 ctx.shadowBlur = 0; // 毎フレームのShadowBlurは重いのでオフ
@@ -353,9 +357,10 @@ const Renderer = {
             glowBlur = 16;
         }
 
+        const isMobileMode = document.body.classList.contains('mobile-mode');
         ctx.fillStyle = `rgba(${barRGB}, ${barAlpha.toFixed(3)})`;
-        ctx.shadowBlur = glowBlur;
-        ctx.shadowColor = `rgba(${glowRGB}, ${glowAlpha.toFixed(3)})`;
+        ctx.shadowBlur = isMobileMode ? 0 : glowBlur;
+        if (!isMobileMode) ctx.shadowColor = `rgba(${glowRGB}, ${glowAlpha.toFixed(3)})`;
         ctx.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
         ctx.shadowBlur = 0;
 
@@ -404,8 +409,11 @@ const Renderer = {
             ctx.fillStyle = '#ffd700';
             ctx.font = 'bold 32px sans-serif';
             ctx.textAlign = 'center';
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = '#ffd700';
+            const isMobileMode = document.body.classList.contains('mobile-mode');
+            if (!isMobileMode) {
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#ffd700';
+            }
             ctx.fillText(`×${GS.play.combo} COMBO!`, canvas.width / 2, 50);
             ctx.restore();
         }
@@ -425,8 +433,11 @@ const Renderer = {
             ctx.save();
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.shadowBlur = 25;
-            ctx.shadowColor = `rgba(255, 64, 129, ${alpha.toFixed(3)})`;
+            const isMobileMode = document.body.classList.contains('mobile-mode');
+            if (!isMobileMode) {
+                ctx.shadowBlur = 25;
+                ctx.shadowColor = `rgba(255, 64, 129, ${alpha.toFixed(3)})`;
+            }
             ctx.fillStyle = `rgba(255, 200, 220, ${alpha.toFixed(3)})`;
 
             const t = translations[GS.lang] || translations['ja'];
@@ -454,8 +465,11 @@ const Renderer = {
             ctx.save();
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.shadowBlur = 18;
-            ctx.shadowColor = `rgba(255, 215, 90, ${alpha.toFixed(3)})`;
+            const isMobileMode = document.body.classList.contains('mobile-mode');
+            if (!isMobileMode) {
+                ctx.shadowBlur = 18;
+                ctx.shadowColor = `rgba(255, 215, 90, ${alpha.toFixed(3)})`;
+            }
             ctx.fillStyle = `rgba(255, 236, 166, ${alpha.toFixed(3)})`;
 
             const t = translations[GS.lang] || translations['ja'];
