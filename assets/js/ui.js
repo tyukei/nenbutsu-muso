@@ -1204,7 +1204,8 @@ dots.forEach((dot, index) => {
     });
 });
 
-// 訪問者数取得 (CountAPI)
+// 訪問者数取得 (CounterAPI v2)
+// v1 サービス停止に伴い v2 へ移行。v1 時点の累積分は VISITOR_COUNT_OFFSET として加算。
 function fetchAndDisplayVisitorCount() {
     const visitorCountDisplay = document.getElementById('visitorCountDisplay');
     const t = translations[GS.lang] || translations['ja'];
@@ -1217,27 +1218,27 @@ function fetchAndDisplayVisitorCount() {
         return;
     }
 
-    const namespace = 'bonno-taisan-game';
-    const key = 'visits';
-    const url = `https://api.counterapi.dev/v1/${namespace}/${key}/up`;
-    const infoUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/`; // 取得のみのURL（末尾のスラッシュが必須）
+    const workspace = 'visitor';
+    const counter = 'bonnnou-shooting';
+    const VISITOR_COUNT_OFFSET = 1500;
+    const upUrl = `https://api.counterapi.dev/v2/${workspace}/${counter}/up`;
+    const getUrl = `https://api.counterapi.dev/v2/${workspace}/${counter}`;
 
     // セッション内で既にカウントアップしたか確認
     const hasCountedInSession = sessionStorage.getItem('nenbunVisitorCounted');
-    const fetchUrl = hasCountedInSession ? infoUrl : url;
+    const fetchUrl = hasCountedInSession ? getUrl : upUrl;
 
     fetch(fetchUrl)
         .then(response => {
             if (!response.ok) {
-                // 初回アクセス等でキーがない場合などを考慮
                 throw new Error(`Network response was not ok: ${response.status}`);
             }
             return response.json();
         })
-        .then(data => {
-            // counterapi.dev は `/up` 時は `{"id":...,"name":"visits","count":195,...}` のような構成で返す
-            // もしくは、ただの `{"count":123}` を返す可能性があるため、適切に取得する。
-            const currentCount = data.count !== undefined ? data.count : (data.value !== undefined ? data.value : 0);
+        .then(payload => {
+            const data = payload.data || {};
+            const upCount = typeof data.up_count === 'number' ? data.up_count : 0;
+            const currentCount = upCount + VISITOR_COUNT_OFFSET;
 
             GS.ui.visitorCount = currentCount;
             const visitorText = t.visitorCount || 'あなたは $1 人目の修行者です';
@@ -1250,7 +1251,5 @@ function fetchAndDisplayVisitorCount() {
         })
         .catch(error => {
             console.error('Visitor count fetch failed:', error);
-            // エラー時は非表示のままにするが、デバッグ用にログを出す
-            // 必要であればフォールバック表示を行う
         });
 }
