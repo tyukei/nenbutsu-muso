@@ -64,14 +64,36 @@ function spawnEnemy() {
     const settings = levelSettings[GS.level.current];
     const nenbutsuRate = settings.nenbutsuRate ?? 0.3;
     const isNenbutsu = Math.random() < nenbutsuRate;
-    const text = isNenbutsu
-        ? ROPPARAMITSU_LIST[Math.floor(Math.random() * ROPPARAMITSU_LIST.length)]
-        : bonnouList[Math.floor(Math.random() * bonnouList.length)];
+    let text, isPublicBonnou = false;
+
+    if (isNenbutsu) {
+        text = ROPPARAMITSU_LIST[Math.floor(Math.random() * ROPPARAMITSU_LIST.length)];
+    } else {
+        const isEasy = GS.level.current === 'easy';
+        const isHardOrDemon = GS.level.current === 'hard' || GS.level.current === 'demon';
+
+        const availableBonnou = isEasy ? bonnouListLevel1 : bonnouList;
+
+        if (isHardOrDemon && Math.random() < 0.1) {
+            text = publicBonnouList[Math.floor(Math.random() * publicBonnouList.length)];
+            isPublicBonnou = true;
+        } else {
+            text = availableBonnou[Math.floor(Math.random() * availableBonnou.length)];
+        }
+    }
+
     const speed = GS.level.baseSpeed + Math.random() * 1.5 + (GS.play.score * settings.speedIncrease);
 
     let color;
+    let width = 60;
+    let height = 50;
+
     if (isNenbutsu) {
         color = '#FFD700';
+    } else if (isPublicBonnou) {
+        color = 'rainbow';
+        width = 60 * 1.5;
+        height = 50 * 1.5;
     } else {
         const range = Math.random() < 0.2 ? 30 : 300;
         const hue = range === 30 ? Math.random() * 30 : 60 + Math.random() * 300;
@@ -83,13 +105,13 @@ function spawnEnemy() {
     if (pool.length > 0) {
         e = pool.pop();
         e.reset(
-            Math.random() * (canvas.width - 60) + 30,
-            -50, 60, 50, speed, text, color, isNenbutsu
+            Math.random() * (canvas.width - width) + width / 2,
+            -height, width, height, speed, text, color, isNenbutsu
         );
     } else {
         e = new Enemy(
-            Math.random() * (canvas.width - 60) + 30,
-            -50, 60, 50, speed, text, color, isNenbutsu
+            Math.random() * (canvas.width - width) + width / 2,
+            -height, width, height, speed, text, color, isNenbutsu
         );
     }
     GS.entities.enemies.push(e);
