@@ -53,6 +53,15 @@
 
                 <div id="titleMainContent">
                     <!-- Floating Menu Button Removed -->
+                    <div class="bonnousai-banner">
+                        <span class="bonnousai-new-tag" data-i18n="newTag">NEW</span>
+                        <img src="images/bonnousai.png" alt="煩悩祭" class="bonnousai-banner-img">
+                        <div class="bonnousai-banner-text">
+                            <p class="bonnousai-banner-main" data-i18n="bonnousaiBannerMain">煩悩祭で選ばれた煩悩が追加されました</p>
+                            <p class="bonnousai-banner-sub" data-i18n="bonnousaiBannerSub">（Lev3以上において、虹色で表示されます）</p>
+                        </div>
+                    </div>
+
                     <h1 class="title-logo">
                         <img src="images/logo.png" alt="煩悩シューティング" class="title-logo-img">
                     </h1>
@@ -63,8 +72,7 @@
 
                     <div class="instruction">
                         <p class="title-main-copy" data-i18n-html="introMain">
-                            降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……<br>
-                            迷わず撃て！悟りはその先にある。
+                            降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……迷わず撃て！悟りはその先にある。
                         </p>
                         <p class="title-sub-copy" data-i18n="introSub">
                             究極の徳（ハイスコア）を目指せ！
@@ -241,9 +249,13 @@
             <div id="zukanScreen" class="screen hidden">
                 <h1 data-i18n="recordZukan">煩悩退散図鑑</h1>
                 <div id="zukanStats"
-                    style="text-align: center; color: #ffd700; font-size: 1.1em; margin-bottom: 15px; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);">
+                    style="text-align: center; color: #ffd700; font-size: 1.1em; margin-bottom: 8px; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);">
                     <span data-i18n="zukanCompletion">コンプリート数</span>: <span id="zukanCompletionCount">0</span> / <span
                         id="zukanTotalCount">28</span>
+                </div>
+                <div id="zukanTapHint" data-i18n="zukanTapHint"
+                    style="text-align: center; color: #aaa; font-size: 0.85em; margin-bottom: 12px;">
+                    タップで詳細を表示
                 </div>
                 <div id="zukanList" class="zukan-list-container"></div>
                 <button id="backFromZukanBtn" data-i18n="back">戻る</button>
@@ -295,6 +307,16 @@
                     <div id="bmDetailContentJa" class="bm-detail-content ja-content"></div>
                     <div id="bmDetailContentEn" class="bm-detail-content en-content"></div>
                     <button id="closeBmDetailBtn" class="menu-btn menu-close-btn">閉じる</button>
+                </div>
+            </div>
+
+            <!-- 図鑑詳細モーダル -->
+            <div id="zukanDetailModal" class="modal hidden">
+                <div class="modal-container buddha-detail-container">
+                    <h2 id="zdTitle" class="bm-detail-title">タイトル</h2>
+                    <div id="zdContentJa" class="bm-detail-content ja-content"></div>
+                    <div id="zdContentEn" class="bm-detail-content en-content"></div>
+                    <button id="closeZdBtn" class="menu-btn menu-close-btn">閉じる</button>
                 </div>
             </div>
 

@@ -585,6 +585,16 @@ closeBmDetailBtn.addEventListener('click', () => {
     buddhaMessageDetailModal.classList.add('hidden');
 });
 
+closeZdBtn.addEventListener('click', () => {
+    zukanDetailModal.classList.add('hidden');
+});
+
+zukanDetailModal.addEventListener('click', (e) => {
+    if (e.target === zukanDetailModal) {
+        zukanDetailModal.classList.add('hidden');
+    }
+});
+
 // 関連リンク内の各リンクに対する監視
 document.querySelectorAll('.affiliate-image-link').forEach(link => {
     link.addEventListener('click', () => {
@@ -623,6 +633,7 @@ function updateLanguageUI() {
     setTranslation('toTitleBtn', 'title');
     setTranslation('shareBtn', 'share');
     setTranslation('closeBmDetailBtn', 'close');
+    setTranslation('closeZdBtn', 'close');
     setTranslation('backFromBuddhaMessageBtn', 'close');
     setTranslation('shootBtn', 'shoot');
     setTranslation('specialBtn', 'special');
@@ -737,7 +748,7 @@ function displayZukan() {
             }
 
             html += `
-                <div class="zukan-item">
+                <div class="zukan-item" data-bonnou="${escapeHtml(bonnou)}">
                     <div class="zukan-item-title ${isEn ? 'font-en' : ''}">
                         ${isEn ? `"${escapeHtml(displayTitle)}"` : `「${escapeHtml(displayTitle)}」`}
                     </div>
@@ -754,6 +765,46 @@ function displayZukan() {
     });
 
     zukanList.innerHTML = html;
+
+    zukanList.querySelectorAll('.zukan-item[data-bonnou]').forEach(el => {
+        el.addEventListener('click', () => {
+            showZukanDetail(el.dataset.bonnou);
+        });
+    });
+}
+
+function showZukanDetail(bonnou) {
+    const isEn = GS.lang === 'en';
+    const fullDescJa = bonnouDescriptionsJa[bonnou] || '';
+    const descEn = bonnouDescriptionsEn[bonnou] || '';
+
+    let phonetic = '';
+    let meaning = fullDescJa;
+    if (fullDescJa) {
+        const parts = fullDescJa.split('：');
+        if (parts.length === 2) {
+            phonetic = parts[0];
+            meaning = parts[1];
+        }
+    }
+
+    const titleJa = phonetic ? `「${bonnou}」（${phonetic}）` : `「${bonnou}」`;
+    zdTitle.innerHTML = isEn ? `"${escapeHtml(descEn || bonnou)}"` : escapeHtml(titleJa);
+
+    if (isEn) {
+        zdContentJa.style.display = 'none';
+        zdContentEn.style.display = 'block';
+        zdContentEn.innerHTML = escapeHtml(descEn);
+        zdContentEn.style.borderTop = 'none';
+        zdContentEn.style.marginTop = '0';
+        zdContentEn.style.paddingTop = '0';
+    } else {
+        zdContentJa.style.display = 'block';
+        zdContentEn.style.display = 'none';
+        zdContentJa.innerHTML = escapeHtml(meaning);
+    }
+
+    zukanDetailModal.classList.remove('hidden');
 }
 
 function showRanking() {

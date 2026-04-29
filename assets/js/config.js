@@ -76,6 +76,11 @@ const closeBmDetailBtn = document.getElementById('closeBmDetailBtn');
 const bmDetailTitle = document.getElementById('bmDetailTitle');
 const bmDetailContentJa = document.getElementById('bmDetailContentJa');
 const bmDetailContentEn = document.getElementById('bmDetailContentEn');
+const zukanDetailModal = document.getElementById('zukanDetailModal');
+const closeZdBtn = document.getElementById('closeZdBtn');
+const zdTitle = document.getElementById('zdTitle');
+const zdContentJa = document.getElementById('zdContentJa');
+const zdContentEn = document.getElementById('zdContentEn');
 const langToggleBtn = document.getElementById('langToggleBtn');
 
 // 関連リンク関連要素
@@ -295,7 +300,11 @@ const translations = {
         // --- 新規追加 ---
         'recordZukan': '煩悩退散図鑑',
         'recordHistory': 'あなたの修行歴',
-        'introMain': '降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……<br>迷わず撃て！悟りはその先にある。',
+        'zukanTapHint': 'タップで詳細を表示',
+        'newTag': 'NEW',
+        'bonnousaiBannerMain': '煩悩祭で選ばれた煩悩が追加されました',
+        'bonnousaiBannerSub': '（Lev3以上において、虹色で表示されます）',
+        'introMain': '降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……迷わず撃て！悟りはその先にある。',
         'introMainRaw': '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。',
         'introRedWord': '煩悩',
         'introSub': '究極の徳（ハイスコア）を目指せ！',
@@ -481,7 +490,11 @@ const translations = {
         // --- 新規追加 ---
         'recordZukan': 'Encyclopedia',
         'recordHistory': 'History',
-        'introMain': 'A falling rain of <span class="text-bonnou-red">afflictions</span>...<br>Shoot without hesitation! Enlightenment lies beyond.',
+        'zukanTapHint': 'Tap a card for details',
+        'newTag': 'NEW',
+        'bonnousaiBannerMain': 'New bonnou from the Bonnou Festival have been added',
+        'bonnousaiBannerSub': '(They appear in rainbow on Lv3 and above)',
+        'introMain': 'A falling rain of <span class="text-bonnou-red">afflictions</span>... Shoot without hesitation! Enlightenment lies beyond.',
         'introMainRaw': 'A falling rain of afflictions...\nShoot without hesitation! Enlightenment lies beyond.',
         'introRedWord': 'afflictions',
         'introSub': 'Aim for the ultimate virtue (High Score)!',
