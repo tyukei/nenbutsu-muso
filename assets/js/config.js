@@ -256,13 +256,13 @@ const bonnouDescriptionsEn = {
     '香欲': 'Craving for smell',
     '味欲': 'Craving for taste',
     '触欲': 'Craving for sense pleasures',
-    '先送り': 'Procrastination',
-    '既読欲': 'Read-receipt anxiety',
-    '無欲欲': 'Desire to be desireless',
-    '昼何悩': 'Endless agonizing over what to eat for lunch',
-    '何見欲': 'Compulsive scrolling of social media',
-    '阪神欲': 'Devotion to the Hanshin Tigers',
-    '掛算嫌': 'Aversion to multiplication'
+    '先送り': 'The urge to put off troublesome work or personal conflicts and run away from what is right in front of you.',
+    '既読欲': 'An intense craving for proof that your messages or posts have been read. You care less about whether the content is understood or replied to than about the evidence that your existence has been acknowledged. Often a manifestation of the need for approval or underlying anxiety.',
+    '無欲欲': 'The very desire to become free of all desires.',
+    '昼何悩': 'Agonizing endlessly over what to have for lunch (only to end up with the same thing).',
+    '何見欲': 'Ending up scrolling social media no matter what.',
+    '阪神欲': 'Being a Hanshin Tigers fan.',
+    '掛算嫌': 'Not wanting to do multiplication.'
 };
 
 // UI・テキストの翻訳辞書
