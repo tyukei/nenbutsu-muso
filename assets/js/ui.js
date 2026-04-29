@@ -708,15 +708,16 @@ function displayZukan() {
     const isEn = GS.lang === 'en';
     let html = '';
 
+    const allBonnouList = bonnouList.concat(publicBonnouList);
+
     // Calculate completion
-    const totalBonnou = bonnouList.length;
-    // Count how many unlocked Bonnou are actually in the bonnouList
-    const unlockedCount = bonnouList.filter(b => GS.play.unlockedBonnou.includes(b)).length;
+    const totalBonnou = allBonnouList.length;
+    const unlockedCount = allBonnouList.filter(b => GS.play.unlockedBonnou.includes(b)).length;
 
     document.getElementById('zukanCompletionCount').textContent = unlockedCount;
     document.getElementById('zukanTotalCount').textContent = totalBonnou;
 
-    bonnouList.forEach(bonnou => {
+    allBonnouList.forEach(bonnou => {
         const isUnlocked = GS.play.unlockedBonnou.includes(bonnou);
 
         if (isUnlocked) {

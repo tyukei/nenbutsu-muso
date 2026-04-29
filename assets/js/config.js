@@ -183,7 +183,6 @@ const bonnouListLevel1 = bonnouList.filter(b => b.length === 1);
 
 // 般公募の煩悩のリスト（3文字等）
 const publicBonnouList = [
-    '承認欲', '出世欲', '自己顕', '金銭欲', '独占欲', '破壊欲', '睡眠欲', '過食欲',
     '先送り', '既読欲', '無欲欲', '昼何悩', '何見欲', '阪神欲', '掛算嫌'
 ];
 
@@ -217,7 +216,14 @@ const bonnouDescriptionsJa = {
     '声欲': 'しょう：声や音楽等への欲望',
     '香欲': 'こう：香りへの欲望',
     '味欲': 'み：一切の食への欲望',
-    '触欲': 'そく：男女の肌や服等への欲望'
+    '触欲': 'そく：男女の肌や服等への欲望',
+    '先送り': 'さきおくり：面倒事を先延ばしにして逃げたい欲',
+    '既読欲': 'きどくよく：相手に読まれた事実を強く求める欲',
+    '無欲欲': 'むよくよく：無欲になりたいという欲そのもの',
+    '昼何悩': 'ひるなんなん：昼ごはんに異様に悩む（結局いつも同じ）',
+    '何見欲': 'なにみよか：結局SNSを見てしまう',
+    '阪神欲': 'はんしんよく：阪神ファンです',
+    '掛算嫌': 'かけざんけん：掛け算をやりたくない'
 };
 
 // 煩悩の説明と対処法 (English)
@@ -249,7 +255,14 @@ const bonnouDescriptionsEn = {
     '声欲': 'Craving for sound',
     '香欲': 'Craving for smell',
     '味欲': 'Craving for taste',
-    '触欲': 'Craving for sense pleasures'
+    '触欲': 'Craving for sense pleasures',
+    '先送り': 'Procrastination',
+    '既読欲': 'Read-receipt anxiety',
+    '無欲欲': 'Desire to be desireless',
+    '昼何悩': 'Endless agonizing over what to eat for lunch',
+    '何見欲': 'Compulsive scrolling of social media',
+    '阪神欲': 'Devotion to the Hanshin Tigers',
+    '掛算嫌': 'Aversion to multiplication'
 };
 
 // UI・テキストの翻訳辞書
