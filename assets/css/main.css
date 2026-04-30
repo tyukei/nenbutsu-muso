@@ -207,10 +207,13 @@
         .title-buttons {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            grid-auto-rows: min-content;
+            align-content: start;
+            gap: 8px;
             width: 100%;
             max-width: 400px;
             margin: 0 auto;
+            flex: 0 0 auto;
         }
 
         .title-buttons .title-button {
@@ -220,7 +223,7 @@
             padding: 10px 5px;
             font-size: 14px;
             min-height: 50px;
-            height: 100%;
+            height: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -244,13 +247,110 @@
             background: rgba(212, 175, 55, 0.1);
             border: 2px solid #d4af37;
             border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
+            padding: 8px 12px;
+            margin: 6px 0;
             max-width: 400px;
         }
 
         .instruction p {
             color: #ffd700;
+            margin: 3px 0;
+        }
+
+        .bonnousai-banner {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.55);
+            border: 1.5px solid #d4af37;
+            border-radius: 6px;
+            padding: 3px 10px 3px 8px;
+            margin: 4px 0 8px 0;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+            cursor: default;
+            animation: bonnousaiGlow 2.4s ease-in-out infinite;
+        }
+
+        @keyframes bonnousaiGlow {
+            0%, 100% { box-shadow: 0 0 6px rgba(212, 175, 55, 0.25); }
+            50%      { box-shadow: 0 0 14px rgba(255, 215, 0, 0.55); }
+        }
+
+        .bonnousai-banner-img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bonnousai-banner-text {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            min-width: 0;
+            text-align: left;
+        }
+
+        .bonnousai-banner-main {
+            color: #ffd700;
+            font-size: 11px;
+            font-weight: bold;
+            margin: 0 0 1px 0;
+            line-height: 1.25;
+            text-shadow: 0 0 4px rgba(212, 175, 55, 0.5);
+        }
+
+        .bonnousai-banner-sub {
+            color: #d4af37;
+            font-size: 9px;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .bonnousai-new-tag {
+            position: absolute;
+            top: -7px;
+            left: -6px;
+            background: #e63946;
+            color: #fff;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 1px 6px;
+            border-radius: 3px;
+            border: 1px solid #ffd700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+            z-index: 2;
+            animation: bonnousaiTagBlink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bonnousaiTagBlink {
+            0%, 100% { opacity: 1; }
+            50%      { opacity: 0.5; }
+        }
+
+        .mobile-mode .bonnousai-banner {
+            padding: 3px 8px 3px 6px;
+            gap: 6px;
+        }
+
+        .mobile-mode .bonnousai-banner-img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .mobile-mode .bonnousai-banner-main {
+            font-size: 10px;
+        }
+
+        .mobile-mode .bonnousai-banner-sub {
+            font-size: 9px;
         }
 
         #rankingList {
@@ -324,9 +424,21 @@
             text-align: left;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 80px;
+            overflow: hidden;
             box-shadow: 0 0 10px rgba(255, 111, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .zukan-item[data-bonnou]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 14px rgba(255, 111, 0, 0.5);
+        }
+
+        .zukan-item.locked {
+            cursor: default;
         }
 
         .zukan-item.locked {
@@ -346,6 +458,12 @@
         .zukan-item-desc {
             color: #ffd700;
             font-size: 12px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 6;
+            line-clamp: 6;
+            -webkit-box-orient: vertical;
+            word-break: break-word;
         }
 
         .mobile-mode .zukan-list-container {
@@ -437,7 +555,7 @@
         }
 
         .title-logo {
-            margin: 0 0 20px 0;
+            margin: 0 0 10px 0;
             font-size: inherit;
             font-weight: normal;
             animation: float 3s ease-in-out infinite;

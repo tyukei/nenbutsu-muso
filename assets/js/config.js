@@ -76,6 +76,11 @@ const closeBmDetailBtn = document.getElementById('closeBmDetailBtn');
 const bmDetailTitle = document.getElementById('bmDetailTitle');
 const bmDetailContentJa = document.getElementById('bmDetailContentJa');
 const bmDetailContentEn = document.getElementById('bmDetailContentEn');
+const zukanDetailModal = document.getElementById('zukanDetailModal');
+const closeZdBtn = document.getElementById('closeZdBtn');
+const zdTitle = document.getElementById('zdTitle');
+const zdContentJa = document.getElementById('zdContentJa');
+const zdContentEn = document.getElementById('zdContentEn');
 const langToggleBtn = document.getElementById('langToggleBtn');
 
 // 関連リンク関連要素
@@ -183,7 +188,7 @@ const bonnouListLevel1 = bonnouList.filter(b => b.length === 1);
 
 // 般公募の煩悩のリスト（3文字等）
 const publicBonnouList = [
-    '承認欲', '出世欲', '自己顕', '金銭欲', '独占欲', '破壊欲', '睡眠欲', '過食欲'
+    '先送り', '既読欲', '無欲欲', '昼何悩', '何見欲', '阪神欲', '掛算嫌'
 ];
 
 
@@ -216,7 +221,14 @@ const bonnouDescriptionsJa = {
     '声欲': 'しょう：声や音楽等への欲望',
     '香欲': 'こう：香りへの欲望',
     '味欲': 'み：一切の食への欲望',
-    '触欲': 'そく：男女の肌や服等への欲望'
+    '触欲': 'そく：男女の肌や服等への欲望',
+    '先送り': 'さきおくり：面倒な仕事、プライベートのイザコザ、目の前にあっても先延ばしして逃げちゃいたいですよね。',
+    '既読欲': 'きどくよく：メッセージや投稿に対し、相手に「読まれた」事実（既読）を強く求める欲求。内容の理解や返信そのものよりも、存在を認識されたという証明に重きを置く傾向がある。主に承認欲求や不安の裏返しとして発生する。',
+    '無欲欲': 'むよくよく：無欲になりたいという欲そのもの',
+    '昼何悩': 'ひるなんにしよう：昼ごはんに異様に悩む（結局いつも同じ）',
+    '何見欲': 'なにみよか：結局SNSを見てしまう',
+    '阪神欲': 'はんしんよく：阪神ファンです',
+    '掛算嫌': 'かけざんきらい：掛け算をやりたくない'
 };
 
 // 煩悩の説明と対処法 (English)
@@ -248,7 +260,14 @@ const bonnouDescriptionsEn = {
     '声欲': 'Craving for sound',
     '香欲': 'Craving for smell',
     '味欲': 'Craving for taste',
-    '触欲': 'Craving for sense pleasures'
+    '触欲': 'Craving for sense pleasures',
+    '先送り': 'The urge to put off troublesome work or personal conflicts and run away from what is right in front of you.',
+    '既読欲': 'An intense craving for proof that your messages or posts have been read. You care less about whether the content is understood or replied to than about the evidence that your existence has been acknowledged. Often a manifestation of the need for approval or underlying anxiety.',
+    '無欲欲': 'The very desire to become free of all desires.',
+    '昼何悩': 'Agonizing endlessly over what to have for lunch (only to end up with the same thing).',
+    '何見欲': 'Ending up scrolling social media no matter what.',
+    '阪神欲': 'Being a Hanshin Tigers fan.',
+    '掛算嫌': 'Not wanting to do multiplication.'
 };
 
 // UI・テキストの翻訳辞書
@@ -281,7 +300,11 @@ const translations = {
         // --- 新規追加 ---
         'recordZukan': '煩悩退散図鑑',
         'recordHistory': 'あなたの修行歴',
-        'introMain': '降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……<br>迷わず撃て！悟りはその先にある。',
+        'zukanTapHint': 'タップで詳細を表示',
+        'newTag': 'NEW',
+        'bonnousaiBannerMain': '煩悩祭で選ばれた煩悩が追加されました',
+        'bonnousaiBannerSub': '（Lev3以上において、虹色で表示されます）',
+        'introMain': '降り注ぐ<span class="text-bonnou-red">煩悩</span>の雨……迷わず撃て！悟りはその先にある。',
         'introMainRaw': '降り注ぐ煩悩の雨……\n迷わず撃て！悟りはその先にある。',
         'introRedWord': '煩悩',
         'introSub': '究極の徳（ハイスコア）を目指せ！',
@@ -467,7 +490,11 @@ const translations = {
         // --- 新規追加 ---
         'recordZukan': 'Encyclopedia',
         'recordHistory': 'History',
-        'introMain': 'A falling rain of <span class="text-bonnou-red">afflictions</span>...<br>Shoot without hesitation! Enlightenment lies beyond.',
+        'zukanTapHint': 'Tap a card for details',
+        'newTag': 'NEW',
+        'bonnousaiBannerMain': 'New bonnou from the Bonnou Festival have been added',
+        'bonnousaiBannerSub': '(They appear in rainbow on Lv3 and above)',
+        'introMain': 'A falling rain of <span class="text-bonnou-red">afflictions</span>... Shoot without hesitation! Enlightenment lies beyond.',
         'introMainRaw': 'A falling rain of afflictions...\nShoot without hesitation! Enlightenment lies beyond.',
         'introRedWord': 'afflictions',
         'introSub': 'Aim for the ultimate virtue (High Score)!',
