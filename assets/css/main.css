@@ -280,9 +280,12 @@
             50%      { box-shadow: 0 0 14px rgba(255, 215, 0, 0.55); }
         }
 
+        .bonnousai-banner img,
         .bonnousai-banner-img {
             width: 32px;
             height: 32px;
+            max-width: 32px;
+            max-height: 32px;
             object-fit: contain;
             flex-shrink: 0;
             position: relative;
