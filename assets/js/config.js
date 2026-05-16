@@ -79,6 +79,7 @@ const bmDetailContentEn = document.getElementById('bmDetailContentEn');
 const zukanDetailModal = document.getElementById('zukanDetailModal');
 const closeZdBtn = document.getElementById('closeZdBtn');
 const zdTitle = document.getElementById('zdTitle');
+const zdImage = document.getElementById('zdImage');
 const zdContentJa = document.getElementById('zdContentJa');
 const zdContentEn = document.getElementById('zdContentEn');
 const langToggleBtn = document.getElementById('langToggleBtn');
@@ -270,6 +271,45 @@ const bonnouDescriptionsEn = {
     '掛算嫌': 'Not wanting to do multiplication.'
 };
 
+// 煩悩図鑑画像
+const bonnouZukanImages = {
+    '貪': '01_ton.webp',
+    '瞋': '02_jin.webp',
+    '痴': '03_chi.webp',
+    '慢': '04_man.webp',
+    '疑': '05_g.webp',
+    '見': '06_ken.webp',
+    '無明': '07_mumyo.webp',
+    '随眠': '08_zuimen.webp',
+    '無慚': '09_muzan.webp',
+    '無愧': '10_muki.webp',
+    '嫉': '11_shitsu.webp',
+    '慳': '12_ken.webp',
+    '悪作': '13_akusa.webp',
+    '眠': '14_men.webp',
+    '掉挙': '15_jouko.webp',
+    '惛沈': '16_konjin.webp',
+    '忿': '17_hun.webp',
+    '覆': '18_fun.webp',
+    '執着': '19_syujaku.webp',
+    '渇愛': '20_katsuai.webp',
+    '妄想': '21_mousou.webp',
+    '恐怖': '22_kuhu.webp',
+    '懈怠': '23_kentai.webp',
+    '色欲': '24_shikiyoku.webp',
+    '声欲': '25_shou.webp',
+    '香欲': '26_kou.webp',
+    '味欲': '27_mi.webp',
+    '触欲': '28_soku.webp',
+    '先送り': '29_sakiokuri.webp',
+    '既読欲': '30_kidokukyoku.webp',
+    '無欲欲': '31_muyokuyoku.webp',
+    '昼何悩': '33_hirunanisiyou.webp',
+    '何見欲': '33_nanimiyoka.webp',
+    '阪神欲': '34_hanshinyoku.webp',
+    '掛算嫌': '35_kakezankirai.webp'
+};
+
 // UI・テキストの翻訳辞書
 const translations = {
     'ja': {
@@ -300,6 +340,7 @@ const translations = {
         // --- 新規追加 ---
         'recordZukan': '煩悩退散図鑑',
         'recordHistory': 'あなたの修行歴',
+        'zukanCompletion': 'コンプリート数',
         'zukanTapHint': 'タップで詳細を表示',
         'newTag': 'NEW',
         'bonnousaiBannerMain': '煩悩祭で選ばれた煩悩が追加されました',
@@ -490,6 +531,7 @@ const translations = {
         // --- 新規追加 ---
         'recordZukan': 'Encyclopedia',
         'recordHistory': 'History',
+        'zukanCompletion': 'Completed',
         'zukanTapHint': 'Tap a card for details',
         'newTag': 'NEW',
         'bonnousaiBannerMain': 'New bonnou from the Bonnou Festival have been added',
