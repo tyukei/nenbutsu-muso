@@ -789,7 +789,9 @@ function showZukanDetail(bonnou) {
     }
 
     const titleJa = phonetic ? `「${bonnou}」（${phonetic}）` : `「${bonnou}」`;
-    zdTitle.innerHTML = isEn ? `"${escapeHtml(descEn || bonnou)}"` : escapeHtml(titleJa);
+    const isLongDescEn = descEn.length > 30;
+    const titleEn = isLongDescEn ? `「${bonnou}」` : `"${descEn || bonnou}"`;
+    zdTitle.innerHTML = isEn ? escapeHtml(titleEn) : escapeHtml(titleJa);
 
     const imageFile = bonnouZukanImages[bonnou];
     if (imageFile) {
@@ -803,11 +805,15 @@ function showZukanDetail(bonnou) {
 
     if (isEn) {
         zdContentJa.style.display = 'none';
-        zdContentEn.style.display = 'block';
-        zdContentEn.innerHTML = escapeHtml(descEn);
-        zdContentEn.style.borderTop = 'none';
-        zdContentEn.style.marginTop = '0';
-        zdContentEn.style.paddingTop = '0';
+        if (isLongDescEn) {
+            zdContentEn.style.display = 'block';
+            zdContentEn.innerHTML = escapeHtml(descEn);
+            zdContentEn.style.borderTop = 'none';
+            zdContentEn.style.marginTop = '0';
+            zdContentEn.style.paddingTop = '0';
+        } else {
+            zdContentEn.style.display = 'none';
+        }
     } else {
         zdContentJa.style.display = 'block';
         zdContentEn.style.display = 'none';
