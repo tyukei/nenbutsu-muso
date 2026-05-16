@@ -791,6 +791,16 @@ function showZukanDetail(bonnou) {
     const titleJa = phonetic ? `「${bonnou}」（${phonetic}）` : `「${bonnou}」`;
     zdTitle.innerHTML = isEn ? `"${escapeHtml(descEn || bonnou)}"` : escapeHtml(titleJa);
 
+    const imageFile = bonnouZukanImages[bonnou];
+    if (imageFile) {
+        zdImage.src = `images/bonnnouzukan/${imageFile}`;
+        zdImage.alt = isEn ? (descEn || bonnou) : bonnou;
+        zdImage.parentElement.style.display = '';
+    } else {
+        zdImage.removeAttribute('src');
+        zdImage.parentElement.style.display = 'none';
+    }
+
     if (isEn) {
         zdContentJa.style.display = 'none';
         zdContentEn.style.display = 'block';
