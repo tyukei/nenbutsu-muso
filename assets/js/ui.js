@@ -261,6 +261,14 @@ function escapeHtml(text) {
         .replace(/>/g, '&gt;');
 }
 
+function truncateAtWord(text, maxLen) {
+    if (text.length <= maxLen) return text;
+    const slice = text.slice(0, maxLen);
+    const lastSpace = slice.lastIndexOf(' ');
+    const cut = lastSpace > 0 ? slice.slice(0, lastSpace) : slice;
+    return cut.replace(/[\s,.;:!?]+$/, '') + '…';
+}
+
 function renderIntroMainText(typedText) {
     const t = translations[GS.lang] || translations['ja'];
     const introMainRaw = t.introMainRaw || TITLE_INTRO_PHRASE_MAIN;
@@ -732,7 +740,11 @@ function displayZukan() {
         const isUnlocked = GS.play.unlockedBonnou.includes(bonnou);
 
         if (isUnlocked) {
-            const displayTitle = isEn ? (bonnouDescriptionsEn[bonnou] || bonnou) : bonnou;
+            const descEn = bonnouDescriptionsEn[bonnou] || '';
+            let displayTitle = bonnou;
+            if (isEn && descEn) {
+                displayTitle = descEn.length <= 30 ? descEn : truncateAtWord(descEn, 28);
+            }
             const fullDesc = isEn ? '' : (bonnouDescriptionsJa[bonnou] || '');
             let phonetic = '';
             let meaning = '';
@@ -790,8 +802,8 @@ function showZukanDetail(bonnou) {
 
     const titleJa = phonetic ? `「${bonnou}」（${phonetic}）` : `「${bonnou}」`;
     const isLongDescEn = descEn.length > 30;
-    const titleEn = isLongDescEn ? `「${bonnou}」` : `"${descEn || bonnou}"`;
-    zdTitle.innerHTML = isEn ? escapeHtml(titleEn) : escapeHtml(titleJa);
+    const titleEnInner = isLongDescEn ? truncateAtWord(descEn, 28) : (descEn || bonnou);
+    zdTitle.innerHTML = isEn ? `"${escapeHtml(titleEnInner)}"` : escapeHtml(titleJa);
 
     const imageFile = bonnouZukanImages[bonnou];
     if (imageFile) {

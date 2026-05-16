@@ -340,6 +340,7 @@ const translations = {
         // --- 新規追加 ---
         'recordZukan': '煩悩退散図鑑',
         'recordHistory': 'あなたの修行歴',
+        'zukanCompletion': 'コンプリート数',
         'zukanTapHint': 'タップで詳細を表示',
         'newTag': 'NEW',
         'bonnousaiBannerMain': '煩悩祭で選ばれた煩悩が追加されました',
@@ -530,6 +531,7 @@ const translations = {
         // --- 新規追加 ---
         'recordZukan': 'Encyclopedia',
         'recordHistory': 'History',
+        'zukanCompletion': 'Completed',
         'zukanTapHint': 'Tap a card for details',
         'newTag': 'NEW',
         'bonnousaiBannerMain': 'New bonnou from the Bonnou Festival have been added',
